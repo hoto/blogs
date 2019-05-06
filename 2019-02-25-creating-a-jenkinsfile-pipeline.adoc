@@ -1,0 +1,28 @@
+= Creating a Jenkinsfile pipeline
+:imagesdir: images/2019-02-25/
+
+Basics of setting up a Jenkins multibranch pipeline job and defining a Jenkinsfile.
+
+image::pipeline.jpg[Pipeline]
+Photo by Bernard Hermant on Unsplash
+
+== Creating Multibranch Pipeline Job
+
+If you want to follow this article but don’t have a Jenkins instance at hand you can use my GitHub project to spin up a dockerized Jenkins:
+
+....
+git clone https://github.com/hoto/jenkinsfile-examples.git
+cd jenkinsfile-examples
+docker-compose pull
+docker-compose up
+....
+
+Let’s open Jenkins by going to `localhost:8080`
+
+There are already a couple of jobs there but ignore them as we will be creating a new job.
+
+=== Creating new job
+
+Click on `New Item` to open a job creation wizard.
+
+
