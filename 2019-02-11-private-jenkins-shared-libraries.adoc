@@ -1,0 +1,146 @@
+= Private Jenkins Shared Libraries
+:imagesdir: images/2019-02-11/
+
+_[Published https://medium.com/@AndrzejRehmann/private-jenkins-shared-libraries-540abe7a0ab7[Medium]]_
+
+The official documentation for Jenkins Shared Libraries is pretty good, but not perfect.
+
+This article expands on how to use https://jenkins.io/doc/book/pipeline/shared-libraries/[Jenkins Shared Libraries] with private git repositories, semantically version and unit test your libraries and provides working examples which you can run yourself.
+
+image::001.jpeg[]
+
+== Short Intro
+
+Jenkins Shared Library is a very useful tool when dealing with multiple similar pipelines. If you are looking for a way to reduce code duplication in your Jenkins pipelines then this article may be the right place to start.
+
+This article assumes the reader is somehow familiar with Jenkinsfiles or at least with the concept of a Pipeline as Code. Here is a https://medium.com/@AndrzejRehmann/creating-a-jenkinsfile-pipeline-7aefc89b8c67[link] to my basic introduction into Jenkinsfiles if you are new to it.
+
+== For those new to the CI
+
+Your company may be going through the Agile/DevOps transformation and suddenly there is this push to use Continuous Integration (CI) and maybe even Continous Delivery/Deployment (CD) for every project. Or maybe it is just the teams themselves who want to start using a CI and are looking for a guide to this fancy DevOps stuff. Whatever your case may be, there are usually three common questions when starting building and deploying applications:
+
+* What CI should we use?
+* Our pipelines are pretty similar, how can we avoid duplication?
+* Is it reasonable to unit test the pipelines?
+
+To be honest only the first question is usually taken into consideration at the beginning of the CI journey and the last two materialise only after the newly automated pipelines grow and require a dedicated person to mainta… Wait a minute this is not what DevOps was supposed t… Well, never mind, let’s keep going.
+
+> What CI should we use?
+
+The answer to this question is u̶n̶f̶o̶r̶t̶u̶n̶a̶t̶e̶l̶y̶ usually https://jenkins.io/["Jenkins"] as it is still the most popular and feature-rich CI on the market. Oh and it’s free, which makes it by default one of the best candidates in the eyes of your management.
+
+>Our pipelines are pretty similar, how can we avoid duplication?
+
+This is more interesting as there are a couple of options for Jenkins. One option is to use https://github.com/jenkinsci/job-dsl-plugin[Jenkins Job DSL] plugin (JDSL) to completely automate the initial creation and content of your jobs, but using JDSL usually implies that there is one Jenkins instance for multiple teams or a central one for the whole company (this works well when all projects follow the same convention). Also, the initial cost of creating a quality https://github.com/jenkinsci/job-dsl-plugin/wiki/Tutorial---Using-the-Jenkins-Job-DSL[seed JDSL job] can be time-consuming and it pays itself of the more jobs you create with it. So what if you don’t want to heavily invest in JDSL? My answer to that is to try https://jenkins.io/doc/book/pipeline/shared-libraries/[Jenkins Shared Library] (JSL). Although it is possible to combine JDSL with JSL, in this article, I’m going to focus on JSL alone.
+
+>Is it reasonable to unit test the pipelines?
+
+Let me ask you this: How do you want to test new pipeline features? Is it ok for you if after every little change you have to push the changes to Jenkins and wait for the build to see them in action? If not then you will have to either be able to run your pipelines locally without the CI server present or unit tests part of them.
+
+In an ideal world, all pipelines would be dead simple, idempotent, written in a declarative way (e.g. using https://docs.ansible.com/ansible/devel/user_guide/playbooks.html[ansible playbooks]) with no logic in them and you should be able to test run them locally without the CI server present.
+
+But if in Jenkins pipelines you are going to use http://groovy-lang.org/[groovy] then it is very common to have a logic-creep infesting the stages of your pipelines. In this case, if you use JSL then you can unit test the code as if you would test any other groovy code.
+
+Currently, it is very hard to test any infrastructure related code as a whole as it requires an expensive mix of mocking, isolation and idempotency. But if you have a chance to easily unit test part of a pipeline then do so. From my experience when you have to unit tests a big chunk of pipeline it means that that code should be extracted as a (Jenkins) plugin because a plugin for it does not exist yet.
+
+Some automation tools have “dry run” mode but with more complex scenarios it falls short. Unfortunately, testability is still not a primary concern with most infrastructure tools.
+
+---
+
+== Pros and cons of using Jenkins Shared Library
+
+The more similar the pipelines are in your organisation the better the outcome you can expect from using JSL.
+
+=== The good stuff:
+
+* Can be shared by multiple teams using different instances of Jenkins.
+* Initial cost is very low and introduction to projects can be done gradually.
+* Can be modularised and unit tested.
+* Can and should be source control versioned.
+* Its development can go through the same https://en.wikipedia.org/wiki/Gated_commit[gated builds] as other projects in the company.
+* Can be publicly available or made private, depending on your repository setup.
+* Can be semantically versioned making it easy to introduce breaking changes without disturbing depended pipelines.
+
+=== The ugly:
+
+There are some unavoidable hindrances but think of it this way: the alternatives usually boil down to some sort of code duplication or nasty practices like keeping all of your company source code in one humongous code repository (https://developer.atlassian.com/blog/2015/10/monorepos-in-git/[monorepo]) using a VCS not designed for it.
+
+Here it is:
+
+* When https://semver.org/[semantically versioned] requires changes in at least two repositories: in JSL repository and in all dependent repositories containing the Jenkinsfiles.
+* E2e testing new pipeline features require a commit and a push from JSL repository (one or multiple times) and a commit and push from the dependent repository (push only once, rebuild multiple times). This is not the problem of JSL on its own, rather it is a decade old problem of Jenkins pipelines testability. It is really hard to e2e test the pipelines because they are not designed to be testable in the first place.
+
+This may feel like it slows you down but think of the alternatives. Code duplication is a maintenance nightmare. If you think monorepo is the answer then unless you are using https://www.quora.com/What-version-control-system-does-Google-use-and-why[piper] I would shy away from it.
+
+In short, JSL comes with the benefits and costs similar to creating and maintaining an open source library. On top of that, it suffers from e2e testability which for me is the biggest drawback. I hope that in the future we will be able to get our hands on a CI which comes with testable pipelines as a first-class citizen.
+
+---
+
+== Defining a Jenkins Shared Library
+
+> JSL is usually a https://semver.org/[semantically] versioned https://gradle.org/[gradle] http://groovy-lang.org/[groovy] project kept in a git repository which is git cloned by Jenkins and put on a https://jenkins.io/doc/developer/plugin-development/dependencies-and-class-loading/[classpath] when a https://jenkins.io/doc/book/pipeline/[pipeline] job using a https://jenkins.io/doc/book/pipeline/jenkinsfile/[Jenkinsfile] request for it. (yikes!)
+
+If you understood the previous paragraph then you probably already have a good picture in your mind how it all works together. If not then don’t worry, we will go step by step and explain along the way.
+
+To figure out what Jenkins is actually doing behind the scenes we are going to run the most basic pipeline job which uses JSL.
+
+=== Setting up a Jenkins instance
+
+To demonstrate what Jenkins is doing when using a JSL I will need a Jenkins instance. I’m going to run one on my local machine and for that I’m going to use my GitHub https://github.com/hoto/jenkinsfile-examples[project] with a dockerized Jenkins, a couple of exemplary Jenkinsfiles and another dockerized service which will load my Jenkinsfiles from a folder and tell Jenkins to create jobs out of them.
+
+This setup is only for demonstration purposes and is not suitable for production usage.
+
+If you want to follow this post and run the examples then you need to have https://docs.docker.com/install/[docker] and https://docs.docker.com/compose/install/[docker-compose] installed.
+
+....
+git clone https://github.com/hoto/jenkinsfile-examples.git -b blog-jenkins-shared-libraries
+cd jenkinsfile-examples
+docker-compose pull
+docker-compose up
+....
+
+image::002.png[]
+
+Jenkins should be available in your web browser on `localhost:8080`
+
+image::003.png[]
+
+There are a couple of jobs there already. Their config is based on the Jenkinsfiles `<job_name>.groovy` files located in the `jenkinsfiles` directory inside the repository. Editing, creating or deleting any of those Jenkinsfiles will cause the change to be reflected immediately in Jenkins (sometimes refreshing the page is required).
+
+Jenkins is setup with authentication disabled and a couple of pre-installed plugins so it can be used immediately after it runs.
+
+Structure of `jenkinsfile-examples` project:
+
+....
+$ pwd
+~/projects/jenkinsfile-examples
+$ tree
+.
+├── Dockerfile
+├── docker-compose.yml
+├── configs
+│   └── C-001-jenkins-shared-library-build-and-test.xml
+├── jenkinsfiles
+│   ├── 001-stages-declarative-style.groovy
+│   ├── 002-stages-scripted-style.groovy
+│   ├── 003-stages-parallel.groovy
+│   ├── 004-stages-parallel-with-sequential.groovy
+│   ├── 020-post-actions.groovy
+│   ├── 030-wait-until.groovy
+│   ├── 031-wait-until-with-post-actions.groovy
+│   ├── 050-shared-library-where-is-it-cloned.groovy
+│   ├── 051-shared-library-using-global-variables.groovy
+│   ├── 052-shared-library-using-classes.groovy
+│   ├── 070-parameterized-build-choices.groovy
+│   ├── 090-wait-for-user-input-not-blocking-executor.groovy
+│   └── 091-wait-for-user-input-blocking-executor.groovy
+└── source
+    └── jenkins
+        └── usr
+            └── share
+                └── jenkins
+                    ├── plugins.txt
+                    └── ref
+                        ├── config.xml
+                        └── scriptApproval.xml
+....
