@@ -7,6 +7,7 @@ The official documentation for Jenkins Shared Libraries is pretty good, but not 
 
 This article expands on how to use https://jenkins.io/doc/book/pipeline/shared-libraries/[Jenkins Shared Libraries] with private git repositories, semantically version and unit test your libraries and provides working examples which you can run yourself.
 
+.Photo by https://unsplash.com/photos/GWOTvo3qq7U?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText[j zamora] on https://unsplash.com/search/photos/library?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText[Unsplash]
 image::001.jpeg[]
 
 == Short Intro
@@ -29,11 +30,11 @@ To be honest only the first question is usually taken into consideration at the 
 
 The answer to this question is u̶n̶f̶o̶r̶t̶u̶n̶a̶t̶e̶l̶y̶ usually https://jenkins.io/["Jenkins"] as it is still the most popular and feature-rich CI on the market. Oh and it’s free, which makes it by default one of the best candidates in the eyes of your management.
 
->Our pipelines are pretty similar, how can we avoid duplication?
+> Our pipelines are pretty similar, how can we avoid duplication?
 
 This is more interesting as there are a couple of options for Jenkins. One option is to use https://github.com/jenkinsci/job-dsl-plugin[Jenkins Job DSL] plugin (JDSL) to completely automate the initial creation and content of your jobs, but using JDSL usually implies that there is one Jenkins instance for multiple teams or a central one for the whole company (this works well when all projects follow the same convention). Also, the initial cost of creating a quality https://github.com/jenkinsci/job-dsl-plugin/wiki/Tutorial---Using-the-Jenkins-Job-DSL[seed JDSL job] can be time-consuming and it pays itself of the more jobs you create with it. So what if you don’t want to heavily invest in JDSL? My answer to that is to try https://jenkins.io/doc/book/pipeline/shared-libraries/[Jenkins Shared Library] (JSL). Although it is possible to combine JDSL with JSL, in this article, I’m going to focus on JSL alone.
 
->Is it reasonable to unit test the pipelines?
+> Is it reasonable to unit test the pipelines?
 
 Let me ask you this: How do you want to test new pipeline features? Is it ok for you if after every little change you have to push the changes to Jenkins and wait for the build to see them in action? If not then you will have to either be able to run your pipelines locally without the CI server present or unit tests part of them.
 
