@@ -144,3 +144,137 @@ $ tree
                         ├── config.xml
                         └── scriptApproval.xml
 ....
+
+=== Referencing a Shared Library
+
+Let’s run a job called https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/jenkinsfiles/050-shared-library-where-is-it-cloned.groovy[`050-shared-library-where-is-it-cloned`] which uses a following Jenkinsfile `050-shared-library-where-is-it-cloned.groovy` (as you can see Jenkinsfiles can be named whatever but in your projects keep the convention of calling it `Jenkinsfile`):
+
+[source,groovy]
+....
+library(
+  identifier: 'jenkins-shared-library@1.0.4',
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/hoto/jenkins-shared-library.git'
+    ]
+  )
+)
+pipeline {
+  agent any
+  stages {
+  stage('Where is Jenkins Shared Library cloned') {
+      steps {
+        script {
+          sh 'ls -la ../050-shared-library-where-is-it-cloned@libs/jenkins-shared-library'
+        }
+      }
+    }
+  }
+}
+....
+
+What should be interesting to us about this job is that it:
+
+1. Request a `library` located at https://github.com/hoto/jenkins-shared-library referencing git tag `1.0.4`
+2. Create a stage which lists the location where the library is located. This is only to reveal the magic behind what Jenkins has done behind the scene.
+
+Let’s run it and go through the build logs.
+
+image::004.png[]
+image::005.png[]
+
+Breaking down the logs:
+
+Jenkins tries to load the shared library:
+
+....
+Loading library jenkins-shared-library@1.0.4
+Attempting to resolve 1.0.4 from remote references...
+....
+
+It can’t find it so it clones the referenced git repository `https://github.com/hoto/jenkins-shared-library.git` and checks out a commit tagged `1.0.4`:
+
+....
+git init /var/jenkins_home/workspace/050-shared-library-where-is-it-cloned@libs/jenkins-shared-library
+...
+git config remote.origin.url https://github.com/hoto/jenkins-shared-library.git
+...
+Checking out Revision b80d1b3ab131580ba51c94d3d97dd65530ec2a66 (1.0.4)
+....
+
+Library repository has been cloned outside of the job workspace into `../050-shared-library-where-is-it-cloned@libs/jenkins-shared-library` directory. We can verify that from the command executed inside the stage:
+
+[source,bash]
+....
+ls -la ../050-shared-library-where-is-it-cloned@libs/jenkins-shared-library
+total 72
+drwxr-xr-x 8 jenkins jenkins 4096 Nov  4 18:49 .
+drwxr-xr-x 3 jenkins jenkins 4096 Nov  4 18:49 ..
+drwxr-xr-x 2 jenkins jenkins 4096 Nov  4 18:49 .circleci
+-rw-r--r-- 1 jenkins jenkins  245 Nov  4 18:49 .editorconfig
+drwxr-xr-x 8 jenkins jenkins 4096 Nov  4 18:49 .git
+-rw-r--r-- 1 jenkins jenkins   81 Nov  4 18:49 .gitattributes
+-rw-r--r-- 1 jenkins jenkins   34 Nov  4 18:49 .gitignore
+-rw-r--r-- 1 jenkins jenkins 1211 Nov  4 18:49 Jenkinsfile
+-rw-r--r-- 1 jenkins jenkins 1100 Nov  4 18:49 LICENSE
+-rw-r--r-- 1 jenkins jenkins  676 Nov  4 18:49 README.md
+-rw-r--r-- 1 jenkins jenkins  789 Nov  4 18:49 build.gradle
+drwxr-xr-x 3 jenkins jenkins 4096 Nov  4 18:49 gradle
+-rwxr-xr-x 1 jenkins jenkins 5296 Nov  4 18:49 gradlew
+-rw-r--r-- 1 jenkins jenkins 2260 Nov  4 18:49 gradlew.bat
+drwxr-xr-x 3 jenkins jenkins 4096 Nov  4 18:49 src
+drwxr-xr-x 4 jenkins jenkins 4096 Nov  4 18:49 test
+drwxr-xr-x 2 jenkins jenkins 4096 Nov  4 18:49 vars
+....
+
+Purpose of `050-shared-library-where-is-it-cloned` job is only to show how Jenkins downloads the shared library into its workspace. Now let’s run something more useful.
+
+---
+
+== Using Jenkins Shared Library
+
+=== Using global variables
+
+Job https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/jenkinsfiles/051-shared-library-using-global-variables.groovy[`051-shared-library-using-global-variables`] is utilising Jenkins https://jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline[scripted pipeline] model with fluent interface design pattern making it possible to write elegant, generic and reusable pipelines. If you have a lot of similar projects you could make a template repository with generic Jenkinsfile using this approach and very easily script the creation of new projects and their pipelines.
+
+This model is my preferred one as it offers the most power, reusability and versatility while making the pipelines easy to read at the same time. I recommend you try it first.
+
+There are two strategies to write pipelines like this:
+
+1. Abstract everything including the commands themselves.
+This only works when all projects follow the same convention which is known to everybody in the company.
+A drawback of doing so will make it hard to tell what commands are used to build a project with just looking at the Jenkinsfile.
+
+2. Abstract everything but the commands.
+This is useful when your company does not have a single convention to build similar projects. If you have lot’s of legacy projects then using this strategy will probably save you some headaches.
+
+This example is using strategy #2:
+
+[source,groovy]
+....
+jsl = library(
+  identifier: 'jenkins-shared-library@1.0.4',
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/hoto/jenkins-shared-library.git'
+    ]
+  )
+)
+simplePipeline([jsl: jsl])
+  .build(
+    command: 'My build command'
+  )
+  .unitTest(
+    command: 'My unit test command'
+  )
+  .deploy(
+    command: 'My deploy command'
+  )
+....
+
+Also, you could split the build phase from the deployment phase when the pipeline grows to make things easier to maintain.
+
+image::006.png[]
+
