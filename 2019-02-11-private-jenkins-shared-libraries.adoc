@@ -278,3 +278,449 @@ Also, you could split the build phase from the deployment phase when the pipelin
 
 image::006.png[]
 
+=== Using classes
+
+Job https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/jenkinsfiles/052-shared-library-using-classes.groovy[`052-shared-library-using-classes`] is using the new Jenkins https://jenkins.io/doc/book/pipeline/syntax/#declarative-pipeline[declarative pipeline] model. I find the declarative model useful when quickly creating a pipeline for a single project. It falls short very quickly when you try to abstract it away for multiple projects. I would stay away from it and write a custom pipeline using the scripted model.
+
+You could still mix declarative model with the scripted one but I would not recommend it, anyway here is an example:
+
+[source,groovy]
+....
+jsl = library(
+  identifier: 'jenkins-shared-library@1.0.4',
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/hoto/jenkins-shared-library.git'
+    ]
+  )
+)
+
+def build = jsl.com.mycompany.jenkins.Build.new(this)
+
+pipeline {
+  agent any
+  stages {
+
+    stage('Init') {
+      steps {
+        script {
+          build.setBuildDescription(
+            title: "#${env.BUILD_NUMBER} My build title.",
+            description: 'My build description.'
+          )
+        }
+      }
+    }
+
+    stage('Build') {
+      steps {
+        script {
+          echo 'Building...'
+        }
+      }
+    }
+
+    stage('Unit Test') {
+      steps {
+        script {
+          echo 'Unit Testing...'
+        }
+      }
+    }
+
+    stage('Deploy') {
+      steps {
+        script {
+          echo 'Deploying...'
+        }
+      }
+    }
+
+  }
+}
+....
+
+image::007.png[]
+
+---
+
+== Making Jenkins Shared Library private
+
+In the examples I’m using in this post the referenced JSL is cloned from my public https://github.com/hoto/jenkins-shared-library/tree/1.0.4[repository] on GitHub. By reference I mean this part:
+
+[source,groovy]
+....
+jsl = library(
+  identifier: 'jenkins-shared-library@1.0.4',
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/hoto/jenkins-shared-library.git'
+    ]
+  )
+)
+....
+
+Now, what if you want the JSL repository to be private? That is very easy to do.
+
+To clone a private JSL repository Jenkins needs to be able to authenticate with the hosting provider. You can achieve this in many different ways:
+
+1. By using basic authentication (user and password) added to your Jenkins credentials and then referencing the `credentialsId`:
+
+    [source,groovy]
+    ....
+    jsl = library(
+      identifier: 'jenkins-shared-library@1.0.4',
+      retriever: modernSCM(
+        [
+          $class: 'GitSCMSource',
+          remote: 'https://github.com/hoto/jenkins-shared-library.git',
+          credentialsId: 'github-cicd-user'
+        ]
+      )
+    )
+    ....
+
+2. By using an ssh key added to your Jenkins credentials and then referencing the `credentialsId`:
+
+    [source,groovy]
+    ....
+    jsl = library(
+      identifier: 'jenkins-shared-library@1.0.4',
+      retriever: modernSCM(
+        [
+          $class: 'GitSCMSource',
+          remote: 'git@github.com:hoto/jenkins-shared-library.git',
+          credentialsId: 'github-cicd-ssh-rw'
+        ]
+      )
+    )
+    ....
+
+3. By adding an ssh key to your Jenkins instance and reference JSL with private ssh URL e.g. `git@github.com:hoto/jenkins-shared-library.git`
+This can actually be tricky to configure correctly so depending on your Jenkins setup try other approaches first. Also, this approach is not my favourite as it is “magical” because it hides the details of how Jenkins authenticates and which ssh key is used.
+
+Also, JSL repository obviously does not have to be hosted on GitHub (it does not even need to be a git repository), it could be hosted from a private GitLab or Bitbucket etc.
+
+---
+
+== Structure of a Jenkins Shared Library
+
+We’ve looked how to use a JSL, but how do we structure the JSL repository? Let’s deconstruct the shared library repository used in this article.
+
+The source code is located at https://github.com/hoto/jenkins-shared-library/tree/1.0.4 .
+
+The full structure of the repository, as of tag `1.0.4`:
+
+[source,bash]
+....
+$ pwd
+~/projects/jenkins-shared-library
+
+$ tree -a
+.
+├── .circleci
+│   └── config.yml
+├── Jenkinsfile
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── src
+│   └── com
+│       └── mycompany
+│           └── jenkins
+│               ├── Build.groovy
+│               └── Git.groovy
+├── test
+│   ├── com
+│   │   └── mycompany
+│   │       └── jenkins
+│   │           ├── BuildShould.groovy
+│   │           └── GitShould.groovy
+│   └── mocks
+│       └── WorkflowScriptStub.groovy
+└── vars
+    └── simplePipeline.groovy
+....
+
+=== Unit testing shared library
+
+Let’s break this project down starting from the top.
+
+[source,bash]
+....
+├── .circleci
+│   └── config.yml
+├── Jenkinsfile
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+....
+
+This repository is a standard https://gradle.org/[gradle] groovy project, there is nothing special about it. It’s using a gradle wrapper `gradlew` checked into the source control. This is a standard procedure, doing so makes it possible to ensure the CI is using the same gradle version as developers. Another advantage is that by using `gradlew` (unix) or `gradlew.bat` (windows) script you don’t need gradle installed, it will download gradle binary into the repository.
+
+I’ve included a Jenkinsfile in the project but it is unused as I don’t want to pay for a machine running Jenkins. I still wanted automatic testing of my shared library project on every push to the repository so I’ve added a https://github.com/hoto/jenkins-shared-library/blob/1.0.4/.circleci/config.yml[`.circleci/config.yml`] file and hooked up my GitHub repository to a free https://circleci.com/gh/hoto/jenkinsfile-loader/tree/master[circleci] online service.
+
+If this was a real case scenario I would just use a Jenkins instance and create a multi-branch pipeline job referencing the shared library repository. But there is no jenkins-as-a-service so I’m using circle ci in this example.
+
+To show you how to use Jenkins instance to test your JSL repository a pre-made job config is included in `jenkinsfile-examples` project called https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/configs/C-001-jenkins-shared-library-build-and-test.xml[`C-001-jenkins-shared-library-build-and-test`]:
+
+
+image::008.png[]
+
+Because my JSL project is a standard gradle git repository there are only two things you need to specify in a multi-branch pipeline job: project repository location (GitHub) and location of Jenkinsfile (root). Open `C-001-jenkins-shared-library-build-and-test` job settings to verify that:
+
+image::009.png[]
+
+Let’s have a look at the `jenkinsfile-shared-library` https://github.com/hoto/jenkins-shared-library/blob/1.0.4/Jenkinsfile[`Jenkinsfile`] and then finally run the job.
+
+[source,groovy]
+....
+jsl = library(
+  identifier: "jenkins-shared-library@${env.BRANCH_NAME}",
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/hoto/jenkins-shared-library.git'
+    ]
+  )
+)
+
+build = jsl.com.mycompany.jenkins.Build.new(this)
+git = jsl.com.mycompany.jenkins.Git.new(this)
+
+pipeline {
+
+  agent {
+    docker {
+      image 'docker.io/gradle:4.5.1-jdk8'
+      args '-v /root/.gradle:/home/gradle/.gradle'
+    }
+  }
+
+  options {
+    timeout(time: 5, unit: 'MINUTES')
+  }
+
+  stages {
+
+    stage('Init') {
+      steps {
+        script {
+          COMMIT_MESSAGE = git.commitMessage()
+          COMMIT_AUTHOR = git.commitAuthor()
+
+          build.setBuildDescription(
+            message: COMMIT_MESSAGE,
+            description: COMMIT_AUTHOR
+          )
+        }
+      }
+    }
+
+    stage('Unit Tests') {
+      steps {
+        script {
+          sh './gradlew test'
+        }
+      }
+    }
+  }
+}
+....
+
+There are two things worth noticing about this particular pipeline:
+
+1. It’s using docker as an agent for every stage making it very easy to run as only docker is needed on a Jenkins executor. No tools and compilers have to be installed on Jenkins, everything comes from a docker container.
+
+2. It uses a neat trick of referencing itself when building and testing itself.
+
+If you haven’t noticed the pipeline is using a shared library which points to itself:
+
+[source,groovy]
+....
+jsl = library(
+  identifier: "jenkins-shared-library@${env.BRANCH_NAME}",
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/hoto/jenkins-shared-library.git'
+    ]
+  )
+)
+....
+
+On top of it, the identifier points to a library version using an environment variable `${env.BRANCH_NAME}`. When you combine this with a multi-branch pipeline job and gated pull requests you are technically able to add new pipeline features and unit test them at the same time before you merge them into master branch. Think of it, the possibilities are endless… But honestly, I don’t think cramming all of your pipelines features into a single Jenkinsfile is practical. More likely you would end up using a couple of components and that’s it.
+
+
+image::010.png[]
+
+First build of `Unit Tests` stage took `1min 15s` yet after retrying the same build it took only `4s` as all of the depenencies has been already cached on the host. This is done by passing some extra arguments to docker to mount the gradle cache from the host `args ‘-v /root/.gradle:/home/gradle/.gradle’` Otherwise each new stage would have to download all of the depencencies each time as each stage is a fresh docker container.
+
+=== Shared Library classes
+
+In groovy you can use either classes or scripts. IMHO most of the logic should be put into unit testable classes and then referenced from groovy scripts (Jenkinsfile itself is a groovy script).
+
+....
+├── src
+│   └── com
+│       └── mycompany
+│           └── jenkins
+│               ├── Build.groovy
+│               └── Git.groovy
+├── test
+│   ├── com
+│   │   └── mycompany
+│   │       └── jenkins
+│   │           ├── BuildShould.groovy
+│   │           └── GitShould.groovy
+│   └── mocks
+│       └── WorkflowScriptStub.groovy
+....
+
+The `src` directory is similar to a standard Java source directory structure. This directory is added to the classpath when executing a pipeline.
+
+In tests, I’m using http://spockframework.org/[spock] test framework which is a nice benefit of using groovy for unit tests.
+
+=== Shared Library global variables
+
+The `vars` directory hosts scripts that define global variables accessible from the pipeline. The base name of each `<name>.groovy` file is a `camelCased` identifier.
+
+....
+└── vars
+    └── simplePipeline.groovy
+....
+
+Official https://jenkins.io/doc/book/pipeline/shared-libraries/[documentation] is using “global variables” for something that to me looks like functions. I’m not a Jenkins or groovy expert so I’m gonna use the same nomenclature as to not confuse people.
+
+The only file in my `vars` folder: `simplePipeline.groovy` is a https://jenkins.io/doc/book/pipeline/shared-libraries/#defining-custom-steps[custom step] directive. It is a step because it contains a function with a special declaration `call(Map args)` .
+
+....
+def call(Map args) {
+  someCodeHere()
+}
+....
+
+That `call` function will be triggered when you call `simplePipeline(args)` from anywhere in the pipeline.
+
+I’m not going to go into many details here but take note that there are a couple of other different “global variables” you can use.
+
+---
+
+== Example of a pipeline
+
+To give you an idea of how a pipeline using JSL could look like here is one example from a project I have been working on. There is still a lot of room for improvement though.
+
+[source,groovy]
+....
+jsl = library(
+  identifier: 'jenkins-shared-library@17.0.0',
+  retriever: modernSCM(
+    [
+      $class       : 'GitSCMSource',
+      remote       : 'ssh://git@bitbucket.mycompany.com/ftl/myservice.git',
+      credentialsId: 'bitbucket-cicd-ssh-rw'
+    ]
+  )
+)
+
+def buildData = environment.gatherBuildData(
+  jsl: jsl,
+  projectName: 'myservice',
+  projectRepositoryUrl: 'https://bitbucket.mycompany.com/projects/ftl/repos/myservice',
+  teamName: 'FTL',
+  servicesNames: ['myservice'],
+  servicesUrls: [
+    myservice: [
+      test: 'http://myservice.dev.mycompany.com',
+      pre : 'http://myservice.pre.mycompany.com',
+      pro : 'http://myservice.pro.mycompany.com'
+    ]
+  ],
+  mainBranch: 'master'
+)
+
+bitbucket(buildData).jobInProgress()
+
+def slack = newSlack(
+  jsl: jsl,
+  buildData: buildData,
+  officialChannel: '#ftl-builds',
+  testChannel: '#ftl-builds-test',
+  whenBranch: 'master'
+)
+
+dockerPipeline(jsl: jsl, type: 'maven', buildData: buildData)
+  .withSlack(slack)
+  .setBuildDescription()
+  .build("""
+    ./mvnw versions:set -D newVersion='${buildData.version}' -D generateBackupPoms=false
+    ./mvnw clean package -D skipTests
+    """)
+  .unitTests('./mvnw test')
+  .integrationTestsWithPostgres('./mvnw verify -D skipTests')
+  .pactTests("""
+    ./mvnw test \
+      -D skipTests=true \
+      -D skipPacts=false \
+      -D pact.provider.version='${buildData.version}' \
+      -D pact.verifier.publishResults={{shouldPublishResults}}
+    """)
+  .gitTag(
+    tag: buildData.version,
+    whenBranch: 'master'
+  )
+
+deployment(jsl: jsl, buildData: buildData)
+  .withSlack(slack)
+  .deployTest(
+    serviceName: 'myservice',
+    artifactDir: './myservice-parent/myservice-webapp/target/',
+    artifactName: "myservice-${buildData.version}.zip",
+    whenBranch: 'master'
+  )
+  .deployPre(
+    serviceName: 'myservice',
+    artifactDir: './myservice-parent/myservice-webapp/target/',
+    artifactName: "myservice-${buildData.version}.zip",
+    whenBranch: 'master'
+  )
+  .gatling(
+    environment: 'PRE',
+    type: 'maven',
+    command: """
+      ./mvnw gatling:execute \
+        -pl myservice-parent/myservice-stress \
+        -D myservice.stress.environment=pre
+    """,
+    whenBranch: 'master'
+  )
+  .promoteArtifactFromPreToPro(
+    serviceName: 'myservice',
+    artifactName: "myservice-${buildData.version}.zip",
+    whenBranch: 'master'
+  )
+  .createJiraTicketRequestingDeploymentToPro(
+    whenBranch: 'master'
+  )
+
+bitbucket(buildData).jobSucceeded()
+....
+
+== The End
+To wrap this up. Jenkins Shared Library takes time and effort to learn and set up properly. Try to make your pipelines as declarative as possible and unit test only the parts with logic in them.
+
+Before you write any custom code for your pipeline in groovy, check if there is a plugin for it first. Jenkins has thousands of them and that’s the main reason it is so popular.
+
+If you are blessed and you are dealing with only containers in production using https://github.com/garystafford/cd-maturity-model/blob/requirejs/images/IaC_Maturity_Model%20v2_1.pdf[proper tools] you should have it easier to make your pipelines simple.
+
+On the other hand, if you are dealing with a ton of legacy apps, no containers and obscure bash scripts then instead of rewriting pipelines to groovy maybe have a look at Ansible? But that’s a topic for another time.
