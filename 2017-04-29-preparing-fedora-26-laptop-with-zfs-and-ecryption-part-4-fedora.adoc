@@ -1,0 +1,123 @@
+= Preparing Fedora 26 laptop with ZFS and encryption — fedora (part 4)
+:imagesdir: images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/
+
+_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a[Medium]]_
+
+.Click on the “Install to hard Drive” to open up a wizard.
+image::001.png[]
+
+In this episode we will install fedora on the partitions we created in previous parts of this series.
+
+Press `Win` key to open up the activity window and open installation wizard from the left menu — `install to hard Drive`.
+
+.Fedora installation wizard — Anaconda Installer.
+image::002.png[]
+
+Chose your language and click `continue`. Select `time & date` then click on `installation destination` to select your disk.
+
+.Click on “installation destination”.
+image::003.png[]
+
+.Select your drive and use “Custom” configuration then click “Done’
+image::004.png[]
+
+Select your drive and from `Storage Configuration` choose `custom` to manually select partitions allocation. For two encrypted partitions you will need to provide your password which you used before to encrypt them.
+
+Using the table below select the partition types.
+
+.Partition table for my 256G SSD drive.
+image::005.png[]
+
+For `20G` partition:
+
+* Decrypt using password you used before
+* Format using `XFS`
+* Use `/` mount point
+
+image::006.png[]
+
+For 1024MB partition:
+
+* Format using `XFS`
+* Use `/boot` mount point
+
+image::007.png[]
+
+For `256G` partition
+
+* Format using `EFI` System Partition
+* Use `/boot/efi` mount point
+
+image::008.png[]
+
+Leave the fourth `~217.1G` partition alone for now as `ZFS` is not available by default (because of the licence incompatibility issues between Linux kernel and ZFS) and we will install `ZFS` later on.
+
+> Even though ZFS is open source and free it’s license prohibits it being part of Linux kernel. If you want to use ZFS you have to install it yourself.
+
+.ZFS is not available by default because of licensing incompatibility.
+image::009.png[]
+
+Click `Done` and installator will warn you that you didn’t created a `swap` partition. With sufficient memory, I have `16G RAM`, we don’t need swap. Ignore the message and click `Done` once again.
+
+.Ignore this and click “Done” once more.
+image::010.png[]
+
+.Click “Accept Changes”.
+image::011.png[]
+
+Click “Accept Changes” and on next screen “Begin Installation”.
+
+.Click “Begin Installation”.
+image::012.png[]
+
+---
+
+While Fedora is installing let’s setup root password and create our own user.
+
+image::013.png[]
+
+.Add your user to administrators so you can use sudo.
+image::014.png[]
+
+Follow the convention where your user name is `surname.lastname`. Check the `Make this user administrator` which will add your user to `wheel` group so you can use `sudo` .
+
+image::015.png[]
+
+Click `Finish configuration` and then go to `Network & Hostname` and setup your hostname to something cool (like `catnipmeadow`) and then click `Quit`.
+
+---
+
+Reboot your laptop and remove your pendrive from the USB.
+
+You should see a screen asking you for your disk encryption password you provided before (this is the password for the `/dev/sda3` partition where we mounted `/`).
+
+.After reboot type your disk encryption password.
+image::016.jpeg[]
+
+After you provide valid decryption password you should see the login screen.
+
+image::017.jpeg[]
+
+Log in and you have a running Fedora :)
+
+What is missing is the decryption of the `/dev/sda4` partition and the ZFS.
+
+
+---
+
+That’s all for this episode. Next we will use `crypttab` to automatically decrypt `/dev/sda4` partition during OS boot in https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40[part 5].
+
+---
+
+This post is part of the series, for more check out:
+
+* Part 1 — introduction https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
+* Part 2 — partitions https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41
+* Part 3 — encryption https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013
+* Part 4 — fedora https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a
+* Part 5 — encryption2 https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40
+* Part 6 — zfs https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4
+
+---
+
+Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details.
