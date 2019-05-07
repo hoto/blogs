@@ -1,0 +1,149 @@
+= Encrypt pendrive with LUKS
+:imagesdir: images/2017-08-15
+
+_[Published https://medium.com/@AndrzejRehmann/encrypt-pendrive-with-luks-a58989889d36[Medium]]_
+
+Have you ever wanted to own an encrypted pendrive which will be unreadable and uncrackable (with strong enough password) to third parties without your password?
+
+Your files on laptop may be encrypted and safe but what about the files on pendrives you use? Removing a file from unencrypted pendrive does not make it impossible to retrieve it. Encrypt a pendrive and you can be always safe.
+
+Password for encrypted pendrive can easily be changed without modifying or erasing the pendrive contents.
+
+In this episode we will encrypt pendrive with `LUKS` and format it with `ext4` or `ntfs` filesystem. Your pendrive data will be removed in the process so back it up.
+
+---
+
+Switch to root.
+
+[source,bash]
+....
+su -
+....
+
+Put the pendrive in and list all disks in order to find your pendrive.
+
+[source,bash]
+....
+lsblk
+....
+
+./dev/sdb1 is our pendrive partition and it’s mounted
+image::001.png[]
+
+Locate your pendrive. My pendrive called `64GB` is device `/dev/sdb` with one partition `/dev/sdb1` mounted under `/run/media/andrzej.rehmann/64GB` .
+
+Move all your data to a save place as we will remove all pendrive content.
+
+Unmount pendrive and check the result.
+
+[source,bash]
+....
+umount /dev/<pendrive_partition>
+lsblk
+....
+
+./dev/sdb1 should have no mountpoint
+image::002.png[]
+
+---
+
+We will now encrypt the pendrive. This will remove all pendrive contents.
+
+[source,bash]
+....
+cryptsetup luksFormat /dev/<pendrive_device>
+....
+
+.Confirm overwriting pendrive content and type your new password.
+image::003.png[]
+
+That’s it. Pendrive is now encrypted but is not usable yet.
+
+---
+
+We will now create filesystem on our pendrive.
+
+First let’s decrypt/open it.
+
+[source,bash]
+....
+cryptsetup luksOpen /dev/<pendrive_device> <luks_name>
+lsblk
+....
+
+Where `<luks_name>` is some random string of your choosing (this is not a persistent name, don’t worry).
+
+.Decrypted (opened) pendrive.
+image::004.png[]
+
+You can overwrite pendrive with https://linux.die.net/man/1/shred[`shred`] to wipe it’s previous content but it can take a while. I’m not going to do this.
+
+[source,bash]
+....
+shred -n 1 mapper/<luks_name>
+....
+
+---
+
+Create file system. I’m using https://en.wikipedia.org/wiki/Ext4[`ext4`], but you can choose other filesystem like `NTFS` or `FAT`.
+
+For `ext4` which will work on Linux no problem but will require additional software on Windows use:
+
+[source,bash]
+....
+mkfs -t ext4 -L "<label>" /dev/mapper/<luks_name>   # Ext4
+....
+
+> Ext4 is a journalling filesystem which means that if the device is unplugged prematurely it stands more of a chance of recovering the damaged filesystem. It can support volumes up to 1 ExbiByte (a lot).
+
+For `NTFS` which should work on Windows no problem but may require additional software on some Linux distributions use:
+
+[source,bash]
+....
+mkfs -t ntfs -L "<label>" /dev/mapper/<luks_name>   # NTFS
+....
+
+Where `<label>` is your new pendrive name.
+
+.I’m formatting my pendrive with ext4 as I only use Linux.
+image::005.png[]
+
+---
+
+After `mkfs` is finished pull out the pendrive and plug it back in. You should see a modal window asking for you pendrive password.
+
+image::006.png[]
+
+If you don’t see this window open file browser and click on the pendrive as if you wanted to browse its content. You should be asked for a password then.
+
+image::007.png[]
+
+It’s done. You can check that indeed your pendrive is now encrypted.
+
+[source,bash]
+....
+lsblk
+....
+
+image::008.png[]
+
+If you see the `luks-UUID` as the partition name it means that that partition is encrypted. My `/dev/sdc` (it switched from `/dev/sdb` ) pendrive is now encrypted.
+
+---
+
+The last step is necessary only if you used `ext4` file system. Your pendrive is owned by root user at the moment so you won’t be able to write to it, we need to fix this.
+
+[source,bash]
+....
+chown -R <user>:<user> <pendrive_mount_point>
+....
+
+image::009.png[]
+
+No my pendrive is owned by my user and ready to use.
+
+image::010.png[]
+
+---
+
+If you are interested with installing a Fedora 26 with ZFS and encryption then check out my series here: https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
