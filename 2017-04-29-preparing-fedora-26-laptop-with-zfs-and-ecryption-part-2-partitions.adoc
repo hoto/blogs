@@ -1,0 +1,20 @@
+= Preparing Fedora 26 laptop with ZFS and encryption — partitions (part 2)
+:imagesdir: images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/
+
+_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41[Medium]]_
+
+.Fedora 26 in all its beauty
+image::001.png[]
+
+On my Dell 3470 in order to boot from the https://www.lifewire.com/g00/create-bootable-fedora-usb-drive-2202081?i10c.referrer=https%3A%2F%2Fwww.google.pl%2F[bootable pendrive] (with https://getfedora.org/en/workstation/download/[Fedora 26 ISO] image) I have to press F12 when the laptop is booting up. Then when the boot menu shows up select the inserted pendrive.
+
+.Inserted bootable pendrive with Fedora 26
+image::002.jpeg[]
+
+.Press F12 (it depends on the laptop) when laptop is booting up and select the inserted pendrive (I’m using UEFI BOOT).
+image::003.jpeg[]
+
+.Click on the “Try Fedora” and the OS will be booted from RAM memory.
+image::003.png[]
+
+image::004.png[]
