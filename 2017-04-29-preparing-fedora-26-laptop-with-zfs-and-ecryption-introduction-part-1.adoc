@@ -1,0 +1,131 @@
+= Preparing Fedora 26 laptop with ZFS and encryption — introduction (part 1)
+:imagesdir: images/2017-04-29/part1/
+
+_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab[Medium]]_
+
+.Bootable Fedora 26 pendrive ready to install.
+image::001.jpeg[]
+
+Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details.
+
+---
+
+== [Aug 2018 update] Full disk encryption in Fedora 28
+
+If you just want the full disk encryption then Fedora 28/29 comes with that by default now. Just use the Fedora install wizard and let it create and format the partitions. Only follow this guide if you either want custom parition scheme and/or ZFS.
+
+== The plan
+In order to setup a laptop with one encrypted SSD disk, Fedora 26 OS, partitioned with ZFS and Docker pre-configured to use ZFS we will in this tutorial:
+
+1. Boot to a Fedora 26 Live Preview from a pendrive.
+2. Create four partitions on a single drive.
+3. Encrypt root and home partitions.
+4. Install ZFS and create zpool for our home partition.
+
+== Introduction
+
+On a Linux system `/dev/sda` is usually the primary disk unless you have an SSD M2 connected to PCI then you primary disk is `/dev/nvme0n1`.
+
+
+> sda
+
+`sd[a-z]` is the drive name and it’s an old acronym which stands for **S**CSI (Small Computer System Interface — pronounced "skuzzy") **D**rive plus a letter starting from "*a*".
+Each new drive will be assigned a new letter [a-z] then [A-Z] if you have more then 26 disks and then [a-z][A-Z] and so on.
+We don’t use SCSI drives anymore but this naming convention is still used in Linux ecosystems.
+
+> nvme
+
+`nvme` is also a drive name and it’s an acronym for **N**on-**V**olatile **M**emory **E**xpress which is the disk connected to the PCI Express on your motherboard. NVME SSD M2 disks are much faster (and twice as expensive) then normal SSD drives.
+
+`nvme*n*` is the name of the disk where `**` is a following number.
+`nvme*n*p*` is the name of the partition.
+
+You can check what disks and partitions are in your laptop with:
+
+> lsblk
+
+_lsblk_ stands for **L**ist **B**lock **D**evices and it lists information about all available block devices. Block devices commonly represent hardware such as disk drives where you read and write one block of data at a time.
+
+If you have an M2 SSD disk then you will see something like this:
+
+....
+NAME MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
+nvme0n1                          259:0    0 238.5G  0 disk
+├─nvme0n1p3                      259:3    0    20G  0 part
+│ └─luks-9e2bd0d0-9006-4b4b-b32e-dfd23a3bcceb 253:0 0 20G  0 crypt /
+├─nvme0n1p1                      259:1    0   256M  0 part /boot/efi
+├─nvme0n1p4                      259:4    0 217.2G  0 part
+│ └─luks-cf1d74d5-fed2-43bb-b759-06e9a417c30b 253:1 0 217.2G 0 crypt
+└─nvme0n1p2
+....
+
+I have a normal 2.5" SSD disk so my current output is:
+
+....
+NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+sdb 8:16 1 59.8G 0 disk
+└─sdb1 8:17 1 59.8G 0 part /run/media/andrzej.rehmann/64GB
+sdc 8:32 1 14.4G 0 disk
+└─sdc1 8:33 1 14.4G 0 part /run/media/andrzej.rehmann/DATA 1
+sda 8:0 0 238.5G 0 disk
+├─sda4 8:4 0 217.2G 0 part
+│ └─luks-ab435781–0913–4e0f-8d8a-64aeeab9470e 253:1 0 217.2G 0 crypt
+├─sda2 8:2 0 1G 0 part /boot
+├─sda3 8:3 0 20G 0 part
+│ └─luks-332dd1ac-b97c-4fb5–8c0d-fd5ec239de36 253:0 0 20G 0 crypt /
+└─sda1 8:1 0 256M 0 part /boot/efi
+....
+
+I have mounted three drives. One SSD drive and two pendrives.
+
+1. Pendrive mounted at `/dev/sdb` `59.8G` with one partition `/dev/sdb1` called “64GB” mounted on `/run/media/andrzej.rehmann/64GB`
+
+2. Pendrive mounted at `/dev/sdc` `14.4G` with one partition `/dev/sdc1` called "DATA 1" mounted on `/run/media/andrzej.rehmann/DATA 1`
+
+3. SSD 2.5" disk mounted on/dev/sda `238.5G` with four partitions:
+
+    * `/dev/sda1` `256M` allocated for `/boot/efi`
+    * `/dev/sda2` `1G` allocated for `/boot`
+    * `/dev/sda3` `20G` allocated for `/` (root) LUKS encrypted
+    * `/dev/sda4` `217.2G` which is shown as unallocated (it’s because of ZFS, more on this later) but I have there my `/home/andrzej.rehmann` and `/var/lib/docker` , this partition is also LUKS encrypted
+
+It’s recommended to have your home `/home/andrzej.rehmann` directory to be on a separate partition then the root `/` directory.
+In the `/` partition you should only have the binaries which comes preinstalled with the Linux distribution of your chosing and the installed/downloaded binaries from the internet.
+Binaries by default are installed in the `/usr/bin` directory, for example:
+
+....
+$ which cat
+/usr/bin/cat
+$ which docker
+/usr/bin/docker
+....
+
+`Cat` (which is pre-installed on every distro) and `Docker` which I installed from the internet are both in `/usr/bin`.
+
+One could argue that encryption is not necessary for the `/` partition but you don’t want your binaries to be manipulated by someone who got hold of your laptop.
+
+== Partitions
+
+Insert the pendrive in the USB with the Fedora 26 ISO installed on it, then boot to Fedora 26 Live Preview.
+
+Now we will create partitions on the disk. System is loaded in the memory and we have booted from a pendrive so we can manipulate the hard drive safely.
+
+I’m using the following setup for my own laptop:
+
+.Partitions setup on 256G SSD drive.
+image::002.png[]
+
+---
+
+That’s all in this episode. Next we will create four partitions for our Fedora installation in https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41[part 2].
+
+---
+
+This post is part of the series, for more check out:
+
+* Part 1 — introduction https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
+* Part 2 — partitions https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41
+* Part 3 — encryption https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013
+* Part 4 — fedora https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a
+* Part 5 — encryption2 https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40
+* Part 6 — zfs https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4
