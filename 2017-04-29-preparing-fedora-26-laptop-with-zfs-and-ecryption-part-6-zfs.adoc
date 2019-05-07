@@ -1,0 +1,241 @@
+= Preparing Fedora 26 laptop with ZFS and encryption — zfs (part 6)
+:imagesdir: images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part6/
+
+_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4[Medium]]_
+
+.zfs list
+image::001.png[]
+
+Before we install ZFS it’s good practice to update the `kernel` first.
+
+[source,bash]
+....
+su -
+dnf update kernel\*
+....
+
+
+image::002.png[]
+
+.Accept updating kernel.
+image::003.png[]
+
+*Reboot* the machine *if* the kernel was updated.
+
+---
+
+After rebooting install `kernel-devel` and `dkms` by typing:
+
+....
+# reboot first if you updated kernel!
+dnf install kernel-devel dkms
+....
+
+image::004.png[]
+image::005.png[]
+
+---
+
+Install ZFS. Go to http://zfsonlinux.org/ and click on `Fedora` which should redirect you to https://github.com/zfsonlinux/zfs/wiki/Fedora. From there copy and paste:
+
+[source,bash]
+....
+dnf install http://download.zfsonlinux.org/fedora/zfs-release$(rpm -E %dist).noarch.rpm
+gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-zfsonlinux
+....
+
+image::006.png[]
+
+Install ZFS.
+
+[source,bash]
+....
+dnf install zfs
+....
+
+image::007.png[]
+image::008.png[]
+
+When ZFS installs enable its modules.
+
+[source,bash]
+....
+systemctl preset zfs-import-cache zfs-import-scan zfs-mount zfs-share zfs-zed zfs.target
+....
+
+image::009.png[]
+
+Confirm ZFS was installed.
+
+[source,bash]
+....
+dkms status
+....
+
+image::010.png[]
+
+
+Load ZFS.
+
+[source,bash]
+....
+modprobe zfs
+....
+
+image::011.png[]
+
+---
+
+Get the luks partition UUID name of /dev/sda4.
+
+[source,bash]
+....
+lsblk
+....
+
+image::012.png[]
+
+Create ZFS pool on `/dev/sda4` and check if it was created.
+
+[source,bash]
+....
+zpool create -m none -o ashift=12 -O relatime=on -O compression=lz4 -O xattr=sa <zpool_name> /dev/mapper/luks-<partition_UUID>
+zfs list
+....
+
+image::013.png[]
+
+ZFS says we have `209G` of available space which sounds about right.
+
+---
+
+What’s left is to create a ZFS create mountpoints for /`home` and `/var/lib/docker` (if you use Docker).
+
+*Reboot* and log in as *root* by clicking on the `Not listed?` and typing `root` as the user name.
+
+.Click on the “Not listed?”.
+image::014.jpeg[]
+
+.Log in as root.
+image::015.jpeg[]
+
+---
+
+Logged in as root, open terminal and let’s create mountpoint for `/home`.
+
+First Move your `home` to another location as ZFS needs an empty directory to create a mountpoint.
+
+[source,bash]
+....
+mv /home/<user_name> /home_<user_name>_copy
+ls -la /home # make sure it's empty!
+....
+
+image::016.png[]
+
+Then remove the the `/home` directory. And create ZFS mountpoint for it.
+
+[source,bash]
+....
+rm -rf /home
+zfs create -o mountpoint=/home <zpool>/home
+....
+
+image::017.png[]
+
+You could leave it at this but I will add two more mountpoints, one for my personal `home` and one for my folder where i keep all of my `projects`. This makes creating and managing ZFS snapshots easier.
+
+[source,bash]
+....
+zfs create <zpool>/home/andrzej.rehmann
+zfs create <zpool>/home/andrzej.rehmann/projects
+zfs list
+....
+
+.Don’t mind the docker mountpoint, we will add it later.
+image::018.png[]
+
+---
+
+Move back your `home` to `/home/<user_name>` and restore selinux context and put the right ownership on all our files (remember we are root at the moment).
+
+[source,bash]
+....
+mv /home_<user_name>_copy /home/<user_name>
+restorecon -R /home
+chown -R <user_name>:<user_name> /home/<user_name>
+chmod 700 /home<user_name>
+....
+
+image::019.png[]
+image::020.png[]
+
+Check if the size of you home pool increased (it should).
+
+....
+zfs list
+....
+
+image::021.png[]
+
+---
+
+If you don’t use Docker then skip this step.
+
+Create mountpoint for `docker` and restore selinux context
+
+[source,bash]
+....
+zfs create -o mountpoint=/var/lib/docker <zpool>/docker
+restorecon -R /var/lib/docker
+....
+
+image::022.png[]
+
+Docker will automatically detect z ZFS file system when you install it.
+
+---
+
+Log out from being a root and log in as you.
+
+.Log out from being a root.
+image::023.png[]
+
+After you log in check the size of your zfs pool.
+
+....
+zfs list
+....
+
+image::024.png[]
+
+We can see that pool `lithiumpool/home` has `38.3M` used space. It means that /home and whatever folder is inside (eg. our `/home/<user_name>`) is stored on a ZFS managed partition `/dev/sda4`.
+
+---
+
+> Never update `kernel` and `zfs` or `dkms` toghether. Update `kernel` last.
+
+....
+
+dnf update --exclude=kernel\*
+dnf update
+....
+
+---
+
+This is the end of this series. In future posts I would like to talk about how to use ansible to configure your Fedora laptop and how to `git` manage your `home` directory so it’s synchronized between all of your laptops and backed up by github/bitbucket.
+
+---
+
+This post is part of the series, for more check out:
+
+* Part 1 — introduction https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
+* Part 2 — partitions https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41
+* Part 3 — encryption https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013
+* Part 4 — fedora https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a
+* Part 5 — encryption2 https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40
+* Part 6 — zfs https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4
+
+---
+
+Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details.
