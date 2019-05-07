@@ -18,3 +18,115 @@ image::003.jpeg[]
 image::003.png[]
 
 image::004.png[]
+
+* `Try Fedora` will load and boot the OS from RAM memory.
+* `Install to Hard Drive` will open an interactive wizard which can quickly format our disk and install Fedora.
+
+We want to create our own partitions and use `cgcrypt` to encrypt them so select `Try Fedora` to boot OS from RAM which will leave the hard drive untouched.
+
+---
+
+When Fedora loads press the `Win` (super) key and open terminal by typing `terminal`.
+
+> By default Fedora comes with GNOME desktop environment, you can access the Activities view by hovering your mouse to the upper left corner of the screen or pressing `Win` key.
+
+.Press Win key to access the Activities view.
+image::005.png[]
+
+We want to create four partitions on our hard drive and for that we will need to have root permissions. Type `su -` to change to `root` user.
+
+> To change to root user you can type `sudo -i` or shorter `su -`.
+
+Type `lsblk` to see what hard drives and pendrives your laptop sees.
+
+image::006.png[]
+
+We will use http://www.rodsbooks.com/gdisk/cgdisk.html[`cgdisk`] which is a partition table manipulator. `cgdisk /dev/sda` needs as a parameter the name of the drive — my laptop has only one SSD drive and by default the primary drive is called `sda` (we explained that in part 1). I already have my drive partitioned but I will erase and create same partitions again.
+
+I’m gonna remove my partitions now.
+
+.Removing partitions so we have a clean disk.
+image::007.png[]
+
+.Clean disk with no partitions
+image::008.png[]
+
+We will create new partitions based on this image (for 256GB SSD drive).
+
+.Partitions table for a 256G SSD drive.
+image::009.png[]
+
+.Type size 256M for our first EFI partition
+image::010.png[]
+
+.Use EF00 (E-F-zero-zero) as partition type which is a code for EFI.
+image::011.png[]
+
+> Partition types (but not all of them) can be seen by typing l (that’s small L) instead of the partition code and hitting enter, you would see a list like the one below. EF00 is EFI System.
+
+.Table list of some of the partition types.
+image::012.png[]
+
+Leave the `partition name` blank (press enter) and we should have our first partitions created.
+
+.New EFI partition is created.
+image::013.png[]
+
+Now select the lowest `free space` to start creating new partition from there, after the previously created `EFI System` partition.
+
+.Type 1024 as partition size.
+image::014.png[]
+
+.Type 8300 as partition code.
+image::015.png[]
+
+.Linux 1024M partition created
+image::016.png[]
+
+Create the third partition with `20G` size and `8304` partition code.
+
+image::017.png[]
+
+image::018.png[]
+
+image::019.png[]
+
+Create fourth partition which will end `9M` from the end of the disk. So instead of providing a size (which would be about `217.1G` in my case) we want the partition to end `9M` from the end. To do that type `-9M` when asked for the partition size. Partition code is `BF01` which stands for ZFS.
+
+.Instead of typing partition type use “-9M” to indicate that the partition should end 9M from the disk end.
+image::020.png[]
+
+.BF01 stands for ZFS
+image::021.png[]
+
+.ZFS partition is created
+image::022.png[]
+
+.Last partition is created so we can now write all partitions to disk.
+image::023.png[]
+
+After you create ZFS partition select `[ Write ]` which will write all partitions to disk permanently. Then exit with `[ Quit ]`.
+
+Confirm partitions were created on `/dev/sda` disk by typing `lsblk`.
+
+.Four partitions were written to sda disk.
+image::024.png[]
+
+---
+
+This concludes this episode. We have now four partition and can now encrypt two of them in https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013[part 3].
+
+---
+
+This post is part of the series, for more check out:
+
+* Part 1 — introduction https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
+* Part 2 — partitions https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41
+* Part 3 — encryption https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013
+* Part 4 — fedora https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a
+* Part 5 — encryption2 https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40
+* Part 6 — zfs https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4
+
+---
+
+Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details.
