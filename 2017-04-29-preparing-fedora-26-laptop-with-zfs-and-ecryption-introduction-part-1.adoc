@@ -37,7 +37,7 @@ We don’t use SCSI drives anymore but this naming convention is still used in L
 
 `nvme` is also a drive name and it’s an acronym for **N**on-**V**olatile **M**emory **E**xpress which is the disk connected to the PCI Express on your motherboard. NVME SSD M2 disks are much faster (and twice as expensive) then normal SSD drives.
 
-`nvme*n*` is the name of the disk where `**` is a following number.
+`nvme*n*` is the name of the disk where `\*` is a following number.
 `nvme*n*p*` is the name of the partition.
 
 You can check what disks and partitions are in your laptop with:
