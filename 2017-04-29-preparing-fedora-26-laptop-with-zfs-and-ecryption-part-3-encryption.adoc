@@ -1,0 +1,52 @@
+= Preparing Fedora 26 laptop with ZFS and encryption — encryption (part 3)
+:imagesdir: images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part3/
+
+_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013[Medium]]_
+
+.tput setaf 2; xxd -c 48 ~/Pictures/cat.png
+image::001.png[]
+
+In this part of the series we will encrypt the two out of four partitions we created in the previous episode. For encryption we will use https://linux.die.net/man/8/cryptsetup[`cryptsetup`] .
+
+We want to encrypt partitions for our binaries `/dev/sda3` and for our home `/dev/sda4` . You can see the encrypted parts in yellow here:
+
+.Encrypted parts are in yellow.
+image::002.png[]
+
+Let’s encrypt both partitions, you can use same password for both of them.
+
+* `cryptsetup luksFormat /dev/sda3`
+* `cryptsetup luksFormat /dev/sda4`
+
+.Encrypting the /dev/sda3 where binaries will be stored.
+image::003.png[]
+
+.Encrypting the /dev/sda4 where our home will reside.
+image::004.png[]
+
+Check if both partitions were encrypted:
+
+* `cryptsetup -v isLuks /dev/sda3`
+* `cryptsetup -v isLuks /dev/sda4`
+
+.Both partitions were encrypted successfully.
+image::005.png[]
+
+---
+
+That’s all for this episode. We will setup automatic decryption of both partition after we install fedora in https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a[`part 4`]. It’s easier that way, as we need to persist crypt key somewhere.
+
+---
+
+This post is part of the series, for more check out:
+
+* Part 1 — introduction https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
+* Part 2 — partitions https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41
+* Part 3 — encryption https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013
+* Part 4 — fedora https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a
+* Part 5 — encryption2 https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40
+* Part 6 — zfs https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4
+
+---
+
+Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details.
