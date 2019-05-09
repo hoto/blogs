@@ -1,5 +1,10 @@
-= Creating a Jenkinsfile pipeline
-:imagesdir: images/2019-02-25-creating-a-jenkinsfile-pipeline/
+---
+title: Creating a Jenkinsfile pipeline
+date: "2019-02-25"
+---
+
+== Creating a Jenkinsfile pipeline
+:imagesdir: /images/2019-02-25-creating-a-jenkinsfile-pipeline/
 
 _[Published https://medium.com/@AndrzejRehmann/creating-a-jenkinsfile-pipeline-7aefc89b8c67[Medium]]_
 

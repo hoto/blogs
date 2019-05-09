@@ -1,0 +1,4 @@
+baseURL = "https://hoto.github.io/blogs"
+languageCode = "en-us"
+title = "Blogs"
+theme = "hugo-theme-learn"
