@@ -1,4 +1,8 @@
-baseURL = "https://hoto.github.io/blogs"
+baseURL = "/"
 languageCode = "en-us"
 title = "Blogs"
 theme = "hugo-theme-learn"
+staticDir = "../blogs/"
+
+[outputs]
+home = [ "HTML", "JSON"]

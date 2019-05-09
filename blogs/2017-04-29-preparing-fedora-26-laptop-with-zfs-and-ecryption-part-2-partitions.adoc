@@ -1,6 +1,6 @@
 ---
-title: Preparing Fedora 26 laptop with ZFS and encryption —— partitions (part 2)
-date: "2017-04-29"
+title: Fedora with ZFS and encryption (2)
+date: "2017-04-29 10:02"
 ---
 
 == Preparing Fedora 26 laptop with ZFS and encryption — partitions (part 2)
