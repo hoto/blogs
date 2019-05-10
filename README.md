@@ -1,9 +1,17 @@
-# My blogs
+# Blog
 
-Backups of my blog posts.
+Backup of my blog posts.
 
-I usually post on https://medium.com/@AndrzejRehmann/
+I usually post on [medium](https://medium.com/@andrzejrehmann/).
 
-### TODO:
+### Generate and publish gh-pages
 
-* Generate html and setup github pages
+Make sure all dependencies are downloaded:
+
+    make dependencies
+    make update-hugo-themes
+    make gh-pages-generate
+
+Publish a release to github:
+
+    make gh-pages-release
