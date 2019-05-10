@@ -12,18 +12,18 @@
     <title>Private Jenkins Shared Libraries :: Blogs</title>
 
     
-    <link href="/blogs/css/nucleus.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/fontawesome-all.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hybrid.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/featherlight.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/perfect-scrollbar.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/auto-complete.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/atom-one-dark-reasonable.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/theme.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hugo-theme.css?1557503034" rel="stylesheet">
+    <link href="/blogs/css/nucleus.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/fontawesome-all.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hybrid.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/featherlight.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/perfect-scrollbar.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/auto-complete.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/atom-one-dark-reasonable.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/theme.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hugo-theme.css?1557504373" rel="stylesheet">
     
 
-    <script src="/blogs/js/jquery-3.3.1.min.js?1557503034"></script>
+    <script src="/blogs/js/jquery-3.3.1.min.js?1557504373"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -68,14 +68,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/blogs/js/lunr.min.js?1557503034"></script>
-<script type="text/javascript" src="/blogs/js/auto-complete.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/lunr.min.js?1557504373"></script>
+<script type="text/javascript" src="/blogs/js/auto-complete.js?1557504373"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/hoto.github.io\/blogs\/";
     
 </script>
-<script type="text/javascript" src="/blogs/js/search.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/search.js?1557504373"></script>
 
     
   </div>
@@ -374,122 +374,226 @@
 
 
 
-== Private Jenkins Shared Libraries
-:imagesdir: /images/2019-02-11-private-jenkins-shared-libraries/
-
-_[Published https://medium.com/@AndrzejRehmann/private-jenkins-shared-libraries-540abe7a0ab7[Medium]]_
-
-The official documentation for Jenkins Shared Libraries is pretty good, but not perfect.
-
-This article expands on how to use https://jenkins.io/doc/book/pipeline/shared-libraries/[Jenkins Shared Libraries] with private git repositories, semantically version and unit test your libraries and provides working examples which you can run yourself.
-
-.Photo by https://unsplash.com/photos/GWOTvo3qq7U?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText[j zamora] on https://unsplash.com/search/photos/library?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText[Unsplash]
-image::001.jpeg[]
-
-== Short Intro
-
-Jenkins Shared Library is a very useful tool when dealing with multiple similar pipelines. If you are looking for a way to reduce code duplication in your Jenkins pipelines then this article may be the right place to start.
-
-This article assumes the reader is somehow familiar with Jenkinsfiles or at least with the concept of a Pipeline as Code. Here is a https://medium.com/@AndrzejRehmann/creating-a-jenkinsfile-pipeline-7aefc89b8c67[link] to my basic introduction into Jenkinsfiles if you are new to it.
-
-== For those new to the CI
-
-Your company may be going through the Agile/DevOps transformation and suddenly there is this push to use Continuous Integration (CI) and maybe even Continous Delivery/Deployment (CD) for every project. Or maybe it is just the teams themselves who want to start using a CI and are looking for a guide to this fancy DevOps stuff. Whatever your case may be, there are usually three common questions when starting building and deploying applications:
-
-* What CI should we use?
-* Our pipelines are pretty similar, how can we avoid duplication?
-* Is it reasonable to unit test the pipelines?
-
-To be honest only the first question is usually taken into consideration at the beginning of the CI journey and the last two materialise only after the newly automated pipelines grow and require a dedicated person to mainta… Wait a minute this is not what DevOps was supposed t… Well, never mind, let’s keep going.
-
-> What CI should we use?
-
-The answer to this question is u̶n̶f̶o̶r̶t̶u̶n̶a̶t̶e̶l̶y̶ usually https://jenkins.io/["Jenkins"] as it is still the most popular and feature-rich CI on the market. Oh and it’s free, which makes it by default one of the best candidates in the eyes of your management.
-
-> Our pipelines are pretty similar, how can we avoid duplication?
-
-This is more interesting as there are a couple of options for Jenkins. One option is to use https://github.com/jenkinsci/job-dsl-plugin[Jenkins Job DSL] plugin (JDSL) to completely automate the initial creation and content of your jobs, but using JDSL usually implies that there is one Jenkins instance for multiple teams or a central one for the whole company (this works well when all projects follow the same convention). Also, the initial cost of creating a quality https://github.com/jenkinsci/job-dsl-plugin/wiki/Tutorial---Using-the-Jenkins-Job-DSL[seed JDSL job] can be time-consuming and it pays itself of the more jobs you create with it. So what if you don’t want to heavily invest in JDSL? My answer to that is to try https://jenkins.io/doc/book/pipeline/shared-libraries/[Jenkins Shared Library] (JSL). Although it is possible to combine JDSL with JSL, in this article, I’m going to focus on JSL alone.
-
-> Is it reasonable to unit test the pipelines?
-
-Let me ask you this: How do you want to test new pipeline features? Is it ok for you if after every little change you have to push the changes to Jenkins and wait for the build to see them in action? If not then you will have to either be able to run your pipelines locally without the CI server present or unit tests part of them.
-
-In an ideal world, all pipelines would be dead simple, idempotent, written in a declarative way (e.g. using https://docs.ansible.com/ansible/devel/user_guide/playbooks.html[ansible playbooks]) with no logic in them and you should be able to test run them locally without the CI server present.
-
-But if in Jenkins pipelines you are going to use http://groovy-lang.org/[groovy] then it is very common to have a logic-creep infesting the stages of your pipelines. In this case, if you use JSL then you can unit test the code as if you would test any other groovy code.
-
-Currently, it is very hard to test any infrastructure related code as a whole as it requires an expensive mix of mocking, isolation and idempotency. But if you have a chance to easily unit test part of a pipeline then do so. From my experience when you have to unit tests a big chunk of pipeline it means that that code should be extracted as a (Jenkins) plugin because a plugin for it does not exist yet.
-
-Some automation tools have “dry run” mode but with more complex scenarios it falls short. Unfortunately, testability is still not a primary concern with most infrastructure tools.
-
----
-
-== Pros and cons of using Jenkins Shared Library
-
-The more similar the pipelines are in your organisation the better the outcome you can expect from using JSL.
-
-=== The good stuff:
-
-* Can be shared by multiple teams using different instances of Jenkins.
-* Initial cost is very low and introduction to projects can be done gradually.
-* Can be modularised and unit tested.
-* Can and should be source control versioned.
-* Its development can go through the same https://en.wikipedia.org/wiki/Gated_commit[gated builds] as other projects in the company.
-* Can be publicly available or made private, depending on your repository setup.
-* Can be semantically versioned making it easy to introduce breaking changes without disturbing depended pipelines.
-
-=== The ugly:
-
-There are some unavoidable hindrances but think of it this way: the alternatives usually boil down to some sort of code duplication or nasty practices like keeping all of your company source code in one humongous code repository (https://developer.atlassian.com/blog/2015/10/monorepos-in-git/[monorepo]) using a VCS not designed for it.
-
-Here it is:
-
-* When https://semver.org/[semantically versioned] requires changes in at least two repositories: in JSL repository and in all dependent repositories containing the Jenkinsfiles.
-* E2e testing new pipeline features require a commit and a push from JSL repository (one or multiple times) and a commit and push from the dependent repository (push only once, rebuild multiple times). This is not the problem of JSL on its own, rather it is a decade old problem of Jenkins pipelines testability. It is really hard to e2e test the pipelines because they are not designed to be testable in the first place.
-
-This may feel like it slows you down but think of the alternatives. Code duplication is a maintenance nightmare. If you think monorepo is the answer then unless you are using https://www.quora.com/What-version-control-system-does-Google-use-and-why[piper] I would shy away from it.
-
-In short, JSL comes with the benefits and costs similar to creating and maintaining an open source library. On top of that, it suffers from e2e testability which for me is the biggest drawback. I hope that in the future we will be able to get our hands on a CI which comes with testable pipelines as a first-class citizen.
-
----
-
-== Defining a Jenkins Shared Library
-
-> JSL is usually a https://semver.org/[semantically] versioned https://gradle.org/[gradle] http://groovy-lang.org/[groovy] project kept in a git repository which is git cloned by Jenkins and put on a https://jenkins.io/doc/developer/plugin-development/dependencies-and-class-loading/[classpath] when a https://jenkins.io/doc/book/pipeline/[pipeline] job using a https://jenkins.io/doc/book/pipeline/jenkinsfile/[Jenkinsfile] request for it. (yikes!)
-
-If you understood the previous paragraph then you probably already have a good picture in your mind how it all works together. If not then don’t worry, we will go step by step and explain along the way.
-
-To figure out what Jenkins is actually doing behind the scenes we are going to run the most basic pipeline job which uses JSL.
-
-=== Setting up a Jenkins instance
-
-To demonstrate what Jenkins is doing when using a JSL I will need a Jenkins instance. I’m going to run one on my local machine and for that I’m going to use my GitHub https://github.com/hoto/jenkinsfile-examples[project] with a dockerized Jenkins, a couple of exemplary Jenkinsfiles and another dockerized service which will load my Jenkinsfiles from a folder and tell Jenkins to create jobs out of them.
-
-This setup is only for demonstration purposes and is not suitable for production usage.
-
-If you want to follow this post and run the examples then you need to have https://docs.docker.com/install/[docker] and https://docs.docker.com/compose/install/[docker-compose] installed.
-
-....
-git clone https://github.com/hoto/jenkinsfile-examples.git -b blog-jenkins-shared-libraries
+<div class="sect1">
+<h2 id="_private_jenkins_shared_libraries">Private Jenkins Shared Libraries</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>[Published <a href="https://medium.com/@AndrzejRehmann/private-jenkins-shared-libraries-540abe7a0ab7">Medium</a>]</em></p>
+</div>
+<div class="paragraph">
+<p>The official documentation for Jenkins Shared Libraries is pretty good, but not perfect.</p>
+</div>
+<div class="paragraph">
+<p>This article expands on how to use <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/">Jenkins Shared Libraries</a> with private git repositories, semantically version and unit test your libraries and provides working examples which you can run yourself.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/001.jpeg" alt="001">
+</div>
+<div class="title">Figure 1. Photo by <a href="https://unsplash.com/photos/GWOTvo3qq7U?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">j zamora</a> on <a href="https://unsplash.com/search/photos/library?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Unsplash</a></div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_short_intro">Short Intro</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Jenkins Shared Library is a very useful tool when dealing with multiple similar pipelines. If you are looking for a way to reduce code duplication in your Jenkins pipelines then this article may be the right place to start.</p>
+</div>
+<div class="paragraph">
+<p>This article assumes the reader is somehow familiar with Jenkinsfiles or at least with the concept of a Pipeline as Code. Here is a <a href="https://medium.com/@AndrzejRehmann/creating-a-jenkinsfile-pipeline-7aefc89b8c67">link</a> to my basic introduction into Jenkinsfiles if you are new to it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_for_those_new_to_the_ci">For those new to the CI</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Your company may be going through the Agile/DevOps transformation and suddenly there is this push to use Continuous Integration (CI) and maybe even Continous Delivery/Deployment (CD) for every project. Or maybe it is just the teams themselves who want to start using a CI and are looking for a guide to this fancy DevOps stuff. Whatever your case may be, there are usually three common questions when starting building and deploying applications:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>What CI should we use?</p>
+</li>
+<li>
+<p>Our pipelines are pretty similar, how can we avoid duplication?</p>
+</li>
+<li>
+<p>Is it reasonable to unit test the pipelines?</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>To be honest only the first question is usually taken into consideration at the beginning of the CI journey and the last two materialise only after the newly automated pipelines grow and require a dedicated person to mainta… Wait a minute this is not what DevOps was supposed t… Well, never mind, let’s keep going.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>What CI should we use?</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>The answer to this question is u̶n̶f̶o̶r̶t̶u̶n̶a̶t̶e̶l̶y̶ usually <a href="https://jenkins.io/">"Jenkins"</a> as it is still the most popular and feature-rich CI on the market. Oh and it’s free, which makes it by default one of the best candidates in the eyes of your management.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Our pipelines are pretty similar, how can we avoid duplication?</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>This is more interesting as there are a couple of options for Jenkins. One option is to use <a href="https://github.com/jenkinsci/job-dsl-plugin">Jenkins Job DSL</a> plugin (JDSL) to completely automate the initial creation and content of your jobs, but using JDSL usually implies that there is one Jenkins instance for multiple teams or a central one for the whole company (this works well when all projects follow the same convention). Also, the initial cost of creating a quality <a href="https://github.com/jenkinsci/job-dsl-plugin/wiki/Tutorial---Using-the-Jenkins-Job-DSL">seed JDSL job</a> can be time-consuming and it pays itself of the more jobs you create with it. So what if you don’t want to heavily invest in JDSL? My answer to that is to try <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/">Jenkins Shared Library</a> (JSL). Although it is possible to combine JDSL with JSL, in this article, I’m going to focus on JSL alone.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Is it reasonable to unit test the pipelines?</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Let me ask you this: How do you want to test new pipeline features? Is it ok for you if after every little change you have to push the changes to Jenkins and wait for the build to see them in action? If not then you will have to either be able to run your pipelines locally without the CI server present or unit tests part of them.</p>
+</div>
+<div class="paragraph">
+<p>In an ideal world, all pipelines would be dead simple, idempotent, written in a declarative way (e.g. using <a href="https://docs.ansible.com/ansible/devel/user_guide/playbooks.html">ansible playbooks</a>) with no logic in them and you should be able to test run them locally without the CI server present.</p>
+</div>
+<div class="paragraph">
+<p>But if in Jenkins pipelines you are going to use <a href="http://groovy-lang.org/">groovy</a> then it is very common to have a logic-creep infesting the stages of your pipelines. In this case, if you use JSL then you can unit test the code as if you would test any other groovy code.</p>
+</div>
+<div class="paragraph">
+<p>Currently, it is very hard to test any infrastructure related code as a whole as it requires an expensive mix of mocking, isolation and idempotency. But if you have a chance to easily unit test part of a pipeline then do so. From my experience when you have to unit tests a big chunk of pipeline it means that that code should be extracted as a (Jenkins) plugin because a plugin for it does not exist yet.</p>
+</div>
+<div class="paragraph">
+<p>Some automation tools have “dry run” mode but with more complex scenarios it falls short. Unfortunately, testability is still not a primary concern with most infrastructure tools.</p>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_pros_and_cons_of_using_jenkins_shared_library">Pros and cons of using Jenkins Shared Library</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The more similar the pipelines are in your organisation the better the outcome you can expect from using JSL.</p>
+</div>
+<div class="sect2">
+<h3 id="_the_good_stuff">The good stuff:</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Can be shared by multiple teams using different instances of Jenkins.</p>
+</li>
+<li>
+<p>Initial cost is very low and introduction to projects can be done gradually.</p>
+</li>
+<li>
+<p>Can be modularised and unit tested.</p>
+</li>
+<li>
+<p>Can and should be source control versioned.</p>
+</li>
+<li>
+<p>Its development can go through the same <a href="https://en.wikipedia.org/wiki/Gated_commit">gated builds</a> as other projects in the company.</p>
+</li>
+<li>
+<p>Can be publicly available or made private, depending on your repository setup.</p>
+</li>
+<li>
+<p>Can be semantically versioned making it easy to introduce breaking changes without disturbing depended pipelines.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_ugly">The ugly:</h3>
+<div class="paragraph">
+<p>There are some unavoidable hindrances but think of it this way: the alternatives usually boil down to some sort of code duplication or nasty practices like keeping all of your company source code in one humongous code repository (<a href="https://developer.atlassian.com/blog/2015/10/monorepos-in-git/">monorepo</a>) using a VCS not designed for it.</p>
+</div>
+<div class="paragraph">
+<p>Here it is:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>When <a href="https://semver.org/">semantically versioned</a> requires changes in at least two repositories: in JSL repository and in all dependent repositories containing the Jenkinsfiles.</p>
+</li>
+<li>
+<p>E2e testing new pipeline features require a commit and a push from JSL repository (one or multiple times) and a commit and push from the dependent repository (push only once, rebuild multiple times). This is not the problem of JSL on its own, rather it is a decade old problem of Jenkins pipelines testability. It is really hard to e2e test the pipelines because they are not designed to be testable in the first place.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This may feel like it slows you down but think of the alternatives. Code duplication is a maintenance nightmare. If you think monorepo is the answer then unless you are using <a href="https://www.quora.com/What-version-control-system-does-Google-use-and-why">piper</a> I would shy away from it.</p>
+</div>
+<div class="paragraph">
+<p>In short, JSL comes with the benefits and costs similar to creating and maintaining an open source library. On top of that, it suffers from e2e testability which for me is the biggest drawback. I hope that in the future we will be able to get our hands on a CI which comes with testable pipelines as a first-class citizen.</p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_defining_a_jenkins_shared_library">Defining a Jenkins Shared Library</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>JSL is usually a <a href="https://semver.org/">semantically</a> versioned <a href="https://gradle.org/">gradle</a> <a href="http://groovy-lang.org/">groovy</a> project kept in a git repository which is git cloned by Jenkins and put on a <a href="https://jenkins.io/doc/developer/plugin-development/dependencies-and-class-loading/">classpath</a> when a <a href="https://jenkins.io/doc/book/pipeline/">pipeline</a> job using a <a href="https://jenkins.io/doc/book/pipeline/jenkinsfile/">Jenkinsfile</a> request for it. (yikes!)</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>If you understood the previous paragraph then you probably already have a good picture in your mind how it all works together. If not then don’t worry, we will go step by step and explain along the way.</p>
+</div>
+<div class="paragraph">
+<p>To figure out what Jenkins is actually doing behind the scenes we are going to run the most basic pipeline job which uses JSL.</p>
+</div>
+<div class="sect2">
+<h3 id="_setting_up_a_jenkins_instance">Setting up a Jenkins instance</h3>
+<div class="paragraph">
+<p>To demonstrate what Jenkins is doing when using a JSL I will need a Jenkins instance. I’m going to run one on my local machine and for that I’m going to use my GitHub <a href="https://github.com/hoto/jenkinsfile-examples">project</a> with a dockerized Jenkins, a couple of exemplary Jenkinsfiles and another dockerized service which will load my Jenkinsfiles from a folder and tell Jenkins to create jobs out of them.</p>
+</div>
+<div class="paragraph">
+<p>This setup is only for demonstration purposes and is not suitable for production usage.</p>
+</div>
+<div class="paragraph">
+<p>If you want to follow this post and run the examples then you need to have <a href="https://docs.docker.com/install/">docker</a> and <a href="https://docs.docker.com/compose/install/">docker-compose</a> installed.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git clone https://github.com/hoto/jenkinsfile-examples.git -b blog-jenkins-shared-libraries
 cd jenkinsfile-examples
 docker-compose pull
-docker-compose up
-....
-
-image::002.png[]
-
-Jenkins should be available in your web browser on `localhost:8080`
-
-image::003.png[]
-
-There are a couple of jobs there already. Their config is based on the Jenkinsfiles `<job_name>.groovy` files located in the `jenkinsfiles` directory inside the repository. Editing, creating or deleting any of those Jenkinsfiles will cause the change to be reflected immediately in Jenkins (sometimes refreshing the page is required).
-
-Jenkins is setup with authentication disabled and a couple of pre-installed plugins so it can be used immediately after it runs.
-
-Structure of `jenkinsfile-examples` project:
-
-....
-$ pwd
+docker-compose up</pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/002.png" alt="002">
+</div>
+</div>
+<div class="paragraph">
+<p>Jenkins should be available in your web browser on <code>localhost:8080</code></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/003.png" alt="003">
+</div>
+</div>
+<div class="paragraph">
+<p>There are a couple of jobs there already. Their config is based on the Jenkinsfiles <code>&lt;job_name&gt;.groovy</code> files located in the <code>jenkinsfiles</code> directory inside the repository. Editing, creating or deleting any of those Jenkinsfiles will cause the change to be reflected immediately in Jenkins (sometimes refreshing the page is required).</p>
+</div>
+<div class="paragraph">
+<p>Jenkins is setup with authentication disabled and a couple of pre-installed plugins so it can be used immediately after it runs.</p>
+</div>
+<div class="paragraph">
+<p>Structure of <code>jenkinsfile-examples</code> project:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ pwd
 ~/projects/jenkinsfile-examples
 $ tree
 .
@@ -519,16 +623,18 @@ $ tree
                     ├── plugins.txt
                     └── ref
                         ├── config.xml
-                        └── scriptApproval.xml
-....
-
-=== Referencing a Shared Library
-
-Let’s run a job called https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/jenkinsfiles/050-shared-library-where-is-it-cloned.groovy[`050-shared-library-where-is-it-cloned`] which uses a following Jenkinsfile `050-shared-library-where-is-it-cloned.groovy` (as you can see Jenkinsfiles can be named whatever but in your projects keep the convention of calling it `Jenkinsfile`):
-
-[source,groovy]
-....
-library(
+                        └── scriptApproval.xml</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_referencing_a_shared_library">Referencing a Shared Library</h3>
+<div class="paragraph">
+<p>Let’s run a job called <a href="https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/jenkinsfiles/050-shared-library-where-is-it-cloned.groovy"><code>050-shared-library-where-is-it-cloned</code></a> which uses a following Jenkinsfile <code>050-shared-library-where-is-it-cloned.groovy</code> (as you can see Jenkinsfiles can be named whatever but in your projects keep the convention of calling it <code>Jenkinsfile</code>):</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">library(
   identifier: 'jenkins-shared-library@1.0.4',
   retriever: modernSCM(
     [
@@ -548,43 +654,65 @@ pipeline {
       }
     }
   }
-}
-....
-
-What should be interesting to us about this job is that it:
-
-1. Request a `library` located at https://github.com/hoto/jenkins-shared-library referencing git tag `1.0.4`
-2. Create a stage which lists the location where the library is located. This is only to reveal the magic behind what Jenkins has done behind the scene.
-
-Let’s run it and go through the build logs.
-
-image::004.png[]
-image::005.png[]
-
-Breaking down the logs:
-
-Jenkins tries to load the shared library:
-
-....
-Loading library jenkins-shared-library@1.0.4
-Attempting to resolve 1.0.4 from remote references...
-....
-
-It can’t find it so it clones the referenced git repository `https://github.com/hoto/jenkins-shared-library.git` and checks out a commit tagged `1.0.4`:
-
-....
-git init /var/jenkins_home/workspace/050-shared-library-where-is-it-cloned@libs/jenkins-shared-library
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>What should be interesting to us about this job is that it:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Request a <code>library</code> located at <a href="https://github.com/hoto/jenkins-shared-library" class="bare">https://github.com/hoto/jenkins-shared-library</a> referencing git tag <code>1.0.4</code></p>
+</li>
+<li>
+<p>Create a stage which lists the location where the library is located. This is only to reveal the magic behind what Jenkins has done behind the scene.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Let’s run it and go through the build logs.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/004.png" alt="004">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/005.png" alt="005">
+</div>
+</div>
+<div class="paragraph">
+<p>Breaking down the logs:</p>
+</div>
+<div class="paragraph">
+<p>Jenkins tries to load the shared library:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>Loading library jenkins-shared-library@1.0.4
+Attempting to resolve 1.0.4 from remote references...</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>It can’t find it so it clones the referenced git repository <code><a href="https://github.com/hoto/jenkins-shared-library.git" class="bare">https://github.com/hoto/jenkins-shared-library.git</a></code> and checks out a commit tagged <code>1.0.4</code>:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>git init /var/jenkins_home/workspace/050-shared-library-where-is-it-cloned@libs/jenkins-shared-library
 ...
 git config remote.origin.url https://github.com/hoto/jenkins-shared-library.git
 ...
-Checking out Revision b80d1b3ab131580ba51c94d3d97dd65530ec2a66 (1.0.4)
-....
-
-Library repository has been cloned outside of the job workspace into `../050-shared-library-where-is-it-cloned@libs/jenkins-shared-library` directory. We can verify that from the command executed inside the stage:
-
-[source,bash]
-....
-ls -la ../050-shared-library-where-is-it-cloned@libs/jenkins-shared-library
+Checking out Revision b80d1b3ab131580ba51c94d3d97dd65530ec2a66 (1.0.4)</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Library repository has been cloned outside of the job workspace into <code>../050-shared-library-where-is-it-cloned@libs/jenkins-shared-library</code> directory. We can verify that from the command executed inside the stage:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">ls -la ../050-shared-library-where-is-it-cloned@libs/jenkins-shared-library
 total 72
 drwxr-xr-x 8 jenkins jenkins 4096 Nov  4 18:49 .
 drwxr-xr-x 3 jenkins jenkins 4096 Nov  4 18:49 ..
@@ -602,35 +730,49 @@ drwxr-xr-x 3 jenkins jenkins 4096 Nov  4 18:49 gradle
 -rw-r--r-- 1 jenkins jenkins 2260 Nov  4 18:49 gradlew.bat
 drwxr-xr-x 3 jenkins jenkins 4096 Nov  4 18:49 src
 drwxr-xr-x 4 jenkins jenkins 4096 Nov  4 18:49 test
-drwxr-xr-x 2 jenkins jenkins 4096 Nov  4 18:49 vars
-....
-
-Purpose of `050-shared-library-where-is-it-cloned` job is only to show how Jenkins downloads the shared library into its workspace. Now let’s run something more useful.
-
----
-
-== Using Jenkins Shared Library
-
-=== Using global variables
-
-Job https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/jenkinsfiles/051-shared-library-using-global-variables.groovy[`051-shared-library-using-global-variables`] is utilising Jenkins https://jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline[scripted pipeline] model with fluent interface design pattern making it possible to write elegant, generic and reusable pipelines. If you have a lot of similar projects you could make a template repository with generic Jenkinsfile using this approach and very easily script the creation of new projects and their pipelines.
-
-This model is my preferred one as it offers the most power, reusability and versatility while making the pipelines easy to read at the same time. I recommend you try it first.
-
-There are two strategies to write pipelines like this:
-
-1. Abstract everything including the commands themselves.
+drwxr-xr-x 2 jenkins jenkins 4096 Nov  4 18:49 vars</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Purpose of <code>050-shared-library-where-is-it-cloned</code> job is only to show how Jenkins downloads the shared library into its workspace. Now let’s run something more useful.</p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_using_jenkins_shared_library">Using Jenkins Shared Library</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_using_global_variables">Using global variables</h3>
+<div class="paragraph">
+<p>Job <a href="https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/jenkinsfiles/051-shared-library-using-global-variables.groovy"><code>051-shared-library-using-global-variables</code></a> is utilising Jenkins <a href="https://jenkins.io/doc/book/pipeline/syntax/#scripted-pipeline">scripted pipeline</a> model with fluent interface design pattern making it possible to write elegant, generic and reusable pipelines. If you have a lot of similar projects you could make a template repository with generic Jenkinsfile using this approach and very easily script the creation of new projects and their pipelines.</p>
+</div>
+<div class="paragraph">
+<p>This model is my preferred one as it offers the most power, reusability and versatility while making the pipelines easy to read at the same time. I recommend you try it first.</p>
+</div>
+<div class="paragraph">
+<p>There are two strategies to write pipelines like this:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Abstract everything including the commands themselves.
 This only works when all projects follow the same convention which is known to everybody in the company.
-A drawback of doing so will make it hard to tell what commands are used to build a project with just looking at the Jenkinsfile.
-
-2. Abstract everything but the commands.
-This is useful when your company does not have a single convention to build similar projects. If you have lot’s of legacy projects then using this strategy will probably save you some headaches.
-
-This example is using strategy #2:
-
-[source,groovy]
-....
-jsl = library(
+A drawback of doing so will make it hard to tell what commands are used to build a project with just looking at the Jenkinsfile.</p>
+</li>
+<li>
+<p>Abstract everything but the commands.
+This is useful when your company does not have a single convention to build similar projects. If you have lot’s of legacy projects then using this strategy will probably save you some headaches.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This example is using strategy #2:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">jsl = library(
   identifier: 'jenkins-shared-library@1.0.4',
   retriever: modernSCM(
     [
@@ -648,22 +790,29 @@ simplePipeline([jsl: jsl])
   )
   .deploy(
     command: 'My deploy command'
-  )
-....
-
-Also, you could split the build phase from the deployment phase when the pipeline grows to make things easier to maintain.
-
-image::006.png[]
-
-=== Using classes
-
-Job https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/jenkinsfiles/052-shared-library-using-classes.groovy[`052-shared-library-using-classes`] is using the new Jenkins https://jenkins.io/doc/book/pipeline/syntax/#declarative-pipeline[declarative pipeline] model. I find the declarative model useful when quickly creating a pipeline for a single project. It falls short very quickly when you try to abstract it away for multiple projects. I would stay away from it and write a custom pipeline using the scripted model.
-
-You could still mix declarative model with the scripted one but I would not recommend it, anyway here is an example:
-
-[source,groovy]
-....
-jsl = library(
+  )</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Also, you could split the build phase from the deployment phase when the pipeline grows to make things easier to maintain.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/006.png" alt="006">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_using_classes">Using classes</h3>
+<div class="paragraph">
+<p>Job <a href="https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/jenkinsfiles/052-shared-library-using-classes.groovy"><code>052-shared-library-using-classes</code></a> is using the new Jenkins <a href="https://jenkins.io/doc/book/pipeline/syntax/#declarative-pipeline">declarative pipeline</a> model. I find the declarative model useful when quickly creating a pipeline for a single project. It falls short very quickly when you try to abstract it away for multiple projects. I would stay away from it and write a custom pipeline using the scripted model.</p>
+</div>
+<div class="paragraph">
+<p>You could still mix declarative model with the scripted one but I would not recommend it, anyway here is an example:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">jsl = library(
   identifier: 'jenkins-shared-library@1.0.4',
   retriever: modernSCM(
     [
@@ -715,20 +864,27 @@ pipeline {
     }
 
   }
-}
-....
-
-image::007.png[]
-
----
-
-== Making Jenkins Shared Library private
-
-In the examples I’m using in this post the referenced JSL is cloned from my public https://github.com/hoto/jenkins-shared-library/tree/1.0.4[repository] on GitHub. By reference I mean this part:
-
-[source,groovy]
-....
-jsl = library(
+}</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/007.png" alt="007">
+</div>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_making_jenkins_shared_library_private">Making Jenkins Shared Library private</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In the examples I’m using in this post the referenced JSL is cloned from my public <a href="https://github.com/hoto/jenkins-shared-library/tree/1.0.4">repository</a> on GitHub. By reference I mean this part:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">jsl = library(
   identifier: 'jenkins-shared-library@1.0.4',
   retriever: modernSCM(
     [
@@ -736,63 +892,84 @@ jsl = library(
       remote: 'https://github.com/hoto/jenkins-shared-library.git'
     ]
   )
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now, what if you want the JSL repository to be private? That is very easy to do.</p>
+</div>
+<div class="paragraph">
+<p>To clone a private JSL repository Jenkins needs to be able to authenticate with the hosting provider. You can achieve this in many different ways:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>By using basic authentication (user and password) added to your Jenkins credentials and then referencing the <code>credentialsId</code>:</p>
+<div class="literalblock">
+<div class="content">
+<pre>[source,groovy]
+....
+jsl = library(
+  identifier: 'jenkins-shared-library@1.0.4',
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'https://github.com/hoto/jenkins-shared-library.git',
+      credentialsId: 'github-cicd-user'
+    ]
+  )
 )
+....</pre>
+</div>
+</div>
+</li>
+<li>
+<p>By using an ssh key added to your Jenkins credentials and then referencing the <code>credentialsId</code>:</p>
+<div class="literalblock">
+<div class="content">
+<pre>[source,groovy]
 ....
-
-Now, what if you want the JSL repository to be private? That is very easy to do.
-
-To clone a private JSL repository Jenkins needs to be able to authenticate with the hosting provider. You can achieve this in many different ways:
-
-1. By using basic authentication (user and password) added to your Jenkins credentials and then referencing the `credentialsId`:
-
-    [source,groovy]
-    ....
-    jsl = library(
-      identifier: 'jenkins-shared-library@1.0.4',
-      retriever: modernSCM(
-        [
-          $class: 'GitSCMSource',
-          remote: 'https://github.com/hoto/jenkins-shared-library.git',
-          credentialsId: 'github-cicd-user'
-        ]
-      )
-    )
-    ....
-
-2. By using an ssh key added to your Jenkins credentials and then referencing the `credentialsId`:
-
-    [source,groovy]
-    ....
-    jsl = library(
-      identifier: 'jenkins-shared-library@1.0.4',
-      retriever: modernSCM(
-        [
-          $class: 'GitSCMSource',
-          remote: 'git@github.com:hoto/jenkins-shared-library.git',
-          credentialsId: 'github-cicd-ssh-rw'
-        ]
-      )
-    )
-    ....
-
-3. By adding an ssh key to your Jenkins instance and reference JSL with private ssh URL e.g. `git@github.com:hoto/jenkins-shared-library.git`
-This can actually be tricky to configure correctly so depending on your Jenkins setup try other approaches first. Also, this approach is not my favourite as it is “magical” because it hides the details of how Jenkins authenticates and which ssh key is used.
-
-Also, JSL repository obviously does not have to be hosted on GitHub (it does not even need to be a git repository), it could be hosted from a private GitLab or Bitbucket etc.
-
----
-
-== Structure of a Jenkins Shared Library
-
-We’ve looked how to use a JSL, but how do we structure the JSL repository? Let’s deconstruct the shared library repository used in this article.
-
-The source code is located at https://github.com/hoto/jenkins-shared-library/tree/1.0.4 .
-
-The full structure of the repository, as of tag `1.0.4`:
-
-[source,bash]
-....
-$ pwd
+jsl = library(
+  identifier: 'jenkins-shared-library@1.0.4',
+  retriever: modernSCM(
+    [
+      $class: 'GitSCMSource',
+      remote: 'git@github.com:hoto/jenkins-shared-library.git',
+      credentialsId: 'github-cicd-ssh-rw'
+    ]
+  )
+)
+....</pre>
+</div>
+</div>
+</li>
+<li>
+<p>By adding an ssh key to your Jenkins instance and reference JSL with private ssh URL e.g. <code>git@github.com:hoto/jenkins-shared-library.git</code>
+This can actually be tricky to configure correctly so depending on your Jenkins setup try other approaches first. Also, this approach is not my favourite as it is “magical” because it hides the details of how Jenkins authenticates and which ssh key is used.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Also, JSL repository obviously does not have to be hosted on GitHub (it does not even need to be a git repository), it could be hosted from a private GitLab or Bitbucket etc.</p>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_structure_of_a_jenkins_shared_library">Structure of a Jenkins Shared Library</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We’ve looked how to use a JSL, but how do we structure the JSL repository? Let’s deconstruct the shared library repository used in this article.</p>
+</div>
+<div class="paragraph">
+<p>The source code is located at <a href="https://github.com/hoto/jenkins-shared-library/tree/1.0.4" class="bare">https://github.com/hoto/jenkins-shared-library/tree/1.0.4</a> .</p>
+</div>
+<div class="paragraph">
+<p>The full structure of the repository, as of tag <code>1.0.4</code>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ pwd
 ~/projects/jenkins-shared-library
 
 $ tree -a
@@ -822,16 +999,17 @@ $ tree -a
 │   └── mocks
 │       └── WorkflowScriptStub.groovy
 └── vars
-    └── simplePipeline.groovy
-....
-
-=== Unit testing shared library
-
-Let’s break this project down starting from the top.
-
-[source,bash]
-....
-├── .circleci
+    └── simplePipeline.groovy</code></pre>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_unit_testing_shared_library">Unit testing shared library</h3>
+<div class="paragraph">
+<p>Let’s break this project down starting from the top.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">├── .circleci
 │   └── config.yml
 ├── Jenkinsfile
 ├── build.gradle
@@ -840,29 +1018,40 @@ Let’s break this project down starting from the top.
 │       ├── gradle-wrapper.jar
 │       └── gradle-wrapper.properties
 ├── gradlew
-├── gradlew.bat
-....
-
-This repository is a standard https://gradle.org/[gradle] groovy project, there is nothing special about it. It’s using a gradle wrapper `gradlew` checked into the source control. This is a standard procedure, doing so makes it possible to ensure the CI is using the same gradle version as developers. Another advantage is that by using `gradlew` (unix) or `gradlew.bat` (windows) script you don’t need gradle installed, it will download gradle binary into the repository.
-
-I’ve included a Jenkinsfile in the project but it is unused as I don’t want to pay for a machine running Jenkins. I still wanted automatic testing of my shared library project on every push to the repository so I’ve added a https://github.com/hoto/jenkins-shared-library/blob/1.0.4/.circleci/config.yml[`.circleci/config.yml`] file and hooked up my GitHub repository to a free https://circleci.com/gh/hoto/jenkinsfile-loader/tree/master[circleci] online service.
-
-If this was a real case scenario I would just use a Jenkins instance and create a multi-branch pipeline job referencing the shared library repository. But there is no jenkins-as-a-service so I’m using circle ci in this example.
-
-To show you how to use Jenkins instance to test your JSL repository a pre-made job config is included in `jenkinsfile-examples` project called https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/configs/C-001-jenkins-shared-library-build-and-test.xml[`C-001-jenkins-shared-library-build-and-test`]:
-
-
-image::008.png[]
-
-Because my JSL project is a standard gradle git repository there are only two things you need to specify in a multi-branch pipeline job: project repository location (GitHub) and location of Jenkinsfile (root). Open `C-001-jenkins-shared-library-build-and-test` job settings to verify that:
-
-image::009.png[]
-
-Let’s have a look at the `jenkinsfile-shared-library` https://github.com/hoto/jenkins-shared-library/blob/1.0.4/Jenkinsfile[`Jenkinsfile`] and then finally run the job.
-
-[source,groovy]
-....
-jsl = library(
+├── gradlew.bat</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This repository is a standard <a href="https://gradle.org/">gradle</a> groovy project, there is nothing special about it. It’s using a gradle wrapper <code>gradlew</code> checked into the source control. This is a standard procedure, doing so makes it possible to ensure the CI is using the same gradle version as developers. Another advantage is that by using <code>gradlew</code> (unix) or <code>gradlew.bat</code> (windows) script you don’t need gradle installed, it will download gradle binary into the repository.</p>
+</div>
+<div class="paragraph">
+<p>I’ve included a Jenkinsfile in the project but it is unused as I don’t want to pay for a machine running Jenkins. I still wanted automatic testing of my shared library project on every push to the repository so I’ve added a <a href="https://github.com/hoto/jenkins-shared-library/blob/1.0.4/.circleci/config.yml"><code>.circleci/config.yml</code></a> file and hooked up my GitHub repository to a free <a href="https://circleci.com/gh/hoto/jenkinsfile-loader/tree/master">circleci</a> online service.</p>
+</div>
+<div class="paragraph">
+<p>If this was a real case scenario I would just use a Jenkins instance and create a multi-branch pipeline job referencing the shared library repository. But there is no jenkins-as-a-service so I’m using circle ci in this example.</p>
+</div>
+<div class="paragraph">
+<p>To show you how to use Jenkins instance to test your JSL repository a pre-made job config is included in <code>jenkinsfile-examples</code> project called <a href="https://github.com/hoto/jenkinsfile-examples/blob/blog-jenkins-shared-libraries/configs/C-001-jenkins-shared-library-build-and-test.xml"><code>C-001-jenkins-shared-library-build-and-test</code></a>:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/008.png" alt="008">
+</div>
+</div>
+<div class="paragraph">
+<p>Because my JSL project is a standard gradle git repository there are only two things you need to specify in a multi-branch pipeline job: project repository location (GitHub) and location of Jenkinsfile (root). Open <code>C-001-jenkins-shared-library-build-and-test</code> job settings to verify that:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/009.png" alt="009">
+</div>
+</div>
+<div class="paragraph">
+<p>Let’s have a look at the <code>jenkinsfile-shared-library</code> <a href="https://github.com/hoto/jenkins-shared-library/blob/1.0.4/Jenkinsfile"><code>Jenkinsfile</code></a> and then finally run the job.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">jsl = library(
   identifier: "jenkins-shared-library@${env.BRANCH_NAME}",
   retriever: modernSCM(
     [
@@ -912,20 +1101,28 @@ pipeline {
       }
     }
   }
-}
-....
-
-There are two things worth noticing about this particular pipeline:
-
-1. It’s using docker as an agent for every stage making it very easy to run as only docker is needed on a Jenkins executor. No tools and compilers have to be installed on Jenkins, everything comes from a docker container.
-
-2. It uses a neat trick of referencing itself when building and testing itself.
-
-If you haven’t noticed the pipeline is using a shared library which points to itself:
-
-[source,groovy]
-....
-jsl = library(
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>There are two things worth noticing about this particular pipeline:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>It’s using docker as an agent for every stage making it very easy to run as only docker is needed on a Jenkins executor. No tools and compilers have to be installed on Jenkins, everything comes from a docker container.</p>
+</li>
+<li>
+<p>It uses a neat trick of referencing itself when building and testing itself.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>If you haven’t noticed the pipeline is using a shared library which points to itself:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">jsl = library(
   identifier: "jenkins-shared-library@${env.BRANCH_NAME}",
   retriever: modernSCM(
     [
@@ -933,22 +1130,29 @@ jsl = library(
       remote: 'https://github.com/hoto/jenkins-shared-library.git'
     ]
   )
-)
-....
-
-On top of it, the identifier points to a library version using an environment variable `${env.BRANCH_NAME}`. When you combine this with a multi-branch pipeline job and gated pull requests you are technically able to add new pipeline features and unit test them at the same time before you merge them into master branch. Think of it, the possibilities are endless… But honestly, I don’t think cramming all of your pipelines features into a single Jenkinsfile is practical. More likely you would end up using a couple of components and that’s it.
-
-
-image::010.png[]
-
-First build of `Unit Tests` stage took `1min 15s` yet after retrying the same build it took only `4s` as all of the depenencies has been already cached on the host. This is done by passing some extra arguments to docker to mount the gradle cache from the host `args ‘-v /root/.gradle:/home/gradle/.gradle’` Otherwise each new stage would have to download all of the depencencies each time as each stage is a fresh docker container.
-
-=== Shared Library classes
-
-In groovy you can use either classes or scripts. IMHO most of the logic should be put into unit testable classes and then referenced from groovy scripts (Jenkinsfile itself is a groovy script).
-
-....
-├── src
+)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On top of it, the identifier points to a library version using an environment variable <code>${env.BRANCH_NAME}</code>. When you combine this with a multi-branch pipeline job and gated pull requests you are technically able to add new pipeline features and unit test them at the same time before you merge them into master branch. Think of it, the possibilities are endless… But honestly, I don’t think cramming all of your pipelines features into a single Jenkinsfile is practical. More likely you would end up using a couple of components and that’s it.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2019-02-11-private-jenkins-shared-libraries/010.png" alt="010">
+</div>
+</div>
+<div class="paragraph">
+<p>First build of <code>Unit Tests</code> stage took <code>1min 15s</code> yet after retrying the same build it took only <code>4s</code> as all of the depenencies has been already cached on the host. This is done by passing some extra arguments to docker to mount the gradle cache from the host <code>args ‘-v /root/.gradle:/home/gradle/.gradle’</code> Otherwise each new stage would have to download all of the depencencies each time as each stage is a fresh docker container.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_shared_library_classes">Shared Library classes</h3>
+<div class="paragraph">
+<p>In groovy you can use either classes or scripts. IMHO most of the logic should be put into unit testable classes and then referenced from groovy scripts (Jenkinsfile itself is a groovy script).</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>├── src
 │   └── com
 │       └── mycompany
 │           └── jenkins
@@ -961,45 +1165,59 @@ In groovy you can use either classes or scripts. IMHO most of the logic should b
 │   │           ├── BuildShould.groovy
 │   │           └── GitShould.groovy
 │   └── mocks
-│       └── WorkflowScriptStub.groovy
-....
-
-The `src` directory is similar to a standard Java source directory structure. This directory is added to the classpath when executing a pipeline.
-
-In tests, I’m using http://spockframework.org/[spock] test framework which is a nice benefit of using groovy for unit tests.
-
-=== Shared Library global variables
-
-The `vars` directory hosts scripts that define global variables accessible from the pipeline. The base name of each `<name>.groovy` file is a `camelCased` identifier.
-
-....
-└── vars
-    └── simplePipeline.groovy
-....
-
-Official https://jenkins.io/doc/book/pipeline/shared-libraries/[documentation] is using “global variables” for something that to me looks like functions. I’m not a Jenkins or groovy expert so I’m gonna use the same nomenclature as to not confuse people.
-
-The only file in my `vars` folder: `simplePipeline.groovy` is a https://jenkins.io/doc/book/pipeline/shared-libraries/#defining-custom-steps[custom step] directive. It is a step because it contains a function with a special declaration `call(Map args)` .
-
-....
-def call(Map args) {
+│       └── WorkflowScriptStub.groovy</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>src</code> directory is similar to a standard Java source directory structure. This directory is added to the classpath when executing a pipeline.</p>
+</div>
+<div class="paragraph">
+<p>In tests, I’m using <a href="http://spockframework.org/">spock</a> test framework which is a nice benefit of using groovy for unit tests.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_shared_library_global_variables">Shared Library global variables</h3>
+<div class="paragraph">
+<p>The <code>vars</code> directory hosts scripts that define global variables accessible from the pipeline. The base name of each <code>&lt;name&gt;.groovy</code> file is a <code>camelCased</code> identifier.</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>└── vars
+    └── simplePipeline.groovy</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Official <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/">documentation</a> is using “global variables” for something that to me looks like functions. I’m not a Jenkins or groovy expert so I’m gonna use the same nomenclature as to not confuse people.</p>
+</div>
+<div class="paragraph">
+<p>The only file in my <code>vars</code> folder: <code>simplePipeline.groovy</code> is a <a href="https://jenkins.io/doc/book/pipeline/shared-libraries/#defining-custom-steps">custom step</a> directive. It is a step because it contains a function with a special declaration <code>call(Map args)</code> .</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>def call(Map args) {
   someCodeHere()
-}
-....
-
-That `call` function will be triggered when you call `simplePipeline(args)` from anywhere in the pipeline.
-
-I’m not going to go into many details here but take note that there are a couple of other different “global variables” you can use.
-
----
-
-== Example of a pipeline
-
-To give you an idea of how a pipeline using JSL could look like here is one example from a project I have been working on. There is still a lot of room for improvement though.
-
-[source,groovy]
-....
-jsl = library(
+}</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That <code>call</code> function will be triggered when you call <code>simplePipeline(args)</code> from anywhere in the pipeline.</p>
+</div>
+<div class="paragraph">
+<p>I’m not going to go into many details here but take note that there are a couple of other different “global variables” you can use.</p>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_example_of_a_pipeline">Example of a pipeline</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To give you an idea of how a pipeline using JSL could look like here is one example from a project I have been working on. There is still a lot of room for improvement though.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-groovy" data-lang="groovy">jsl = library(
   identifier: 'jenkins-shared-library@17.0.0',
   retriever: modernSCM(
     [
@@ -1090,17 +1308,29 @@ deployment(jsl: jsl, buildData: buildData)
     whenBranch: 'master'
   )
 
-bitbucket(buildData).jobSucceeded()
-....
+bitbucket(buildData).jobSucceeded()</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_end">The End</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To wrap this up. Jenkins Shared Library takes time and effort to learn and set up properly. Try to make your pipelines as declarative as possible and unit test only the parts with logic in them.</p>
+</div>
+<div class="paragraph">
+<p>Before you write any custom code for your pipeline in groovy, check if there is a plugin for it first. Jenkins has thousands of them and that’s the main reason it is so popular.</p>
+</div>
+<div class="paragraph">
+<p>If you are blessed and you are dealing with only containers in production using <a href="https://github.com/garystafford/cd-maturity-model/blob/requirejs/images/IaC_Maturity_Model%20v2_1.pdf">proper tools</a> you should have it easier to make your pipelines simple.</p>
+</div>
+<div class="paragraph">
+<p>On the other hand, if you are dealing with a ton of legacy apps, no containers and obscure bash scripts then instead of rewriting pipelines to groovy maybe have a look at Ansible? But that’s a topic for another time.</p>
+</div>
+</div>
+</div>
 
-== The End
-To wrap this up. Jenkins Shared Library takes time and effort to learn and set up properly. Try to make your pipelines as declarative as possible and unit test only the parts with logic in them.
-
-Before you write any custom code for your pipeline in groovy, check if there is a plugin for it first. Jenkins has thousands of them and that’s the main reason it is so popular.
-
-If you are blessed and you are dealing with only containers in production using https://github.com/garystafford/cd-maturity-model/blob/requirejs/images/IaC_Maturity_Model%20v2_1.pdf[proper tools] you should have it easier to make your pipelines simple.
-
-On the other hand, if you are dealing with a ton of legacy apps, no containers and obscure bash scripts then instead of rewriting pipelines to groovy maybe have a look at Ansible? But that’s a topic for another time.
 
 <footer class=" footline" >
 	
@@ -1323,20 +1553,20 @@ On the other hand, if you are dealing with a ton of legacy apps, no containers a
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/blogs/js/clipboard.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557503034"></script>
-    <script src="/blogs/js/jquery.sticky.js?1557503034"></script>
-    <script src="/blogs/js/featherlight.min.js?1557503034"></script>
-    <script src="/blogs/js/html5shiv-printshiv.min.js?1557503034"></script>
-    <script src="/blogs/js/highlight.pack.js?1557503034"></script>
+    <script src="/blogs/js/clipboard.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557504373"></script>
+    <script src="/blogs/js/jquery.sticky.js?1557504373"></script>
+    <script src="/blogs/js/featherlight.min.js?1557504373"></script>
+    <script src="/blogs/js/html5shiv-printshiv.min.js?1557504373"></script>
+    <script src="/blogs/js/highlight.pack.js?1557504373"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557503034"></script>
-    <script src="/blogs/js/learn.js?1557503034"></script>
-    <script src="/blogs/js/hugo-learn.js?1557503034"></script>
+    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557504373"></script>
+    <script src="/blogs/js/learn.js?1557504373"></script>
+    <script src="/blogs/js/hugo-learn.js?1557504373"></script>
 
-    <link href="/blogs/mermaid/mermaid.css?1557503034" type="text/css" rel="stylesheet" />
-    <script src="/blogs/mermaid/mermaid.js?1557503034"></script>
+    <link href="/blogs/mermaid/mermaid.css?1557504373" type="text/css" rel="stylesheet" />
+    <script src="/blogs/mermaid/mermaid.js?1557504373"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

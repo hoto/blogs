@@ -12,18 +12,18 @@
     <title>Fedora with ZFS and encryption (4) :: Blogs</title>
 
     
-    <link href="/blogs/css/nucleus.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/fontawesome-all.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hybrid.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/featherlight.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/perfect-scrollbar.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/auto-complete.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/atom-one-dark-reasonable.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/theme.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hugo-theme.css?1557503034" rel="stylesheet">
+    <link href="/blogs/css/nucleus.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/fontawesome-all.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hybrid.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/featherlight.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/perfect-scrollbar.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/auto-complete.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/atom-one-dark-reasonable.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/theme.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hugo-theme.css?1557504373" rel="stylesheet">
     
 
-    <script src="/blogs/js/jquery-3.3.1.min.js?1557503034"></script>
+    <script src="/blogs/js/jquery-3.3.1.min.js?1557504373"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -68,14 +68,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/blogs/js/lunr.min.js?1557503034"></script>
-<script type="text/javascript" src="/blogs/js/auto-complete.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/lunr.min.js?1557504373"></script>
+<script type="text/javascript" src="/blogs/js/auto-complete.js?1557504373"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/hoto.github.io\/blogs\/";
     
 </script>
-<script type="text/javascript" src="/blogs/js/search.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/search.js?1557504373"></script>
 
     
   </div>
@@ -374,129 +374,244 @@
 
 
 
-== Preparing Fedora 26 laptop with ZFS and encryption — fedora (part 4)
-:imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/
+<div class="sect1">
+<h2 id="_preparing_fedora_26_laptop_with_zfs_and_encryption_fedora_part_4">Preparing Fedora 26 laptop with ZFS and encryption — fedora (part 4)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>[Published <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a">Medium</a>]</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/001.png" alt="001">
+</div>
+<div class="title">Figure 1. Click on the “Install to hard Drive” to open up a wizard.</div>
+</div>
+<div class="paragraph">
+<p>In this episode we will install fedora on the partitions we created in previous parts of this series.</p>
+</div>
+<div class="paragraph">
+<p>Press <code>Win</code> key to open up the activity window and open installation wizard from the left menu — <code>install to hard Drive</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/002.png" alt="002">
+</div>
+<div class="title">Figure 2. Fedora installation wizard — Anaconda Installer.</div>
+</div>
+<div class="paragraph">
+<p>Chose your language and click <code>continue</code>. Select <code>time &amp; date</code> then click on <code>installation destination</code> to select your disk.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/003.png" alt="003">
+</div>
+<div class="title">Figure 3. Click on “installation destination”.</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/004.png" alt="004">
+</div>
+<div class="title">Figure 4. Select your drive and use “Custom” configuration then click “Done’</div>
+</div>
+<div class="paragraph">
+<p>Select your drive and from <code>Storage Configuration</code> choose <code>custom</code> to manually select partitions allocation. For two encrypted partitions you will need to provide your password which you used before to encrypt them.</p>
+</div>
+<div class="paragraph">
+<p>Using the table below select the partition types.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/005.png" alt="005">
+</div>
+<div class="title">Figure 5. Partition table for my 256G SSD drive.</div>
+</div>
+<div class="paragraph">
+<p>For <code>20G</code> partition:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Decrypt using password you used before</p>
+</li>
+<li>
+<p>Format using <code>XFS</code></p>
+</li>
+<li>
+<p>Use <code>/</code> mount point</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/006.png" alt="006">
+</div>
+</div>
+<div class="paragraph">
+<p>For 1024MB partition:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Format using <code>XFS</code></p>
+</li>
+<li>
+<p>Use <code>/boot</code> mount point</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/007.png" alt="007">
+</div>
+</div>
+<div class="paragraph">
+<p>For <code>256G</code> partition</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Format using <code>EFI</code> System Partition</p>
+</li>
+<li>
+<p>Use <code>/boot/efi</code> mount point</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/008.png" alt="008">
+</div>
+</div>
+<div class="paragraph">
+<p>Leave the fourth <code>~217.1G</code> partition alone for now as <code>ZFS</code> is not available by default (because of the licence incompatibility issues between Linux kernel and ZFS) and we will install <code>ZFS</code> later on.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Even though ZFS is open source and free it’s license prohibits it being part of Linux kernel. If you want to use ZFS you have to install it yourself.</p>
+</div>
+</blockquote>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/009.png" alt="009">
+</div>
+<div class="title">Figure 6. ZFS is not available by default because of licensing incompatibility.</div>
+</div>
+<div class="paragraph">
+<p>Click <code>Done</code> and installator will warn you that you didn’t created a <code>swap</code> partition. With sufficient memory, I have <code>16G RAM</code>, we don’t need swap. Ignore the message and click <code>Done</code> once again.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/010.png" alt="010">
+</div>
+<div class="title">Figure 7. Ignore this and click “Done” once more.</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/011.png" alt="011">
+</div>
+<div class="title">Figure 8. Click “Accept Changes”.</div>
+</div>
+<div class="paragraph">
+<p>Click “Accept Changes” and on next screen “Begin Installation”.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/012.png" alt="012">
+</div>
+<div class="title">Figure 9. Click “Begin Installation”.</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>While Fedora is installing let’s setup root password and create our own user.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/013.png" alt="013">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/014.png" alt="014">
+</div>
+<div class="title">Figure 10. Add your user to administrators so you can use sudo.</div>
+</div>
+<div class="paragraph">
+<p>Follow the convention where your user name is <code>surname.lastname</code>. Check the <code>Make this user administrator</code> which will add your user to <code>wheel</code> group so you can use <code>sudo</code> .</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/015.png" alt="015">
+</div>
+</div>
+<div class="paragraph">
+<p>Click <code>Finish configuration</code> and then go to <code>Network &amp; Hostname</code> and setup your hostname to something cool (like <code>catnipmeadow</code>) and then click <code>Quit</code>.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>Reboot your laptop and remove your pendrive from the USB.</p>
+</div>
+<div class="paragraph">
+<p>You should see a screen asking you for your disk encryption password you provided before (this is the password for the <code>/dev/sda3</code> partition where we mounted <code>/</code>).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/016.jpeg" alt="016">
+</div>
+<div class="title">Figure 11. After reboot type your disk encryption password.</div>
+</div>
+<div class="paragraph">
+<p>After you provide valid decryption password you should see the login screen.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/017.jpeg" alt="017">
+</div>
+</div>
+<div class="paragraph">
+<p>Log in and you have a running Fedora :)</p>
+</div>
+<div class="paragraph">
+<p>What is missing is the decryption of the <code>/dev/sda4</code> partition and the ZFS.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>That’s all for this episode. Next we will use <code>crypttab</code> to automatically decrypt <code>/dev/sda4</code> partition during OS boot in <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40">part 5</a>.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>This post is part of the series, for more check out:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Part 1 — introduction <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab</a></p>
+</li>
+<li>
+<p>Part 2 — partitions <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41</a></p>
+</li>
+<li>
+<p>Part 3 — encryption <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013</a></p>
+</li>
+<li>
+<p>Part 4 — fedora <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a</a></p>
+</li>
+<li>
+<p>Part 5 — encryption2 <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40</a></p>
+</li>
+<li>
+<p>Part 6 — zfs <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4</a></p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p>Special thanks to <a href="https://medium.com/@marcinskarbek">Marcin Skarbek</a> for setting up my laptop and explaining all of this stuff to me with excruciating details.</p>
+</div>
+</div>
+</div>
 
-_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a[Medium]]_
-
-.Click on the “Install to hard Drive” to open up a wizard.
-image::001.png[]
-
-In this episode we will install fedora on the partitions we created in previous parts of this series.
-
-Press `Win` key to open up the activity window and open installation wizard from the left menu — `install to hard Drive`.
-
-.Fedora installation wizard — Anaconda Installer.
-image::002.png[]
-
-Chose your language and click `continue`. Select `time & date` then click on `installation destination` to select your disk.
-
-.Click on “installation destination”.
-image::003.png[]
-
-.Select your drive and use “Custom” configuration then click “Done’
-image::004.png[]
-
-Select your drive and from `Storage Configuration` choose `custom` to manually select partitions allocation. For two encrypted partitions you will need to provide your password which you used before to encrypt them.
-
-Using the table below select the partition types.
-
-.Partition table for my 256G SSD drive.
-image::005.png[]
-
-For `20G` partition:
-
-* Decrypt using password you used before
-* Format using `XFS`
-* Use `/` mount point
-
-image::006.png[]
-
-For 1024MB partition:
-
-* Format using `XFS`
-* Use `/boot` mount point
-
-image::007.png[]
-
-For `256G` partition
-
-* Format using `EFI` System Partition
-* Use `/boot/efi` mount point
-
-image::008.png[]
-
-Leave the fourth `~217.1G` partition alone for now as `ZFS` is not available by default (because of the licence incompatibility issues between Linux kernel and ZFS) and we will install `ZFS` later on.
-
-> Even though ZFS is open source and free it’s license prohibits it being part of Linux kernel. If you want to use ZFS you have to install it yourself.
-
-.ZFS is not available by default because of licensing incompatibility.
-image::009.png[]
-
-Click `Done` and installator will warn you that you didn’t created a `swap` partition. With sufficient memory, I have `16G RAM`, we don’t need swap. Ignore the message and click `Done` once again.
-
-.Ignore this and click “Done” once more.
-image::010.png[]
-
-.Click “Accept Changes”.
-image::011.png[]
-
-Click “Accept Changes” and on next screen “Begin Installation”.
-
-.Click “Begin Installation”.
-image::012.png[]
-
----
-
-While Fedora is installing let’s setup root password and create our own user.
-
-image::013.png[]
-
-.Add your user to administrators so you can use sudo.
-image::014.png[]
-
-Follow the convention where your user name is `surname.lastname`. Check the `Make this user administrator` which will add your user to `wheel` group so you can use `sudo` .
-
-image::015.png[]
-
-Click `Finish configuration` and then go to `Network & Hostname` and setup your hostname to something cool (like `catnipmeadow`) and then click `Quit`.
-
----
-
-Reboot your laptop and remove your pendrive from the USB.
-
-You should see a screen asking you for your disk encryption password you provided before (this is the password for the `/dev/sda3` partition where we mounted `/`).
-
-.After reboot type your disk encryption password.
-image::016.jpeg[]
-
-After you provide valid decryption password you should see the login screen.
-
-image::017.jpeg[]
-
-Log in and you have a running Fedora :)
-
-What is missing is the decryption of the `/dev/sda4` partition and the ZFS.
-
-
----
-
-That’s all for this episode. Next we will use `crypttab` to automatically decrypt `/dev/sda4` partition during OS boot in https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40[part 5].
-
----
-
-This post is part of the series, for more check out:
-
-* Part 1 — introduction https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
-* Part 2 — partitions https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41
-* Part 3 — encryption https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013
-* Part 4 — fedora https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a
-* Part 5 — encryption2 https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40
-* Part 6 — zfs https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4
-
----
-
-Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details.
 
 <footer class=" footline" >
 	
@@ -719,20 +834,20 @@ Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting 
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/blogs/js/clipboard.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557503034"></script>
-    <script src="/blogs/js/jquery.sticky.js?1557503034"></script>
-    <script src="/blogs/js/featherlight.min.js?1557503034"></script>
-    <script src="/blogs/js/html5shiv-printshiv.min.js?1557503034"></script>
-    <script src="/blogs/js/highlight.pack.js?1557503034"></script>
+    <script src="/blogs/js/clipboard.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557504373"></script>
+    <script src="/blogs/js/jquery.sticky.js?1557504373"></script>
+    <script src="/blogs/js/featherlight.min.js?1557504373"></script>
+    <script src="/blogs/js/html5shiv-printshiv.min.js?1557504373"></script>
+    <script src="/blogs/js/highlight.pack.js?1557504373"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557503034"></script>
-    <script src="/blogs/js/learn.js?1557503034"></script>
-    <script src="/blogs/js/hugo-learn.js?1557503034"></script>
+    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557504373"></script>
+    <script src="/blogs/js/learn.js?1557504373"></script>
+    <script src="/blogs/js/hugo-learn.js?1557504373"></script>
 
-    <link href="/blogs/mermaid/mermaid.css?1557503034" type="text/css" rel="stylesheet" />
-    <script src="/blogs/mermaid/mermaid.js?1557503034"></script>
+    <link href="/blogs/mermaid/mermaid.css?1557504373" type="text/css" rel="stylesheet" />
+    <script src="/blogs/mermaid/mermaid.js?1557504373"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

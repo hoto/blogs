@@ -12,18 +12,18 @@
     <title>Fedora with ZFS and encryption (1) :: Blogs</title>
 
     
-    <link href="/blogs/css/nucleus.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/fontawesome-all.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hybrid.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/featherlight.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/perfect-scrollbar.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/auto-complete.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/atom-one-dark-reasonable.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/theme.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hugo-theme.css?1557503034" rel="stylesheet">
+    <link href="/blogs/css/nucleus.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/fontawesome-all.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hybrid.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/featherlight.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/perfect-scrollbar.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/auto-complete.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/atom-one-dark-reasonable.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/theme.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hugo-theme.css?1557504373" rel="stylesheet">
     
 
-    <script src="/blogs/js/jquery-3.3.1.min.js?1557503034"></script>
+    <script src="/blogs/js/jquery-3.3.1.min.js?1557504373"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -68,14 +68,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/blogs/js/lunr.min.js?1557503034"></script>
-<script type="text/javascript" src="/blogs/js/auto-complete.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/lunr.min.js?1557504373"></script>
+<script type="text/javascript" src="/blogs/js/auto-complete.js?1557504373"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/hoto.github.io\/blogs\/";
     
 </script>
-<script type="text/javascript" src="/blogs/js/search.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/search.js?1557504373"></script>
 
     
   </div>
@@ -374,71 +374,122 @@
 
 
 
-== Preparing Fedora 26 laptop with ZFS and encryption — introduction (part 1)
-:imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part1/
-
-_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab[Medium]]_
-
-.Bootable Fedora 26 pendrive ready to install.
-image::001.jpeg[]
-
-Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details.
-
----
-
-== [Aug 2018 update] Full disk encryption in Fedora 28
-
-If you just want the full disk encryption then Fedora 28/29 comes with that by default now. Just use the Fedora install wizard and let it create and format the partitions. Only follow this guide if you either want custom parition scheme and/or ZFS.
-
-== The plan
-In order to setup a laptop with one encrypted SSD disk, Fedora 26 OS, partitioned with ZFS and Docker pre-configured to use ZFS we will in this tutorial:
-
-1. Boot to a Fedora 26 Live Preview from a pendrive.
-2. Create four partitions on a single drive.
-3. Encrypt root and home partitions.
-4. Install ZFS and create zpool for our home partition.
-
-== Introduction
-
-On a Linux system `/dev/sda` is usually the primary disk unless you have an SSD M2 connected to PCI then you primary disk is `/dev/nvme0n1`.
-
-
-> sda
-
-`sd[a-z]` is the drive name and it’s an old acronym which stands for **S**CSI (Small Computer System Interface — pronounced "skuzzy") **D**rive plus a letter starting from "*a*".
+<div class="sect1">
+<h2 id="_preparing_fedora_26_laptop_with_zfs_and_encryption_introduction_part_1">Preparing Fedora 26 laptop with ZFS and encryption — introduction (part 1)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>[Published <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab">Medium</a>]</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part1/001.jpeg" alt="001">
+</div>
+<div class="title">Figure 1. Bootable Fedora 26 pendrive ready to install.</div>
+</div>
+<div class="paragraph">
+<p>Special thanks to <a href="https://medium.com/@marcinskarbek">Marcin Skarbek</a> for setting up my laptop and explaining all of this stuff to me with excruciating details.</p>
+</div>
+<hr>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_aug_2018_update_full_disk_encryption_in_fedora_28">[Aug 2018 update] Full disk encryption in Fedora 28</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>If you just want the full disk encryption then Fedora 28/29 comes with that by default now. Just use the Fedora install wizard and let it create and format the partitions. Only follow this guide if you either want custom parition scheme and/or ZFS.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_plan">The plan</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>In order to setup a laptop with one encrypted SSD disk, Fedora 26 OS, partitioned with ZFS and Docker pre-configured to use ZFS we will in this tutorial:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Boot to a Fedora 26 Live Preview from a pendrive.</p>
+</li>
+<li>
+<p>Create four partitions on a single drive.</p>
+</li>
+<li>
+<p>Encrypt root and home partitions.</p>
+</li>
+<li>
+<p>Install ZFS and create zpool for our home partition.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introduction">Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>On a Linux system <code>/dev/sda</code> is usually the primary disk unless you have an SSD M2 connected to PCI then you primary disk is <code>/dev/nvme0n1</code>.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>sda</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p><code>sd[a-z]</code> is the drive name and it’s an old acronym which stands for <strong>S</strong>CSI (Small Computer System Interface — pronounced "skuzzy") <strong>D</strong>rive plus a letter starting from "<strong>a</strong>".
 Each new drive will be assigned a new letter [a-z] then [A-Z] if you have more then 26 disks and then [a-z][A-Z] and so on.
-We don’t use SCSI drives anymore but this naming convention is still used in Linux ecosystems.
-
-> nvme
-
-`nvme` is also a drive name and it’s an acronym for **N**on-**V**olatile **M**emory **E**xpress which is the disk connected to the PCI Express on your motherboard. NVME SSD M2 disks are much faster (and twice as expensive) then normal SSD drives.
-
-`nvme*n*` is the name of the disk where `\*` is a following number.
-`nvme*n*p*` is the name of the partition.
-
-You can check what disks and partitions are in your laptop with:
-
-> lsblk
-
-_lsblk_ stands for **L**ist **B**lock **D**evices and it lists information about all available block devices. Block devices commonly represent hardware such as disk drives where you read and write one block of data at a time.
-
-If you have an M2 SSD disk then you will see something like this:
-
-....
-NAME MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
+We don’t use SCSI drives anymore but this naming convention is still used in Linux ecosystems.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>nvme</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p><code>nvme</code> is also a drive name and it’s an acronym for <strong>N</strong>on-<strong>V</strong>olatile <strong>M</strong>emory <strong>E</strong>xpress which is the disk connected to the PCI Express on your motherboard. NVME SSD M2 disks are much faster (and twice as expensive) then normal SSD drives.</p>
+</div>
+<div class="paragraph">
+<p><code>nvme*n*</code> is the name of the disk where <code>*</code> is a following number.
+<code>nvme*n*p*</code> is the name of the partition.</p>
+</div>
+<div class="paragraph">
+<p>You can check what disks and partitions are in your laptop with:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>lsblk</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p><em>lsblk</em> stands for <strong>L</strong>ist <strong>B</strong>lock <strong>D</strong>evices and it lists information about all available block devices. Block devices commonly represent hardware such as disk drives where you read and write one block of data at a time.</p>
+</div>
+<div class="paragraph">
+<p>If you have an M2 SSD disk then you will see something like this:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>NAME MAJ:MIN RM   SIZE RO TYPE  MOUNTPOINT
 nvme0n1                          259:0    0 238.5G  0 disk
 ├─nvme0n1p3                      259:3    0    20G  0 part
 │ └─luks-9e2bd0d0-9006-4b4b-b32e-dfd23a3bcceb 253:0 0 20G  0 crypt /
 ├─nvme0n1p1                      259:1    0   256M  0 part /boot/efi
 ├─nvme0n1p4                      259:4    0 217.2G  0 part
 │ └─luks-cf1d74d5-fed2-43bb-b759-06e9a417c30b 253:1 0 217.2G 0 crypt
-└─nvme0n1p2
-....
-
-I have a normal 2.5" SSD disk so my current output is:
-
-....
-NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+└─nvme0n1p2</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I have a normal 2.5" SSD disk so my current output is:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>NAME MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
 sdb 8:16 1 59.8G 0 disk
 └─sdb1 8:17 1 59.8G 0 part /run/media/andrzej.rehmann/64GB
 sdc 8:32 1 14.4G 0 disk
@@ -449,62 +500,112 @@ sda 8:0 0 238.5G 0 disk
 ├─sda2 8:2 0 1G 0 part /boot
 ├─sda3 8:3 0 20G 0 part
 │ └─luks-332dd1ac-b97c-4fb5–8c0d-fd5ec239de36 253:0 0 20G 0 crypt /
-└─sda1 8:1 0 256M 0 part /boot/efi
-....
-
-I have mounted three drives. One SSD drive and two pendrives.
-
-1. Pendrive mounted at `/dev/sdb` `59.8G` with one partition `/dev/sdb1` called “64GB” mounted on `/run/media/andrzej.rehmann/64GB`
-
-2. Pendrive mounted at `/dev/sdc` `14.4G` with one partition `/dev/sdc1` called "DATA 1" mounted on `/run/media/andrzej.rehmann/DATA 1`
-
-3. SSD 2.5" disk mounted on/dev/sda `238.5G` with four partitions:
-
-    * `/dev/sda1` `256M` allocated for `/boot/efi`
-    * `/dev/sda2` `1G` allocated for `/boot`
-    * `/dev/sda3` `20G` allocated for `/` (root) LUKS encrypted
-    * `/dev/sda4` `217.2G` which is shown as unallocated (it’s because of ZFS, more on this later) but I have there my `/home/andrzej.rehmann` and `/var/lib/docker` , this partition is also LUKS encrypted
-
-It’s recommended to have your home `/home/andrzej.rehmann` directory to be on a separate partition then the root `/` directory.
-In the `/` partition you should only have the binaries which comes preinstalled with the Linux distribution of your chosing and the installed/downloaded binaries from the internet.
-Binaries by default are installed in the `/usr/bin` directory, for example:
-
-....
-$ which cat
+└─sda1 8:1 0 256M 0 part /boot/efi</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>I have mounted three drives. One SSD drive and two pendrives.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Pendrive mounted at <code>/dev/sdb</code> <code>59.8G</code> with one partition <code>/dev/sdb1</code> called “64GB” mounted on <code>/run/media/andrzej.rehmann/64GB</code></p>
+</li>
+<li>
+<p>Pendrive mounted at <code>/dev/sdc</code> <code>14.4G</code> with one partition <code>/dev/sdc1</code> called "DATA 1" mounted on <code>/run/media/andrzej.rehmann/DATA 1</code></p>
+</li>
+<li>
+<p>SSD 2.5" disk mounted on/dev/sda <code>238.5G</code> with four partitions:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><code>/dev/sda1</code> <code>256M</code> allocated for <code>/boot/efi</code></p>
+</li>
+<li>
+<p><code>/dev/sda2</code> <code>1G</code> allocated for <code>/boot</code></p>
+</li>
+<li>
+<p><code>/dev/sda3</code> <code>20G</code> allocated for <code>/</code> (root) LUKS encrypted</p>
+</li>
+<li>
+<p><code>/dev/sda4</code> <code>217.2G</code> which is shown as unallocated (it’s because of ZFS, more on this later) but I have there my <code>/home/andrzej.rehmann</code> and <code>/var/lib/docker</code> , this partition is also LUKS encrypted</p>
+</li>
+</ul>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>It’s recommended to have your home <code>/home/andrzej.rehmann</code> directory to be on a separate partition then the root <code>/</code> directory.
+In the <code>/</code> partition you should only have the binaries which comes preinstalled with the Linux distribution of your chosing and the installed/downloaded binaries from the internet.
+Binaries by default are installed in the <code>/usr/bin</code> directory, for example:</p>
+</div>
+<div class="literalblock">
+<div class="content">
+<pre>$ which cat
 /usr/bin/cat
 $ which docker
-/usr/bin/docker
-....
-
-`Cat` (which is pre-installed on every distro) and `Docker` which I installed from the internet are both in `/usr/bin`.
-
-One could argue that encryption is not necessary for the `/` partition but you don’t want your binaries to be manipulated by someone who got hold of your laptop.
-
-== Partitions
-
-Insert the pendrive in the USB with the Fedora 26 ISO installed on it, then boot to Fedora 26 Live Preview.
-
-Now we will create partitions on the disk. System is loaded in the memory and we have booted from a pendrive so we can manipulate the hard drive safely.
-
-I’m using the following setup for my own laptop:
-
-.Partitions setup on 256G SSD drive.
-image::002.png[]
-
----
-
-That’s all in this episode. Next we will create four partitions for our Fedora installation in https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41[part 2].
-
----
-
-This post is part of the series, for more check out:
-
-* Part 1 — introduction https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
-* Part 2 — partitions https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41
-* Part 3 — encryption https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013
-* Part 4 — fedora https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a
-* Part 5 — encryption2 https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40
-* Part 6 — zfs https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4
+/usr/bin/docker</pre>
+</div>
+</div>
+<div class="paragraph">
+<p><code>Cat</code> (which is pre-installed on every distro) and <code>Docker</code> which I installed from the internet are both in <code>/usr/bin</code>.</p>
+</div>
+<div class="paragraph">
+<p>One could argue that encryption is not necessary for the <code>/</code> partition but you don’t want your binaries to be manipulated by someone who got hold of your laptop.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_partitions">Partitions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Insert the pendrive in the USB with the Fedora 26 ISO installed on it, then boot to Fedora 26 Live Preview.</p>
+</div>
+<div class="paragraph">
+<p>Now we will create partitions on the disk. System is loaded in the memory and we have booted from a pendrive so we can manipulate the hard drive safely.</p>
+</div>
+<div class="paragraph">
+<p>I’m using the following setup for my own laptop:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part1/002.png" alt="002">
+</div>
+<div class="title">Figure 2. Partitions setup on 256G SSD drive.</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>That’s all in this episode. Next we will create four partitions for our Fedora installation in <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41">part 2</a>.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>This post is part of the series, for more check out:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Part 1 — introduction <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab</a></p>
+</li>
+<li>
+<p>Part 2 — partitions <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41</a></p>
+</li>
+<li>
+<p>Part 3 — encryption <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013</a></p>
+</li>
+<li>
+<p>Part 4 — fedora <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a</a></p>
+</li>
+<li>
+<p>Part 5 — encryption2 <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40</a></p>
+</li>
+<li>
+<p>Part 6 — zfs <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
 
 
 <footer class=" footline" >
@@ -728,20 +829,20 @@ This post is part of the series, for more check out:
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/blogs/js/clipboard.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557503034"></script>
-    <script src="/blogs/js/jquery.sticky.js?1557503034"></script>
-    <script src="/blogs/js/featherlight.min.js?1557503034"></script>
-    <script src="/blogs/js/html5shiv-printshiv.min.js?1557503034"></script>
-    <script src="/blogs/js/highlight.pack.js?1557503034"></script>
+    <script src="/blogs/js/clipboard.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557504373"></script>
+    <script src="/blogs/js/jquery.sticky.js?1557504373"></script>
+    <script src="/blogs/js/featherlight.min.js?1557504373"></script>
+    <script src="/blogs/js/html5shiv-printshiv.min.js?1557504373"></script>
+    <script src="/blogs/js/highlight.pack.js?1557504373"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557503034"></script>
-    <script src="/blogs/js/learn.js?1557503034"></script>
-    <script src="/blogs/js/hugo-learn.js?1557503034"></script>
+    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557504373"></script>
+    <script src="/blogs/js/learn.js?1557504373"></script>
+    <script src="/blogs/js/hugo-learn.js?1557504373"></script>
 
-    <link href="/blogs/mermaid/mermaid.css?1557503034" type="text/css" rel="stylesheet" />
-    <script src="/blogs/mermaid/mermaid.js?1557503034"></script>
+    <link href="/blogs/mermaid/mermaid.css?1557504373" type="text/css" rel="stylesheet" />
+    <script src="/blogs/mermaid/mermaid.js?1557504373"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

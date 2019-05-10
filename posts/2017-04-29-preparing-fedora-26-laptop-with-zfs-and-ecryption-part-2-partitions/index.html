@@ -12,18 +12,18 @@
     <title>Fedora with ZFS and encryption (2) :: Blogs</title>
 
     
-    <link href="/blogs/css/nucleus.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/fontawesome-all.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hybrid.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/featherlight.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/perfect-scrollbar.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/auto-complete.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/atom-one-dark-reasonable.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/theme.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hugo-theme.css?1557503034" rel="stylesheet">
+    <link href="/blogs/css/nucleus.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/fontawesome-all.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hybrid.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/featherlight.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/perfect-scrollbar.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/auto-complete.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/atom-one-dark-reasonable.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/theme.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hugo-theme.css?1557504373" rel="stylesheet">
     
 
-    <script src="/blogs/js/jquery-3.3.1.min.js?1557503034"></script>
+    <script src="/blogs/js/jquery-3.3.1.min.js?1557504373"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -68,14 +68,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/blogs/js/lunr.min.js?1557503034"></script>
-<script type="text/javascript" src="/blogs/js/auto-complete.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/lunr.min.js?1557504373"></script>
+<script type="text/javascript" src="/blogs/js/auto-complete.js?1557504373"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/hoto.github.io\/blogs\/";
     
 </script>
-<script type="text/javascript" src="/blogs/js/search.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/search.js?1557504373"></script>
 
     
   </div>
@@ -374,138 +374,268 @@
 
 
 
-== Preparing Fedora 26 laptop with ZFS and encryption — partitions (part 2)
-:imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/
+<div class="sect1">
+<h2 id="_preparing_fedora_26_laptop_with_zfs_and_encryption_partitions_part_2">Preparing Fedora 26 laptop with ZFS and encryption — partitions (part 2)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>[Published <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41">Medium</a>]</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/001.png" alt="001">
+</div>
+<div class="title">Figure 1. Fedora 26 in all its beauty</div>
+</div>
+<div class="paragraph">
+<p>On my Dell 3470 in order to boot from the <a href="https://www.lifewire.com/g00/create-bootable-fedora-usb-drive-2202081?i10c.referrer=https%3A%2F%2Fwww.google.pl%2F">bootable pendrive</a> (with <a href="https://getfedora.org/en/workstation/download/">Fedora 26 ISO</a> image) I have to press F12 when the laptop is booting up. Then when the boot menu shows up select the inserted pendrive.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/002.jpeg" alt="002">
+</div>
+<div class="title">Figure 2. Inserted bootable pendrive with Fedora 26</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/003.jpeg" alt="003">
+</div>
+<div class="title">Figure 3. Press F12 (it depends on the laptop) when laptop is booting up and select the inserted pendrive (I’m using UEFI BOOT).</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/003.png" alt="003">
+</div>
+<div class="title">Figure 4. Click on the “Try Fedora” and the OS will be booted from RAM memory.</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/004.png" alt="004">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>Try Fedora</code> will load and boot the OS from RAM memory.</p>
+</li>
+<li>
+<p><code>Install to Hard Drive</code> will open an interactive wizard which can quickly format our disk and install Fedora.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We want to create our own partitions and use <code>cgcrypt</code> to encrypt them so select <code>Try Fedora</code> to boot OS from RAM which will leave the hard drive untouched.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>When Fedora loads press the <code>Win</code> (super) key and open terminal by typing <code>terminal</code>.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>By default Fedora comes with GNOME desktop environment, you can access the Activities view by hovering your mouse to the upper left corner of the screen or pressing <code>Win</code> key.</p>
+</div>
+</blockquote>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/005.png" alt="005">
+</div>
+<div class="title">Figure 5. Press Win key to access the Activities view.</div>
+</div>
+<div class="paragraph">
+<p>We want to create four partitions on our hard drive and for that we will need to have root permissions. Type <code>su -</code> to change to <code>root</code> user.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>To change to root user you can type <code>sudo -i</code> or shorter <code>su -</code>.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Type <code>lsblk</code> to see what hard drives and pendrives your laptop sees.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/006.png" alt="006">
+</div>
+</div>
+<div class="paragraph">
+<p>We will use <a href="http://www.rodsbooks.com/gdisk/cgdisk.html"><code>cgdisk</code></a> which is a partition table manipulator. <code>cgdisk /dev/sda</code> needs as a parameter the name of the drive — my laptop has only one SSD drive and by default the primary drive is called <code>sda</code> (we explained that in part 1). I already have my drive partitioned but I will erase and create same partitions again.</p>
+</div>
+<div class="paragraph">
+<p>I’m gonna remove my partitions now.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/007.png" alt="007">
+</div>
+<div class="title">Figure 6. Removing partitions so we have a clean disk.</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/008.png" alt="008">
+</div>
+<div class="title">Figure 7. Clean disk with no partitions</div>
+</div>
+<div class="paragraph">
+<p>We will create new partitions based on this image (for 256GB SSD drive).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/009.png" alt="009">
+</div>
+<div class="title">Figure 8. Partitions table for a 256G SSD drive.</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/010.png" alt="010">
+</div>
+<div class="title">Figure 9. Type size 256M for our first EFI partition</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/011.png" alt="011">
+</div>
+<div class="title">Figure 10. Use EF00 (E-F-zero-zero) as partition type which is a code for EFI.</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Partition types (but not all of them) can be seen by typing l (that’s small L) instead of the partition code and hitting enter, you would see a list like the one below. EF00 is EFI System.</p>
+</div>
+</blockquote>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/012.png" alt="012">
+</div>
+<div class="title">Figure 11. Table list of some of the partition types.</div>
+</div>
+<div class="paragraph">
+<p>Leave the <code>partition name</code> blank (press enter) and we should have our first partitions created.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/013.png" alt="013">
+</div>
+<div class="title">Figure 12. New EFI partition is created.</div>
+</div>
+<div class="paragraph">
+<p>Now select the lowest <code>free space</code> to start creating new partition from there, after the previously created <code>EFI System</code> partition.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/014.png" alt="014">
+</div>
+<div class="title">Figure 13. Type 1024 as partition size.</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/015.png" alt="015">
+</div>
+<div class="title">Figure 14. Type 8300 as partition code.</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/016.png" alt="016">
+</div>
+<div class="title">Figure 15. Linux 1024M partition created</div>
+</div>
+<div class="paragraph">
+<p>Create the third partition with <code>20G</code> size and <code>8304</code> partition code.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/017.png" alt="017">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/018.png" alt="018">
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/019.png" alt="019">
+</div>
+</div>
+<div class="paragraph">
+<p>Create fourth partition which will end <code>9M</code> from the end of the disk. So instead of providing a size (which would be about <code>217.1G</code> in my case) we want the partition to end <code>9M</code> from the end. To do that type <code>-9M</code> when asked for the partition size. Partition code is <code>BF01</code> which stands for ZFS.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/020.png" alt="020">
+</div>
+<div class="title">Figure 16. Instead of typing partition type use “-9M” to indicate that the partition should end 9M from the disk end.</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/021.png" alt="021">
+</div>
+<div class="title">Figure 17. BF01 stands for ZFS</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/022.png" alt="022">
+</div>
+<div class="title">Figure 18. ZFS partition is created</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/023.png" alt="023">
+</div>
+<div class="title">Figure 19. Last partition is created so we can now write all partitions to disk.</div>
+</div>
+<div class="paragraph">
+<p>After you create ZFS partition select <code>[ Write ]</code> which will write all partitions to disk permanently. Then exit with <code>[ Quit ]</code>.</p>
+</div>
+<div class="paragraph">
+<p>Confirm partitions were created on <code>/dev/sda</code> disk by typing <code>lsblk</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/024.png" alt="024">
+</div>
+<div class="title">Figure 20. Four partitions were written to sda disk.</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>This concludes this episode. We have now four partition and can now encrypt two of them in <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013">part 3</a>.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>This post is part of the series, for more check out:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Part 1 — introduction <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab</a></p>
+</li>
+<li>
+<p>Part 2 — partitions <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41</a></p>
+</li>
+<li>
+<p>Part 3 — encryption <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013</a></p>
+</li>
+<li>
+<p>Part 4 — fedora <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a</a></p>
+</li>
+<li>
+<p>Part 5 — encryption2 <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40</a></p>
+</li>
+<li>
+<p>Part 6 — zfs <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4</a></p>
+</li>
+</ul>
+</div>
+<hr>
+<div class="paragraph">
+<p>Special thanks to <a href="https://medium.com/@marcinskarbek">Marcin Skarbek</a> for setting up my laptop and explaining all of this stuff to me with excruciating details.</p>
+</div>
+</div>
+</div>
 
-_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41[Medium]]_
-
-.Fedora 26 in all its beauty
-image::001.png[]
-
-On my Dell 3470 in order to boot from the https://www.lifewire.com/g00/create-bootable-fedora-usb-drive-2202081?i10c.referrer=https%3A%2F%2Fwww.google.pl%2F[bootable pendrive] (with https://getfedora.org/en/workstation/download/[Fedora 26 ISO] image) I have to press F12 when the laptop is booting up. Then when the boot menu shows up select the inserted pendrive.
-
-.Inserted bootable pendrive with Fedora 26
-image::002.jpeg[]
-
-.Press F12 (it depends on the laptop) when laptop is booting up and select the inserted pendrive (I’m using UEFI BOOT).
-image::003.jpeg[]
-
-.Click on the “Try Fedora” and the OS will be booted from RAM memory.
-image::003.png[]
-
-image::004.png[]
-
-* `Try Fedora` will load and boot the OS from RAM memory.
-* `Install to Hard Drive` will open an interactive wizard which can quickly format our disk and install Fedora.
-
-We want to create our own partitions and use `cgcrypt` to encrypt them so select `Try Fedora` to boot OS from RAM which will leave the hard drive untouched.
-
----
-
-When Fedora loads press the `Win` (super) key and open terminal by typing `terminal`.
-
-> By default Fedora comes with GNOME desktop environment, you can access the Activities view by hovering your mouse to the upper left corner of the screen or pressing `Win` key.
-
-.Press Win key to access the Activities view.
-image::005.png[]
-
-We want to create four partitions on our hard drive and for that we will need to have root permissions. Type `su -` to change to `root` user.
-
-> To change to root user you can type `sudo -i` or shorter `su -`.
-
-Type `lsblk` to see what hard drives and pendrives your laptop sees.
-
-image::006.png[]
-
-We will use http://www.rodsbooks.com/gdisk/cgdisk.html[`cgdisk`] which is a partition table manipulator. `cgdisk /dev/sda` needs as a parameter the name of the drive — my laptop has only one SSD drive and by default the primary drive is called `sda` (we explained that in part 1). I already have my drive partitioned but I will erase and create same partitions again.
-
-I’m gonna remove my partitions now.
-
-.Removing partitions so we have a clean disk.
-image::007.png[]
-
-.Clean disk with no partitions
-image::008.png[]
-
-We will create new partitions based on this image (for 256GB SSD drive).
-
-.Partitions table for a 256G SSD drive.
-image::009.png[]
-
-.Type size 256M for our first EFI partition
-image::010.png[]
-
-.Use EF00 (E-F-zero-zero) as partition type which is a code for EFI.
-image::011.png[]
-
-> Partition types (but not all of them) can be seen by typing l (that’s small L) instead of the partition code and hitting enter, you would see a list like the one below. EF00 is EFI System.
-
-.Table list of some of the partition types.
-image::012.png[]
-
-Leave the `partition name` blank (press enter) and we should have our first partitions created.
-
-.New EFI partition is created.
-image::013.png[]
-
-Now select the lowest `free space` to start creating new partition from there, after the previously created `EFI System` partition.
-
-.Type 1024 as partition size.
-image::014.png[]
-
-.Type 8300 as partition code.
-image::015.png[]
-
-.Linux 1024M partition created
-image::016.png[]
-
-Create the third partition with `20G` size and `8304` partition code.
-
-image::017.png[]
-
-image::018.png[]
-
-image::019.png[]
-
-Create fourth partition which will end `9M` from the end of the disk. So instead of providing a size (which would be about `217.1G` in my case) we want the partition to end `9M` from the end. To do that type `-9M` when asked for the partition size. Partition code is `BF01` which stands for ZFS.
-
-.Instead of typing partition type use “-9M” to indicate that the partition should end 9M from the disk end.
-image::020.png[]
-
-.BF01 stands for ZFS
-image::021.png[]
-
-.ZFS partition is created
-image::022.png[]
-
-.Last partition is created so we can now write all partitions to disk.
-image::023.png[]
-
-After you create ZFS partition select `[ Write ]` which will write all partitions to disk permanently. Then exit with `[ Quit ]`.
-
-Confirm partitions were created on `/dev/sda` disk by typing `lsblk`.
-
-.Four partitions were written to sda disk.
-image::024.png[]
-
----
-
-This concludes this episode. We have now four partition and can now encrypt two of them in https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013[part 3].
-
----
-
-This post is part of the series, for more check out:
-
-* Part 1 — introduction https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
-* Part 2 — partitions https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41
-* Part 3 — encryption https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013
-* Part 4 — fedora https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a
-* Part 5 — encryption2 https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40
-* Part 6 — zfs https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4
-
----
-
-Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details.
 
 <footer class=" footline" >
 	
@@ -728,20 +858,20 @@ Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting 
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/blogs/js/clipboard.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557503034"></script>
-    <script src="/blogs/js/jquery.sticky.js?1557503034"></script>
-    <script src="/blogs/js/featherlight.min.js?1557503034"></script>
-    <script src="/blogs/js/html5shiv-printshiv.min.js?1557503034"></script>
-    <script src="/blogs/js/highlight.pack.js?1557503034"></script>
+    <script src="/blogs/js/clipboard.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557504373"></script>
+    <script src="/blogs/js/jquery.sticky.js?1557504373"></script>
+    <script src="/blogs/js/featherlight.min.js?1557504373"></script>
+    <script src="/blogs/js/html5shiv-printshiv.min.js?1557504373"></script>
+    <script src="/blogs/js/highlight.pack.js?1557504373"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557503034"></script>
-    <script src="/blogs/js/learn.js?1557503034"></script>
-    <script src="/blogs/js/hugo-learn.js?1557503034"></script>
+    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557504373"></script>
+    <script src="/blogs/js/learn.js?1557504373"></script>
+    <script src="/blogs/js/hugo-learn.js?1557504373"></script>
 
-    <link href="/blogs/mermaid/mermaid.css?1557503034" type="text/css" rel="stylesheet" />
-    <script src="/blogs/mermaid/mermaid.js?1557503034"></script>
+    <link href="/blogs/mermaid/mermaid.css?1557504373" type="text/css" rel="stylesheet" />
+    <script src="/blogs/mermaid/mermaid.js?1557504373"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>

@@ -12,18 +12,18 @@
     <title>Encrypt pendrive with LUKS :: Blogs</title>
 
     
-    <link href="/blogs/css/nucleus.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/fontawesome-all.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hybrid.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/featherlight.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/perfect-scrollbar.min.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/auto-complete.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/atom-one-dark-reasonable.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/theme.css?1557503034" rel="stylesheet">
-    <link href="/blogs/css/hugo-theme.css?1557503034" rel="stylesheet">
+    <link href="/blogs/css/nucleus.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/fontawesome-all.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hybrid.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/featherlight.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/perfect-scrollbar.min.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/auto-complete.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/atom-one-dark-reasonable.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/theme.css?1557504373" rel="stylesheet">
+    <link href="/blogs/css/hugo-theme.css?1557504373" rel="stylesheet">
     
 
-    <script src="/blogs/js/jquery-3.3.1.min.js?1557503034"></script>
+    <script src="/blogs/js/jquery-3.3.1.min.js?1557504373"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -68,14 +68,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/blogs/js/lunr.min.js?1557503034"></script>
-<script type="text/javascript" src="/blogs/js/auto-complete.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/lunr.min.js?1557504373"></script>
+<script type="text/javascript" src="/blogs/js/auto-complete.js?1557504373"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/hoto.github.io\/blogs\/";
     
 </script>
-<script type="text/javascript" src="/blogs/js/search.js?1557503034"></script>
+<script type="text/javascript" src="/blogs/js/search.js?1557504373"></script>
 
     
   </div>
@@ -374,155 +374,214 @@
 
 
 
-== Encrypt pendrive with LUKS
-:imagesdir: /images/2017-08-15-encrypt-pendrive-with-luks
+<div class="sect1">
+<h2 id="_encrypt_pendrive_with_luks">Encrypt pendrive with LUKS</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>[Published <a href="https://medium.com/@AndrzejRehmann/encrypt-pendrive-with-luks-a58989889d36">Medium</a>]</em></p>
+</div>
+<div class="paragraph">
+<p>Have you ever wanted to own an encrypted pendrive which will be unreadable and uncrackable (with strong enough password) to third parties without your password?</p>
+</div>
+<div class="paragraph">
+<p>Your files on laptop may be encrypted and safe but what about the files on pendrives you use? Removing a file from unencrypted pendrive does not make it impossible to retrieve it. Encrypt a pendrive and you can be always safe.</p>
+</div>
+<div class="paragraph">
+<p>Password for encrypted pendrive can easily be changed without modifying or erasing the pendrive contents.</p>
+</div>
+<div class="paragraph">
+<p>In this episode we will encrypt pendrive with <code>LUKS</code> and format it with <code>ext4</code> or <code>ntfs</code> filesystem. Your pendrive data will be removed in the process so back it up.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>Switch to root.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">su -</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Put the pendrive in and list all disks in order to find your pendrive.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">lsblk</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/001.png" alt="001">
+</div>
+<div class="title">Figure 1. /dev/sdb1 is our pendrive partition and it’s mounted</div>
+</div>
+<div class="paragraph">
+<p>Locate your pendrive. My pendrive called <code>64GB</code> is device <code>/dev/sdb</code> with one partition <code>/dev/sdb1</code> mounted under <code>/run/media/andrzej.rehmann/64GB</code> .</p>
+</div>
+<div class="paragraph">
+<p>Move all your data to a save place as we will remove all pendrive content.</p>
+</div>
+<div class="paragraph">
+<p>Unmount pendrive and check the result.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">umount /dev/&lt;pendrive_partition&gt;
+lsblk</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/002.png" alt="002">
+</div>
+<div class="title">Figure 2. /dev/sdb1 should have no mountpoint</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>We will now encrypt the pendrive. This will remove all pendrive contents.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">cryptsetup luksFormat /dev/&lt;pendrive_device&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/003.png" alt="003">
+</div>
+<div class="title">Figure 3. Confirm overwriting pendrive content and type your new password.</div>
+</div>
+<div class="paragraph">
+<p>That’s it. Pendrive is now encrypted but is not usable yet.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>We will now create filesystem on our pendrive.</p>
+</div>
+<div class="paragraph">
+<p>First let’s decrypt/open it.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">cryptsetup luksOpen /dev/&lt;pendrive_device&gt; &lt;luks_name&gt;
+lsblk</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where <code>&lt;luks_name&gt;</code> is some random string of your choosing (this is not a persistent name, don’t worry).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/004.png" alt="004">
+</div>
+<div class="title">Figure 4. Decrypted (opened) pendrive.</div>
+</div>
+<div class="paragraph">
+<p>You can overwrite pendrive with <a href="https://linux.die.net/man/1/shred"><code>shred</code></a> to wipe it’s previous content but it can take a while. I’m not going to do this.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">shred -n 1 mapper/&lt;luks_name&gt;</code></pre>
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>Create file system. I’m using <a href="https://en.wikipedia.org/wiki/Ext4"><code>ext4</code></a>, but you can choose other filesystem like <code>NTFS</code> or <code>FAT</code>.</p>
+</div>
+<div class="paragraph">
+<p>For <code>ext4</code> which will work on Linux no problem but will require additional software on Windows use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">mkfs -t ext4 -L "&lt;label&gt;" /dev/mapper/&lt;luks_name&gt;   # Ext4</code></pre>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Ext4 is a journalling filesystem which means that if the device is unplugged prematurely it stands more of a chance of recovering the damaged filesystem. It can support volumes up to 1 ExbiByte (a lot).</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>For <code>NTFS</code> which should work on Windows no problem but may require additional software on some Linux distributions use:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">mkfs -t ntfs -L "&lt;label&gt;" /dev/mapper/&lt;luks_name&gt;   # NTFS</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Where <code>&lt;label&gt;</code> is your new pendrive name.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/005.png" alt="005">
+</div>
+<div class="title">Figure 5. I’m formatting my pendrive with ext4 as I only use Linux.</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>After <code>mkfs</code> is finished pull out the pendrive and plug it back in. You should see a modal window asking for you pendrive password.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/006.png" alt="006">
+</div>
+</div>
+<div class="paragraph">
+<p>If you don’t see this window open file browser and click on the pendrive as if you wanted to browse its content. You should be asked for a password then.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/007.png" alt="007">
+</div>
+</div>
+<div class="paragraph">
+<p>It’s done. You can check that indeed your pendrive is now encrypted.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">lsblk</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/008.png" alt="008">
+</div>
+</div>
+<div class="paragraph">
+<p>If you see the <code>luks-UUID</code> as the partition name it means that that partition is encrypted. My <code>/dev/sdc</code> (it switched from <code>/dev/sdb</code> ) pendrive is now encrypted.</p>
+</div>
+<hr>
+<div class="paragraph">
+<p>The last step is necessary only if you used <code>ext4</code> file system. Your pendrive is owned by root user at the moment so you won’t be able to write to it, we need to fix this.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">chown -R &lt;user&gt;:&lt;user&gt; &lt;pendrive_mount_point&gt;</code></pre>
+</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/009.png" alt="009">
+</div>
+</div>
+<div class="paragraph">
+<p>No my pendrive is owned by my user and ready to use.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/images/2017-08-15-encrypt-pendrive-with-luks/010.png" alt="010">
+</div>
+</div>
+<hr>
+<div class="paragraph">
+<p>If you are interested with installing a Fedora 26 with ZFS and encryption then check out my series here: <a href="https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab" class="bare">https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab</a></p>
+</div>
+</div>
+</div>
 
-_[Published https://medium.com/@AndrzejRehmann/encrypt-pendrive-with-luks-a58989889d36[Medium]]_
-
-Have you ever wanted to own an encrypted pendrive which will be unreadable and uncrackable (with strong enough password) to third parties without your password?
-
-Your files on laptop may be encrypted and safe but what about the files on pendrives you use? Removing a file from unencrypted pendrive does not make it impossible to retrieve it. Encrypt a pendrive and you can be always safe.
-
-Password for encrypted pendrive can easily be changed without modifying or erasing the pendrive contents.
-
-In this episode we will encrypt pendrive with `LUKS` and format it with `ext4` or `ntfs` filesystem. Your pendrive data will be removed in the process so back it up.
-
----
-
-Switch to root.
-
-[source,bash]
-....
-su -
-....
-
-Put the pendrive in and list all disks in order to find your pendrive.
-
-[source,bash]
-....
-lsblk
-....
-
-./dev/sdb1 is our pendrive partition and it’s mounted
-image::001.png[]
-
-Locate your pendrive. My pendrive called `64GB` is device `/dev/sdb` with one partition `/dev/sdb1` mounted under `/run/media/andrzej.rehmann/64GB` .
-
-Move all your data to a save place as we will remove all pendrive content.
-
-Unmount pendrive and check the result.
-
-[source,bash]
-....
-umount /dev/<pendrive_partition>
-lsblk
-....
-
-./dev/sdb1 should have no mountpoint
-image::002.png[]
-
----
-
-We will now encrypt the pendrive. This will remove all pendrive contents.
-
-[source,bash]
-....
-cryptsetup luksFormat /dev/<pendrive_device>
-....
-
-.Confirm overwriting pendrive content and type your new password.
-image::003.png[]
-
-That’s it. Pendrive is now encrypted but is not usable yet.
-
----
-
-We will now create filesystem on our pendrive.
-
-First let’s decrypt/open it.
-
-[source,bash]
-....
-cryptsetup luksOpen /dev/<pendrive_device> <luks_name>
-lsblk
-....
-
-Where `<luks_name>` is some random string of your choosing (this is not a persistent name, don’t worry).
-
-.Decrypted (opened) pendrive.
-image::004.png[]
-
-You can overwrite pendrive with https://linux.die.net/man/1/shred[`shred`] to wipe it’s previous content but it can take a while. I’m not going to do this.
-
-[source,bash]
-....
-shred -n 1 mapper/<luks_name>
-....
-
----
-
-Create file system. I’m using https://en.wikipedia.org/wiki/Ext4[`ext4`], but you can choose other filesystem like `NTFS` or `FAT`.
-
-For `ext4` which will work on Linux no problem but will require additional software on Windows use:
-
-[source,bash]
-....
-mkfs -t ext4 -L "<label>" /dev/mapper/<luks_name>   # Ext4
-....
-
-> Ext4 is a journalling filesystem which means that if the device is unplugged prematurely it stands more of a chance of recovering the damaged filesystem. It can support volumes up to 1 ExbiByte (a lot).
-
-For `NTFS` which should work on Windows no problem but may require additional software on some Linux distributions use:
-
-[source,bash]
-....
-mkfs -t ntfs -L "<label>" /dev/mapper/<luks_name>   # NTFS
-....
-
-Where `<label>` is your new pendrive name.
-
-.I’m formatting my pendrive with ext4 as I only use Linux.
-image::005.png[]
-
----
-
-After `mkfs` is finished pull out the pendrive and plug it back in. You should see a modal window asking for you pendrive password.
-
-image::006.png[]
-
-If you don’t see this window open file browser and click on the pendrive as if you wanted to browse its content. You should be asked for a password then.
-
-image::007.png[]
-
-It’s done. You can check that indeed your pendrive is now encrypted.
-
-[source,bash]
-....
-lsblk
-....
-
-image::008.png[]
-
-If you see the `luks-UUID` as the partition name it means that that partition is encrypted. My `/dev/sdc` (it switched from `/dev/sdb` ) pendrive is now encrypted.
-
----
-
-The last step is necessary only if you used `ext4` file system. Your pendrive is owned by root user at the moment so you won’t be able to write to it, we need to fix this.
-
-[source,bash]
-....
-chown -R <user>:<user> <pendrive_mount_point>
-....
-
-image::009.png[]
-
-No my pendrive is owned by my user and ready to use.
-
-image::010.png[]
-
----
-
-If you are interested with installing a Fedora 26 with ZFS and encryption then check out my series here: https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
 
 <footer class=" footline" >
 	
@@ -745,20 +804,20 @@ If you are interested with installing a Fedora 26 with ZFS and encryption then c
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/blogs/js/clipboard.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.min.js?1557503034"></script>
-    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557503034"></script>
-    <script src="/blogs/js/jquery.sticky.js?1557503034"></script>
-    <script src="/blogs/js/featherlight.min.js?1557503034"></script>
-    <script src="/blogs/js/html5shiv-printshiv.min.js?1557503034"></script>
-    <script src="/blogs/js/highlight.pack.js?1557503034"></script>
+    <script src="/blogs/js/clipboard.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.min.js?1557504373"></script>
+    <script src="/blogs/js/perfect-scrollbar.jquery.min.js?1557504373"></script>
+    <script src="/blogs/js/jquery.sticky.js?1557504373"></script>
+    <script src="/blogs/js/featherlight.min.js?1557504373"></script>
+    <script src="/blogs/js/html5shiv-printshiv.min.js?1557504373"></script>
+    <script src="/blogs/js/highlight.pack.js?1557504373"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557503034"></script>
-    <script src="/blogs/js/learn.js?1557503034"></script>
-    <script src="/blogs/js/hugo-learn.js?1557503034"></script>
+    <script src="/blogs/js/modernizr.custom-3.6.0.js?1557504373"></script>
+    <script src="/blogs/js/learn.js?1557504373"></script>
+    <script src="/blogs/js/hugo-learn.js?1557504373"></script>
 
-    <link href="/blogs/mermaid/mermaid.css?1557503034" type="text/css" rel="stylesheet" />
-    <script src="/blogs/mermaid/mermaid.js?1557503034"></script>
+    <link href="/blogs/mermaid/mermaid.css?1557504373" type="text/css" rel="stylesheet" />
+    <script src="/blogs/mermaid/mermaid.js?1557504373"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
