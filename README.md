@@ -1,8 +1,8 @@
 # Blog
 
-Backup of my blog posts.
+Backup of my blog posts from [medium](https://medium.com/@andrzejrehmann/).
 
-I usually post on [medium](https://medium.com/@andrzejrehmann/).
+Github [pages](https://hoto.github.io/blog/).
 
 ### Generate and publish gh-pages
 
