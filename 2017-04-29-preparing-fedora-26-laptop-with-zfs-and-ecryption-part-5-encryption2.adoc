@@ -1,0 +1,154 @@
+---
+title: Fedora with ZFS and encryption (5)
+date: "2017-04-29"
+---
+
+== Preparing Fedora 26 laptop with ZFS and encryption — encryption2 (part 5)
+:imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part5/
+
+_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40[Medium]]_
+
+.tput setaf 3; xxd -c 48 ~/Pictures/unicorn.png
+image::001.png[]
+
+Let’s not forget about the second encrypted partition `/dev/sda4` where we will put our `/home/<user_name>` and `/var/lib/docker` (if you use Docker). We still need to configure https://www.freedesktop.org/software/systemd/man/crypttab.html[`crypttab`] to decrypt two partitions automatically during boot.
+
+Our current situation is: when the laptop boots up and we provide encryption password it only unlocks the `/dev/sda3` partition. The /dev/sda4 is still encrypted as nothing tried to decrypt it. We will change this in this episode.
+
+You can check that only `/dev/sda3` was decrypted during the OS boot.
+
+....
+lsblk
+....
+
+.Only sda3 was decrypted during the OS boot.
+image::002.png[]
+
+When a partition is decrypted you will see the `luks-<UUID>` after the partition id. `/dev/sda4` is not recognized as `luks` so it is not decrypted.
+
+---
+
+In https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013[part 3] we encrypted partitions `/dev/sda3` and `/dev/sda4` with some passwords. Those passwords could be different or be the same but it does not matter as `dm_crypt` will only ask for password for `/dev/sda3` where our binaries are stored (it is mounted to `/` ).
+
+So how do we let `dm_crypt` know it should decrypt `/dev/sda4`? To make this happen we will add a crypt key file for the `/dev/sda4` partition which will be stored on the `/dev/sda3` in `/etcd/crypt.d/<key_name>`.
+
+When the laptop boots up, `dm_crypt` will ask us the password for the first partition `/dev/sda3` and then it will lookup the content of a file `/etc/crypttab` (stored on `/dev/sda3` ) and will decrypt all other partitions which are defined in that file. In our case it will just decrypt `/dev/sda4`.
+
+---
+
+First let’s create the keys folder and the key itself.
+
+[source,bash]
+....
+mkdir /etc/crypt.d
+dd bs=515 count=4 if=/dev/urandom of=/etc/crypt.d/sda4.key
+....
+
+image::003.png[]
+
+This will generate a `2KB` file with random stuff in it.
+
+Next https://wiki.archlinux.org/index.php/Dm-crypt/Device_encryption[`add`] that `/etc/crypt.d/sda4.key` to the list of keys (you have available 10 empty key slots) which can decrypt `/dev/sda4` partition. Provide the password which you used to encrypt the partition before.
+
+....
+cryptsetup luksAddKey /dev/sda4 /etc/crypt.d/sda4.key
+....
+
+image::004.png[]
+
+Check if the key was added.
+
+....
+cryptsetup luksDump /dev/sda4
+....
+
+.List of encryption keys which can decrypt partition /dev/sda4
+image::005.png[]
+
+Key slot number `0` is occupied by the password which we used to decrypt the disk in the first place.
+
+Key slot number `1` is the key we just added, the `/etc/crypt.d/sda4.key`. That means that if someone stole that file he could use that key to decrypt your `/dev/sda4` partition. But because that file is stored on the encrypted partition `/dev/sda3` the hacker would have to decrypt that partition first.
+
+---
+
+Now let’s create the `/etc/crypttab` file and put there the path for our newly created decryption key.
+
+`/etc/crypttab` file looks like this:
+
+....
+<luks_name> UUID=<luks_UUID> <path_to_key_file>
+....
+
+.My current crypttab file.
+image::006.png[]
+
+To get the `<luks_name>` and `<luks_UUID>` of an already opened (decrypted) partition use our favorite command.
+
+....
+lsblk
+....
+
+.List of all disks and decrypted partitions.
+image::007.png[]
+
+To get the /dev/sda4 partition UUID which is not yet opened use:
+
+....
+blkid /dev/sda4
+....
+
+.Luks UUID of /dev/sda4 partition.
+image::008.png[]
+
+Copy the `UUID` and add an entry to `/etc/crypttab`:
+
+....
+vi /etc/crypttab # you can use nano or gedit if you don't like vi
+....
+
+.Add an entry to /etc/crypttab.
+image::009.png[]
+
+.Check if /etc/crypttab was saved
+image::010.png[]
+
+---
+
+*Reboot* and check if both partitions were decrypted.
+
+....
+lsblk
+....
+
+.Both sda3 and sda4 should be decrypted after reboot.
+image::011.png[]
+
+Both `/dev/sda3` and `/dev/sda4` should be decrypted after the reboot. You should see the `luks-<UUID>` after the partition name.
+
+You can check that the `/dev/sda4` is encrypted and ZFS formatted.
+
+....
+fdisk -l
+....
+
+./dev/sda4 is encrypted and ZFS formatted.
+image::012.png[]
+
+---
+
+That’s all for this episode. Next we will install ZFS and prepare the fourth `/dev/sda4` partition then move our `/home/<user_name>` there so our home files are safe with ZFS in https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4[part 6].
+
+---
+
+This post is part of the series, for more check out:
+
+* Part 1 — introduction https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab
+* Part 2 — partitions https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41
+* Part 3 — encryption https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013
+* Part 4 — fedora https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a
+* Part 5 — encryption2 https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40
+* Part 6 — zfs https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4
+
+---
+
+Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details.

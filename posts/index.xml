@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Blogs</title>
+    <link>https://hoto.github.io/blogs/posts/</link>
+    <description>Recent content in Posts on Blogs</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 25 Feb 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://hoto.github.io/blogs/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Creating a Jenkinsfile pipeline</title>
+      <link>https://hoto.github.io/blogs/posts/2019-02-25-creating-a-jenkinsfile-pipeline/</link>
+      <pubDate>Mon, 25 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blogs/posts/2019-02-25-creating-a-jenkinsfile-pipeline/</guid>
+      <description>== Creating a Jenkinsfile pipeline :imagesdir: /images/2019-02-25-creating-a-jenkinsfile-pipeline/ _[Published https://medium.com/@AndrzejRehmann/creating-a-jenkinsfile-pipeline-7aefc89b8c67[Medium]]_ Basics of setting up a Jenkins multibranch pipeline job and defining a Jenkinsfile. .Photo by https://unsplash.com/photos/Zpdb7-owcpw?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText[Bernard Hermant] on https://unsplash.com/search/photos/pipeline?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText[Unsplash] image::pipeline.jpg[Pipeline] == Creating Multibranch Pipeline Job If you want to follow this article but don’t have a Jenkins instance at hand you can use my GitHub project to spin up a dockerized Jenkins: [source,bash] .... git clone https://github.com/hoto/jenkinsfile-examples.git cd jenkinsfile-examples docker-compose pull docker-compose up .</description>
+    </item>
+    
+    <item>
+      <title>Private Jenkins Shared Libraries</title>
+      <link>https://hoto.github.io/blogs/posts/2019-02-11-private-jenkins-shared-libraries/</link>
+      <pubDate>Mon, 11 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blogs/posts/2019-02-11-private-jenkins-shared-libraries/</guid>
+      <description>== Private Jenkins Shared Libraries :imagesdir: /images/2019-02-11-private-jenkins-shared-libraries/ _[Published https://medium.com/@AndrzejRehmann/private-jenkins-shared-libraries-540abe7a0ab7[Medium]]_ The official documentation for Jenkins Shared Libraries is pretty good, but not perfect. This article expands on how to use https://jenkins.io/doc/book/pipeline/shared-libraries/[Jenkins Shared Libraries] with private git repositories, semantically version and unit test your libraries and provides working examples which you can run yourself. .Photo by https://unsplash.com/photos/GWOTvo3qq7U?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText[j zamora] on https://unsplash.com/search/photos/library?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText[Unsplash] image::001.jpeg[] == Short Intro Jenkins Shared Library is a very useful tool when dealing with multiple similar pipelines.</description>
+    </item>
+    
+    <item>
+      <title>Encrypt pendrive with LUKS</title>
+      <link>https://hoto.github.io/blogs/posts/2017-08-15-encrypt-pendrive-with-luks/</link>
+      <pubDate>Tue, 15 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blogs/posts/2017-08-15-encrypt-pendrive-with-luks/</guid>
+      <description>== Encrypt pendrive with LUKS :imagesdir: /images/2017-08-15-encrypt-pendrive-with-luks _[Published https://medium.com/@AndrzejRehmann/encrypt-pendrive-with-luks-a58989889d36[Medium]]_ Have you ever wanted to own an encrypted pendrive which will be unreadable and uncrackable (with strong enough password) to third parties without your password? Your files on laptop may be encrypted and safe but what about the files on pendrives you use? Removing a file from unencrypted pendrive does not make it impossible to retrieve it. Encrypt a pendrive and you can be always safe.</description>
+    </item>
+    
+    <item>
+      <title>Fedora with ZFS and encryption (1)</title>
+      <link>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-1-introduction/</link>
+      <pubDate>Sat, 29 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-1-introduction/</guid>
+      <description>== Preparing Fedora 26 laptop with ZFS and encryption — introduction (part 1) :imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part1/ _[Published https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab[Medium]]_ .Bootable Fedora 26 pendrive ready to install. image::001.jpeg[] Special thanks to https://medium.com/@marcinskarbek[Marcin Skarbek] for setting up my laptop and explaining all of this stuff to me with excruciating details. --- == [Aug 2018 update] Full disk encryption in Fedora 28 If you just want the full disk encryption then Fedora 28/29 comes with that by default now.</description>
+    </item>
+    
+    <item>
+      <title>Fedora with ZFS and encryption (2)</title>
+      <link>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-2-partitions/</link>
+      <pubDate>Sat, 29 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-2-partitions/</guid>
+      <description>== Preparing Fedora 26 laptop with ZFS and encryption — partitions (part 2) :imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part2/ _[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-part-2-partitions-7b481f381c41[Medium]]_ .Fedora 26 in all its beauty image::001.png[] On my Dell 3470 in order to boot from the https://www.lifewire.com/g00/create-bootable-fedora-usb-drive-2202081?i10c.referrer=https%3A%2F%2Fwww.google.pl%2F[bootable pendrive] (with https://getfedora.org/en/workstation/download/[Fedora 26 ISO] image) I have to press F12 when the laptop is booting up. Then when the boot menu shows up select the inserted pendrive. .Inserted bootable pendrive with Fedora 26 image::002.jpeg[] .</description>
+    </item>
+    
+    <item>
+      <title>Fedora with ZFS and encryption (3)</title>
+      <link>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-3-encryption/</link>
+      <pubDate>Sat, 29 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-3-encryption/</guid>
+      <description>== Preparing Fedora 26 laptop with ZFS and encryption — encryption (part 3)
+:imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part3/
+
+_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013[Medium]]_
+
+.tput setaf 2; xxd -c 48 ~/Pictures/cat.png
+image::001.png[]
+
+In this part of the series we will encrypt the two out of four partitions we created in the previous episode. For encryption we will use https://linux.die.net/man/8/cryptsetup[`cryptsetup`] .
+
+We want to encrypt partitions for our binaries `/dev/sda3` and for our home `/dev/sda4` .</description>
+    </item>
+    
+    <item>
+      <title>Fedora with ZFS and encryption (4)</title>
+      <link>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-4-fedora/</link>
+      <pubDate>Sat, 29 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-4-fedora/</guid>
+      <description>== Preparing Fedora 26 laptop with ZFS and encryption — fedora (part 4) :imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part4/ _[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-fedora-part-4-1fceb9c8428a[Medium]]_ .Click on the “Install to hard Drive” to open up a wizard. image::001.png[] In this episode we will install fedora on the partitions we created in previous parts of this series. Press `Win` key to open up the activity window and open installation wizard from the left menu — `install to hard Drive`. .</description>
+    </item>
+    
+    <item>
+      <title>Fedora with ZFS and encryption (5)</title>
+      <link>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-5-encryption2/</link>
+      <pubDate>Sat, 29 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-5-encryption2/</guid>
+      <description>== Preparing Fedora 26 laptop with ZFS and encryption — encryption2 (part 5) :imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part5/ _[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40[Medium]]_ .tput setaf 3; xxd -c 48 ~/Pictures/unicorn.png image::001.png[] Let’s not forget about the second encrypted partition `/dev/sda4` where we will put our `/home/` and `/var/lib/docker` (if you use Docker). We still need to configure https://www.freedesktop.org/software/systemd/man/crypttab.html[`crypttab`] to decrypt two partitions automatically during boot. Our current situation is: when the laptop boots up and we provide encryption password it only unlocks the `/dev/sda3` partition.</description>
+    </item>
+    
+    <item>
+      <title>Fedora with ZFS and encryption (6)</title>
+      <link>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-6-zfs/</link>
+      <pubDate>Sat, 29 Apr 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blogs/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-6-zfs/</guid>
+      <description>== Preparing Fedora 26 laptop with ZFS and encryption — zfs (part 6) :imagesdir: /images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part6/ _[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-zfs-part-5-1e17820b40a4[Medium]]_ .zfs list image::001.png[] Before we install ZFS it’s good practice to update the `kernel` first. [source,bash] .... su - dnf update kernel\* .... image::002.png[] .Accept updating kernel. image::003.png[] *Reboot* the machine *if* the kernel was updated. --- After rebooting install `kernel-devel` and `dkms` by typing: .... # reboot first if you updated kernel! dnf install kernel-devel dkms .</description>
+    </item>
+    
+  </channel>
+</rss>
