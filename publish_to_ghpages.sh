@@ -24,6 +24,9 @@ rm -rf public/*
 echo -e "\n[Generating site...]"
 make gh-pages-generate
 
+echo -e "\n[Fixing images urls...]"
+make gh-pages-fix-urls
+
 echo -e "\n[Commiting gh-pages branch...]"
 cd public && git add --all && git commit -m "Publishing to gh-pages (publish.sh)" && cd ..
 
