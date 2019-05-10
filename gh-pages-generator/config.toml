@@ -1,6 +1,6 @@
-baseURL = "https://hoto.github.io/blogs/"
+baseURL = "https://hoto.github.io/blog/"
 languageCode = "en-us"
-title = "Blogs"
+title = "Andy"
 theme = "hugo-theme-learn"
 staticDir = "../blogs/"
 
