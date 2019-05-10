@@ -1,0 +1,7 @@
+baseURL = "https://hoto.github.io/blog/"
+languageCode = "en-us"
+title = "Blog"
+theme = "hugo-theme-learn"
+staticDir = "../blogs/"
+
+publishDir = "../public/"

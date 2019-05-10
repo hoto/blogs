@@ -1,5 +1,10 @@
-= Encrypt pendrive with LUKS
-:imagesdir: images/2017-08-15-encrypt-pendrive-with-luks
+---
+title: Encrypt pendrive with LUKS
+date: "2017-08-15"
+---
+
+== Encrypt pendrive with LUKS
+:imagesdir: ./images/2017-08-15-encrypt-pendrive-with-luks
 
 _[Published https://medium.com/@AndrzejRehmann/encrypt-pendrive-with-luks-a58989889d36[Medium]]_
 

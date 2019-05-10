@@ -1,5 +1,10 @@
-= Preparing Fedora 26 laptop with ZFS and encryption — encryption2 (part 5)
-:imagesdir: images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part5/
+---
+title: Fedora with ZFS and encryption (5)
+date: "2017-04-29"
+---
+
+== Preparing Fedora 26 laptop with ZFS and encryption — encryption2 (part 5)
+:imagesdir: ./images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part5/
 
 _[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption2-part-5-fd98d688fc40[Medium]]_
 
