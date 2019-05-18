@@ -114,7 +114,7 @@ Even all of the DevOps catch phrases from the company "we are hiring" page will 
 
 In my opinion the most common oversights when dealing with microservices are:
 
-=== 1. Lack of monitoring.
+=== 1. Lack of monitoring
 
 Observability has to be built into the services and the platform from the very beginning.
 Don't make a mistake going into production and then worry about observability, it may be too late.
@@ -131,7 +131,7 @@ But if there is a penalty to break the SLA then somebody's job, or even the whol
 
 > "People are not afraid of failure, they are afraid of blame."
 
-=== 2. Wrong tools for alerts (or no alerting).
+=== 2. Wrong tools for alerts (or no alerting)
 
 Getting spammed by dozens occurrences of the same alert will make the receivers desensitized.
 Same types of alerts must be grouped together automatically.
@@ -143,16 +143,59 @@ You don't want people working on the same issue in parallel without knowing the 
 Every alert needs at lest the source of origin and the action to follow.
 Alerts will be fixed quicker when there is a clear procedure to fix the problem.
 
-=== 3. Making artifacts mutable.
-=== 4. Not following the https://12factor.net/["twelve factors"] rules.
-=== 5. Designing pipelines with no automated rollback strategy.
-=== 6. Not changing the tools when scale changes.
+=== 3. Making artifacts mutable
 
-I was on a project once where the tool for orchestrating services was very primitive.
-That tool didn't know about the capacity of the platform. Service assignment was done manually.
-You can imagine that would work very well for a small platform with little to no load.
+Having to rebuild the artifact to change it's configuration makes me cry. Every time.
+Artifacts should be built once and be deployable to any environment.
+You can pass the config with env variables or read an external config file.
+
+=== 4. Not following the https://12factor.net/[twelve factors] rules
+
+It makes me really sad when I see a container in 2019 which instead of logging to stdout logs to a file.
+Those are really the basics and the lowest hanging fruits to pick.
+
+=== 5. Designing pipelines without automated rollbacks
+
+To have an automated rollback you need auto detection when something goes wrong.
+How the system decides if something went wrong separates Continuous Deployment wannabes from the pros.
+
+Most basic check would be a healthcheck.
+
+=== 6. Not adapting the tools with scale
+
+I was on a project once where it started with a handful of services so the tool for orchestrating services was very primitive.
+That tool biggest flaw was that it didn't know about the capacity of the platform. Service assignment to a host was done manually.
+We had to calculate how much memory and cpu service needs and allocate them accordingly.
+When we scaled from couple of services to dozens we should have changed the tool but we didn't.
+At that time I didn't even understand the problem.
+Platform became incredibly unstable and required daily manual restarts but it was too late to simply replace the orchestrator, it was too deeply embedded into the system.
+It took more then a year to create a new platform from scratch.
 
 === 7. Not using a Service Mesh
+
+When replacing function calls (monolith) for network calls (microservices) we need to accommodate for latency, network errors and packet drops.
+Doing retries directly from the service may seem harmless but it may cause system wide cascading failures and put unnecessary strain on the network.
+
+Why forcing each service to deal with network failures when we can use a middle man called service mesh which is designed to handle for it.
+It's true that we are still making a network call to the service mesh but it's a safer one because the call is not leaving the host.
+
+Service mesh also gives us crucial features like retries policies, timeouts and deadlines.
+It also makes it easier to have network calls tracing.
+
+=== 8. Not https://zipkin.apache.org/[tracing] the network calls
+
+When a function call fails we get a stacktrace where we can see where the call originated.
+When a network call to a service fails we don't have a single stacktrace showing us the calls made to all involved services.
+It is incredibly insightful to have the ability to see network calls hopping between services and be able to trace a single call through the system.
+
+If you use a service mesh then tracing becomes much easier to setup.
+
+=== 9. Not requiring healthchecks
+
+Every service needs to answer one basic question: is it healthy or not.
+Of course healthcheck from the application should be just one of many metrics collected by the orchestrator to decide if a service is healthy.
+E.g. there may be some performance issues that the service is not aware of.
+Or maybe service becomes a "healthy" zombie that needs to be killed and replaced.
 
 == Monitoring, observability and debuggability
 
