@@ -59,22 +59,23 @@ Additionally we have things which describes the platform setup and deployment pr
 
 Every platform has a lifecycle:
 
-* Day 1
+*Day 1*
 
-    There is nothing.
-    Infrastructure gets created and software gets deployment for the first time.
+There is nothing.
+Infrastructure gets created and software gets deployment for the first time.
 
-* Day 2+
+*Day 2+*
 
-  Infrastructure gets extended or updated.
-  Software gets redeployed.
+Infrastructure gets extended or updated.
+Software gets redeployed.
 
-Project crippling problems arise not on day 1, but on day 2 onwards.
-Platform is like a free puppy. Upfront cost may be zero but when puppy grows and multiplies the maintenance costs grows exponentially.
+Project halting problems arise not on day 1, but on day 2 onwards.
+
+Platform is like a free puppy.
+Upfront cost may be zero but when puppy grows and multiplies the maintenance costs grows exponentially.
 Eventually a badly designed and poorly maintained platform will behave oddly in the most unexpected ways up to a point where instead of fixing the current one it's cheaper to just create a new one.
 
 == Platform as an afterthought
-
 
 There are two cases when starting with microservices architecture:
 
@@ -83,18 +84,40 @@ There are two cases when starting with microservices architecture:
 
 Unfortunately both cases usually suffer from the same symptoms:
 
-> Platform is an afterthought.
+> Platform design is often an afterthought.
 
-== Paying attention to details
+== Common oversights
 
-In my opinion the most common mistakes when "designing" platform for a microservices are:
+In my opinion the most common oversights when dealing with microservices are:
 
-1. Lack of monitoring.
-2. Making artifacts mutable.
-3. Not following the https://12factor.net/["twelve factors"] rules.
-4. Designing pipelines with no automated rollback strategy.
-5. Not changing the tools with scale.
-6.
+=== 1. Lack of monitoring.
+
+Observability has to be built into the services and the platform from the very beginning.
+Don't make a mistake going into production and then worry about observability, it may be too late.
+
+SLIs, SLAs and SLOs, which boils down to https://cloud.google.com/blog/products/gcp/sre-fundamentals-slis-slas-and-slos[availability],  should be agreed up front and monitored.
+To monitor those values you need observability.
+
+Often there is a question who will be looking at the monitoring and my answer would be to ask this:
+Who cares about not breaking the SLA and what happens when it's broken?
+
+If the answer is "nobody" and "nothing" then you don't need monitoring in the first place because nobody cares if the system is working or not.
+
+But if there is a penalty to break the SLA then somebody's job, or even the whole company, is on the line.
+
+> “Some people change their ways when they see the light; others when they feel the heat”
+
+=== 2. Wrong tools for alerts (or no alerting).
+=== 3. Making artifacts mutable.
+=== 4. Not following the https://12factor.net/["twelve factors"] rules.
+=== 5. Designing pipelines with no automated rollback strategy.
+=== 6. Not changing the tools when scale changes.
+
+I was on a project once where the tool for orchestrating services was very primitive.
+That tool didn't know about the capacity of the platform. Service assignment was done manually.
+You can imagine that would work very well for a small platform with little to no load.
+
+=== 7. Not using a Service Mesh
 
 == Monitoring, observability and debuggability
 
