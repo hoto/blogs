@@ -31,13 +31,16 @@ Those models are full of holes and may be completely different than what's accep
 
 > Complicated - hard to understand regardless of the complexity
 
+Sometimes things may seem complicated at first but will become complex with enough familiarity (think driving a car).
+
 We can describe any software system on how complicated and complex it is.
 System can be made less complicated and complex by removing pieces of it.
-When splitting a system into pieces it may become less complicated but the complexity will increase.
+When splitting a system into pieces it may become less complicated but the complexity usually increases.
 
-Thankfully splitting can be done in such a way that we end up with an organized complexity which is easy to understand.
+Thankfully splitting can be done in such a way that we end up with an "organized" complexity which is easy to understand.
+But that, in my opinion, is an art and requires not only expertise but a ton of experience.
 
-When going from a monolith to microservices we split services reducing their complexity but the complexity does not disappear into thin air, it is transferred onto platform.
+When going from a monolith to microservices we split services reducing their complexity but the complexity does not disappear into thin air, it is transferred onto the platform.
 
 Because designing a platform for distributed systems on a large scale is a pretty new concept many companies don't realize they have to change tactics and fail miserably when giving in the microservices hype.
 
