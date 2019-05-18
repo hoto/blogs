@@ -11,7 +11,7 @@ I think there is a common misconception about microservices out there.
 
 The popular opinion is that microservices supposed to be the cure for all of our problems.  
 But I say that by themselves they can cure only half of our problems.  
-You are suppose to combine them with DevBizSecQaOps practices to transform your company into the ultimate buzzword producing killing machinegun and achievie Continous Deployment nirvana.
+You are suppose to combine them with the latest DevBizSecQaOps practices to transform your company into the ultimate buzzword producing killing machinegun and achievie Continous Deployment nirvana.
 
 But seriously.
 
@@ -25,27 +25,37 @@ We can describe any software system on how complicated and complex it is.
 System can be made less complicated and complex by removing pieces of it.  
 But when splitting a system into pieces we increase its complexity exponentially.
 
+== What is a platform
+
 == Monitoring
 
 == Alarms
 
 == Scalling
 
-== Observability
-The tools and techniques needed to observe a system composed of five services vs fifty services are vastly different.
-Where one can manage to comprehend and manually check five services doing so for dozens is absolutely out of the question (I've been there).
+== Observability and debugability
 
-== Why
+> If you are observable I can understand you.
+
+The tools and techniques needed to observe a system composed of couple services vs dozens or hundredths of services are vastly different.
+Where one can manage to manually check few services doing so for dozens is not sustainable (I've been there).
+
+The opposite of an observable system is a "black box", where the only thing we can see are the inputs and outputs (or a lack of outpus).
+In this very entertaining https://www.youtube.com/watch?v=30jNsCVLpAE[talk] Bryan Cantrill talks about the art of debugability.
+
+> The art of debugging isn't to guess the answer - it is to be able to ask the right questions to know how to answer them. 
+> Answered questions are facts, not hyphotesis.
+
+== Platform
 
 First I would like to point out that if you haven't noticed yet this post is my own private opinion on the subject.
 
-In my career I stumbled upon two scenarios when approaching microservices architecture:
+There are two cases when starting with microservices architecture:
 
-1. Migrating from a monolith by extracting bits from it.
-2. Starting fresh - what we call a greenfield project.
+1. Starting fresh - what we call a greenfield project.
+2. Migrating from a monolith by extracting bits from it.
 
-Although the second scenario seems to be much easier to pull off, in my opinion is the easiest to butcher.
-But both cases suffer from the same symptom: 
+Unfortunally both cases usually suffer from the same symptoms:
 
 > Platform is an afterthought.
 
