@@ -19,6 +19,12 @@ But few asked what is the price for all of this?
 
 Many forgets that microservices architecture shifts the complexity from the code to the platform.
 
+== Disclaimer
+
+I would like to point here out that, if you haven't noticed yet, this post is my own opinions on the subject.
+I have created my own models in order to understand microservices architecture, especially in the context of Continuous Deployment.
+Those models may be completely different than what's acknowledged as the industry standard.
+
 == Complexity
 
 > Complex - many parts with intricate arrangements, organized (easy) or disorganized (hard)
@@ -36,8 +42,6 @@ When going from a monolith to microservices we split services reducing their com
 Because designing a platform for distributed systems on a large scale is a pretty new concept many companies don't realize they have to change tactics and fail miserably when giving in the microservices hype.
 
 == Platform definition
-
-First I would like to point out that if you haven't noticed yet this post is my own opinion on the subject.
 
 Software which is not a shelfware will eventually end up running on a platform.
 Platform is all the things which enables the software to run and perform it's duty.
