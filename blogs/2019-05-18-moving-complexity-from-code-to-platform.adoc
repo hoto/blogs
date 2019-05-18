@@ -39,7 +39,6 @@ When platform fails your software fails.
 
 My definition of any software platform includes:
 
-* *Platform definition* - procedures (hopefuly in code) describing creation of the infrastructure
 * *Platform topology* - existing infrastructure
 * *Services* - executable units of software
   - *Core services* - executables required to fulfil business needs
@@ -49,6 +48,10 @@ My definition of any software platform includes:
 * *Service Discovery* - detection of services
 * *Service Mesh* - delivery of requests through a topology
 * *Service orchestration* - executable assigning which service goes where, also responsible for scalling services
+
+Additionally we have things which describes the platform setup and deployment procedures:
+
+* *Platform definition* - procedures (hopefuly in code) describing in details the infrastructure
 * *Deployment pipelines* - procedures (hopefully in code) describing the deployment process
 
 Every platform has a lifecycle:
@@ -64,7 +67,7 @@ Every platform has a lifecycle:
   Software gets redeployed.
 
 Project crippling problems arise not on day 1, but on day 2 onwards.
-Eventually a badly designed and not maintaned platform will behave oddly crippling the system in the most unexpected ways.
+Eventually a badly designed and poorly maintaned platform will behave oddly in the most unexpected ways up to a point where instead of fixing the problems it's cheaper to create a new platform.
 
 == Monitoring
 
