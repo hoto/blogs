@@ -1,50 +1,50 @@
-//---
-//title: Microservices on a budget: ignoring platform complexity
-//date: "2019-05-18"
-//---
+---
+title: Microservices on a budget: ignoring platform complexity
+date: "2019-05-18"
+---
 
-== Microservices failures: ignoring platform complexity
+== Microservices failures: Ignoring platform complexity
 
 I think there is a common misconception about microservices out there.
 
-The popular opinion is that microservices supposed to be the cure for all of our problems.  
-But I say that by themselves they can cure only half of our problems.  
-You are suppose to combine them with the latest DevBizSecDbaQaOps practices in order to transform your company into the ultimate buzzword producing killing machinegun and achievie Continous Deployment nirvana.
+The popular opinion is that microservices supposed to be the cure for all of our problems.
+But I say that by themselves they can cure only half of our problems.
+You are suppose to combine them with the latest DevBizSecDbaQaOps practices in order to transform your company into the ultimate buzzword producing killing machinegun and achieve Continuous Deployment nirvana.
 
 But seriously.
 
 Countless of blogs promised us that microservices will be the the ultimate cure.
-They were supposed to enable companies to perform gazzilions deployments per day, scale the system up to infinity while saving money and reducing the codebase complexity at the same time.  
+They were supposed to enable companies to perform gazillions deployments per day, scale the system up to infinity while saving money and reducing the codebase complexity at the same time.
 But few asked what is the price for all of this?
 
-Many forgets that microservices architecture shifts the complexity from code to the platform.
+Many forgets that microservices architecture shifts the complexity from the code to the platform.
 
 == Complexity
 
-> Complexity - many parts with intricate arrangements, organized (easy) or disorganized (hard)  
+> Complex - many parts with intricate arrangements, organized (easy) or disorganized (hard)
 
 > Complicated - hard to understand regardless of the complexity
 
-We can describe any software system on how complicated and complex it is.  
-System can be made less complicated and complex by removing pieces of it.  
-When splitting a system into pieces it may become less complicated but the complexity will increase. 
-Thanfully splitting can be done in such a way that we end up with an organized complexity which is easy to understand.  
+We can describe any software system on how complicated and complex it is.
+System can be made less complicated and complex by removing pieces of it.
+When splitting a system into pieces it may become less complicated but the complexity will increase.
+Thankfully splitting can be done in such a way that we end up with an organized complexity which is easy to understand.
 
 Microservices may reduce complexity from the code but just the opposite happens to the platform.  
 
 == Platform definition
 
-If you create software which is not a shelfware it will eventually end up running on a platform.   
-It's all the things which enables the software to perform.  
+Software which is not a shelfware will eventually end up running on a platform.
+It's all the things which enables the software to perform.
 When platform fails your software fails.  
 
 My definition of any software platform includes:
 
 * *Platform topology* - existing infrastructure
 * *Services* - executable units of software
-  - *Core services* - executables required to fulfil business needs
-  - *Support services* - executables monitoring core services and the platform itself
-  - *Service Orchestration* - executables assigning which service goes where, also responsible for scalling and destroying services
+** *Core services* - executables required to fulfil business needs
+** *Support services* - executables monitoring core services and the platform itself
+** *Service Orchestration* - executables assigning which service goes where, also responsible for scalling and destroying services
 * *Service Configuration* - configuration which changes depending on the environment
 * *Service Secrets* - configuration which should not be source controlled
 * *Service Discovery* - detection of services
@@ -59,8 +59,8 @@ Every platform has a lifecycle:
 
 * Day 1
 
-  There is nothing.
-  Infrastructure gets created and software gets deployment for the first time.
+    There is nothing.
+    Infrastructure gets created and software gets deployment for the first time.
 
 * Day 2+
 
@@ -69,12 +69,6 @@ Every platform has a lifecycle:
 
 Project crippling problems arise not on day 1, but on day 2 onwards.
 Eventually a badly designed and poorly maintaned platform will behave oddly in the most unexpected ways up to a point where instead of fixing the problems it's cheaper to create a new platform.
-
-== Monitoring
-
-== Alarms
-
-== Scalling
 
 == Platform
 
@@ -85,7 +79,7 @@ There are two cases when starting with microservices architecture:
 1. Starting fresh - what we call a greenfield project.
 2. Migrating from a monolith by extracting bits from it.
 
-Unfortunally both cases usually suffer from the same symptoms:
+Unfortunately both cases usually suffer from the same symptoms:
 
 > Platform is an afterthought.
 
@@ -95,13 +89,14 @@ When starting fresh everybody on the project is hyped about microservices.
 
 == Devil is in the details
 
-When starting fresh the core funcionality does not exist yet (obviously) and it will get distributed across many services - that's why we call it a distributed system.
+When starting fresh the core functionality does not exist yet (obviously) and it will get distributed across many services - that's why we call it a distributed system.
 
-The most common mistakes when starting a distributed system from scratch that I recognize are:
+The most common mistakes when starting a distributed system from scratch are:
 
-1. 
+1. Not following the 12
+1. Absence or not enough of monitoring.
 
-== Monitoring, observability and debugability
+== Monitoring, observability and debuggability
 
 Monitoring is gathering and displaying data so it can be analyzed.  
 To monitor a system it must be observable.
