@@ -21,9 +21,9 @@ Many forgets that microservices architecture shifts the complexity from the code
 
 == Disclaimer
 
-I would like to point here out that, if you haven't noticed yet, this post is my own opinions on the subject.
+I would like to point here out that, if you haven't noticed already, this post are my own opinions on the subject.
 I have created my own models in order to understand microservices architecture, especially in the context of Continuous Deployment.
-Those models may be completely different than what's acknowledged as the industry standard.
+Those models are full of holes and may be completely different than what's accepted as the industry standard.
 
 == Complexity
 
