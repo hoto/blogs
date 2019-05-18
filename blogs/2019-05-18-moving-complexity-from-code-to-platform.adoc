@@ -176,13 +176,13 @@ It took more then a year to create a new platform from scratch.
 When replacing function calls (monolith) for network calls (microservices) we need to accommodate for latency, network errors and packet drops.
 Doing retries directly from the service may seem harmless but it may cause system wide cascading failures and put unnecessary strain on the network.
 
-Why forcing each service to deal with network failures when we can use a middle man called service mesh which is designed to handle for it.
-It's true that we are still making a network call to the service mesh but it's a safer one because the call is not leaving the host.
+Why forcing each service to deal with network failures when we can use a middle man called service mesh which is designed to handle this.
+It is true that we are still making a network call to the service mesh but it is a safer because the call is not leaving the host.
 
-Service mesh also gives us crucial features like retries policies, timeouts and deadlines.
-It also makes it easier to have network calls tracing.
+Service mesh also gives us crucial features like retries policies, call timeouts and deadlines.
+It also makes it easier to have call tracing.
 
-=== 8. Not https://zipkin.apache.org/[tracing] the network calls
+=== 8. Not https://zipkin.apache.org/[tracing] network calls
 
 When a function call fails we get a stacktrace where we can see where the call originated.
 When a network call to a service fails we don't have a single stacktrace showing us the calls made to all involved services.
