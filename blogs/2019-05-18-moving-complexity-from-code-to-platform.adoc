@@ -47,7 +47,7 @@ Because designing a platform for distributed systems on a large scale is a prett
 == Platform definition
 
 Software which is not a shelfware will eventually end up running on a platform.
-Platform is all the things which enables the software to run and perform it's duty.
+Platform is all the things which enables the software to run and perform its duty.
 When platform fails your software fails.  
 
 My definition of a software platform includes:
@@ -67,7 +67,7 @@ Additionally we have things which describes the platform setup and deployment pr
 * *Platform definition* - procedures (hopefuly in code) describing in details the infrastructure
 * *Deployment pipelines* - procedures (hopefully in code) describing the deployment process
 
-Every platform has a lifecycle:
+Every platform is alive, evolving and has a lifecycle:
 
 *Day 1*
 
@@ -76,14 +76,22 @@ Infrastructure gets created and software gets deployment for the first time.
 
 *Day 2+*
 
-Infrastructure gets extended or updated.
+Infrastructure gets removed, updated or extended.
+Configuration changes.
+Software crashes.
 Software gets redeployed.
+Deployment fails and needs to be rollbacked.
 
-Project halting problems arise not on day 1, but on day 2 onwards.
+Really difficult problems arise not on day 1, but on day 2 onwards.
+If you don't plan and think ahead on the first day you may be in a need one day to scrap your whole platform and go back to the drawing board.
+
+You can see that there is a lot of things to go wrong here.
+What's inside the boxes (services) is irrelevant, the thing which handles the boxes should be the main focus of attention.
+If the company thinks that the services are more important then the platform then I would recommend to stay with monoliths.
 
 Platform is like a free puppy.
 Upfront cost may be zero but when puppy grows and multiplies the maintenance costs grows exponentially.
-Eventually a badly designed and poorly maintained platform will behave oddly in the most unexpected ways up to a point where instead of fixing the current one it's cheaper to just create a new one.
+Eventually a badly designed and poorly maintained platform will behave in the most unexpected ways up to a point where instead of fixing the current one it's cheaper to just create a new one.
 
 == Platform as an afterthought
 
