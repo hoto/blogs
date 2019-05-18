@@ -1,5 +1,5 @@
 ---
-title: Microservices on a budget: ignoring platform complexity
+title: Microservices failures: Ignoring platform complexity
 date: "2019-05-18"
 ---
 
@@ -8,13 +8,13 @@ date: "2019-05-18"
 I think there is a common misconception about microservices out there.
 
 The popular opinion is that microservices supposed to be the cure for all of our problems.
-But I say that by themselves they can cure only half of our problems.
-You are suppose to combine them with the latest DevBizSecDbaQaOps practices in order to transform your company into the ultimate buzzword producing killing machine gun and achieve Continuous Deployment nirvana.
+But I say that by themselves they can only cure half of the problems.
+To cure the other half you are suppose to combine microservices with the DevBizSecDbaQaOps practices and transform your company into the ultimate buzzword producing killing machine gun and achieve Continuous Deployment nirvana.
 
 But seriously.
 
 Countless of blogs promised us that microservices will be the the ultimate cure.
-They were supposed to enable companies to perform gazillions deployments per day, scale the system up to infinity while saving money and reducing the codebase complexity at the same time.
+They were supposed to enable companies to perform gazillion deployments per day, scale the system up to infinity, reduce the codebase complexity and save money at the same time.
 But few asked what is the price for all of this?
 
 Many forgets that microservices architecture shifts the complexity from the code to the platform.
@@ -28,9 +28,12 @@ Many forgets that microservices architecture shifts the complexity from the code
 We can describe any software system on how complicated and complex it is.
 System can be made less complicated and complex by removing pieces of it.
 When splitting a system into pieces it may become less complicated but the complexity will increase.
+
 Thankfully splitting can be done in such a way that we end up with an organized complexity which is easy to understand.
 
-Microservices may reduce complexity from the code but just the opposite happens to the platform.  
+When going from a monolith to microservices we split services reducing their complexity but the complexity does not disappear into thin air, it is transferred onto platform.
+
+Because designing a platform for distributed systems on a large scale is a pretty new concept many companies don't realize they have to change tactics and fail miserably when giving in the microservices hype.
 
 == Platform definition
 
@@ -88,6 +91,8 @@ Unfortunately both cases usually suffer from the same symptoms:
 
 == Common oversights
 
+> "Some people change their ways when they see the light; others when they feel the heat."
+
 In my opinion the most common oversights when dealing with microservices are:
 
 === 1. Lack of monitoring.
@@ -105,7 +110,7 @@ If the answer is "nobody" and "nothing" then you don't need monitoring in the fi
 
 But if there is a penalty to break the SLA then somebody's job, or even the whole company, is on the line.
 
-> “Some people change their ways when they see the light; others when they feel the heat”
+> "People are not afraid of failure, they are afraid of blame."
 
 === 2. Wrong tools for alerts (or no alerting).
 === 3. Making artifacts mutable.
