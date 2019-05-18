@@ -7,7 +7,37 @@ date: "2019-05-18"
 == Microservices failures: underestimating platform complexity
 :imagesdir: ./images/2019-05-18-microservices-failures
 
-First I would like to point out that this blog is my own private opinion on the subject.
+I think there is a common misconception about microservices out there.
+
+The popular opinion is that microservices supposed to be the cure for all of our problems.  
+But I say that by themselves they can cure only half of our problems.  
+You are suppose to combine them with DevBizSecQaOps practices to transform your company into the ultimate buzzword producing killing machinegun and achievie Continous Deployment nirvana.
+
+But seriously.
+
+Countless of blogs promised us that microservices will be the the ultimate cure.
+They were supposed to enable companies to perform gazzilions deployments per day, scale the system up to infinity while reducing the codebase complexity at the same time.
+But few asked what is the price for all of this?
+
+Many forgets that microservices architecture shifts the complexity from code to the platform.
+
+We can describe any software system on how complicated and complex it is.  
+System can be made less complicated and complex by removing pieces of it.  
+But when splitting a system into pieces we increase its complexity exponentially.
+
+== Monitoring
+
+== Alarms
+
+== Scalling
+
+== Observability
+The tools and techniques needed to observe a system composed of five services vs fifty services are vastly different.
+Where one can manage to comprehend and manually check five services doing so for dozens is absolutely out of the question (I've been there).
+
+== Why
+
+First I would like to point out that if you haven't noticed yet this post is my own private opinion on the subject.
 
 In my career I stumbled upon two scenarios when approaching microservices architecture:
 
@@ -15,8 +45,18 @@ In my career I stumbled upon two scenarios when approaching microservices archit
 2. Starting fresh - what we call a greenfield project.
 
 Although the second scenario seems to be much easier to pull off, in my opinion is the easiest to butcher.
+But both cases suffer from the same symptom: 
+
+> Platform is an afterthought.
+
+== No rewards for paying attention to details
+
+When starting fresh everybody on the project is hyped about microservices.
+
+== Devil is in the details
 
 When starting fresh the core funcionality does not exist yet (obviously) and it will get distributed across many services - that's why we call it a distributed system.
 
-The most common mistakes when starting a distributed system from scratch are:
+The most common mistakes when starting a distributed system from scratch that I recognize are:
+
 1. 
