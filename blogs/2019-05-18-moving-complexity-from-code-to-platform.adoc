@@ -33,15 +33,40 @@ But when splitting a system into pieces we increase its complexity exponentially
 
 == Scalling
 
-== Observability and debugability
+== Monitoring, observability and debugability
+
+Monitoring is gathering and displaying data so it can be analyzed.  
+To monitor a system it must be observable.
 
 > If you are observable I can understand you.
 
-The tools and techniques needed to observe a system composed of couple services vs dozens or hundredths of services are vastly different.
-Where one can manage to manually check few services doing so for dozens is not sustainable (I've been there).
+The tools and techniques needed to analyze a system composed of couple services vs hundredths of services are vastly different.
+Where one can manage to manually gather and sift through metrics for few services, doing so for dozens is not sustainable.
+Any large scale microservice system needs tools to automatically gather all the necessary metrics and display them in a format consumable to humans.
+
+> Systems are as good as the people who designed it.
+
+Systems fails and that should be expected.
+But it should also self recover. How you ask? Not with a help from humans.
+
+> With any advanced automation the weakest link is always the human.
+
+Creating a self healing system requires it's observable.
+To make the platform observable you need monitoring.
+Monitoring is usually an afterthough on a project when it should be the priority.
+
+Humans should only be in the loop when something goes critically wrong.
+Humans main job should not only be fixing the problems but primarly making sure those problems never occur again or will be fixed automatically next time.
+This is why there is a need for "platform engineers" (or SRE, however we want to call them). 
+Those are either system administrators who can code or coders who knows system administration.  
+There is this one twisted interpretation of DevOps where the premise is you could get "rid" of system administrators and your developers would manage their services in production.
+That's never gonna happen. Most developers don't care and does not want to learn about system adminisration, but there are a few are. 
+Just search for "devops engineer" on any job searching portal.
+
+If a system would always behave 
 
 The opposite of an observable system is a "black box", where the only thing we can see are the inputs and outputs (or a lack of outpus).
-In this very entertaining https://www.youtube.com/watch?v=30jNsCVLpAE[talk] Bryan Cantrill talks about the art of debugability.
+In this very entertaining https://www.youtube.com/watch?v=30jNsCVLpAE[talk] Bryan Cantrill talks about the art of debugability:
 
 > The art of debugging isn't to guess the answer - it is to be able to ask the right questions to know how to answer them. 
 > Answered questions are facts, not hyphotesis.
