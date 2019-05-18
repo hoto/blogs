@@ -1,0 +1,22 @@
+---
+title: Microservices failures: underestimating platform complexity
+title: Microservices on a budget: ignoring platform complexity
+date: "2019-05-18"
+---
+
+== Microservices failures: underestimating platform complexity
+:imagesdir: ./images/2019-05-18-microservices-failures
+
+First I would like to point out that this blog is my own private opinion on the subject.
+
+In my career I stumbled upon two scenarios when approaching microservices architecture:
+
+1. Migrating from a monolith by extracting bits from it.
+2. Starting fresh - what we call a greenfield project.
+
+Although the second scenario seems to be much easier to pull off, in my opinion is the easiest to butcher.
+
+When starting fresh the core funcionality does not exist yet (obviously) and it will get distributed across many services - that's why we call it a distributed system.
+
+The most common mistakes when starting a distributed system from scratch are:
+1. 
