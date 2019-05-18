@@ -1,16 +1,15 @@
----
-title: Microservices failures: underestimating platform complexity
-title: Microservices on a budget: ignoring platform complexity
-date: "2019-05-18"
----
+//---
+//title: Microservices on a budget: ignoring platform complexity
+//date: "2019-05-18"
+//---
 
-== Microservices failures: underestimating platform complexity
+== Microservices failures: ignoring platform complexity
 
 I think there is a common misconception about microservices out there.
 
 The popular opinion is that microservices supposed to be the cure for all of our problems.  
 But I say that by themselves they can cure only half of our problems.  
-You are suppose to combine them with the latest DevBizSecQaOps practices in order to transform your company into the ultimate buzzword producing killing machinegun and achievie Continous Deployment nirvana.
+You are suppose to combine them with the latest DevBizSecDbaQaOps practices in order to transform your company into the ultimate buzzword producing killing machinegun and achievie Continous Deployment nirvana.
 
 But seriously.
 
@@ -20,22 +19,37 @@ But few asked what is the price for all of this?
 
 Many forgets that microservices architecture shifts the complexity from code to the platform.
 
-== Increasing complexity
+== Complexity
 
-> Complex - many parts with intricate arrangements, organized (easy) or disorganized (hard)
+> Complex - many parts with intricate arrangements, organized (easy) or disorganized (hard)  
 > Complicated - hard to understand regardless of the complexity
 
 We can describe any software system on how complicated and complex it is.  
 System can be made less complicated and complex by removing pieces of it.  
-But when splitting a system into pieces we may reduce the complicatedness but the complexity will increase.
+When splitting a system into pieces it may become less complicated but the complexity will increase.
+Thanfully splitting can be done in such a way that we end up with an organized complexity which is easy to understand.
 
-Using microservices we may be reducing complexity from the code but just the opposite happens to the platform.
+Microservices may reduce complexity from the code but just the opposite happens to the platform.
 
 == What's a platform
 
-If you create software you always have a platform.  
-It's all the things which enables the software to be useful to the business.
-You may not own the platform but you can't never ignore it.
+If you create software which is not a shelfware it will eventually end up running on a platform.  
+It's all the things which enables the software to run.
+When platform fails your software fails.
+
+My definition of any software platform includes:
+
+* *Platform definition* - procedures (hopefuly in code) describing creation of the infrastructure
+* *Platform topology* - existing infrastructure
+* *Services* - executable units of software
+  - *Core services* - executables required to fulfil business needs
+  - *Support services* - executables monitoring core services and the platform itself
+* *Service Configuration* - service configuration which changes depending on the environment
+* *Service Secrets* - configuration which should not be source controlled
+* *Service Discovery* - detection of services
+* *Service Mesh* - delivery of requests through a topology
+* *Service orchestration* - executable assigning which service goes where, also responsible for scalling services
+* *Deployment pipelines* - procedures (hopefully in code) describing the deployment process
 
 Every platform has a lifecycle:
 
@@ -49,7 +63,8 @@ Every platform has a lifecycle:
   Infrastructure gets extended or updated.
   Software gets redeployed.
 
-Problem are not on day 1, problems are on day 2+ and when the platform is badly designed and never upgraded problems will arise exponentialy until no deployment can be done without completely crashing the parts of the system.
+Project crippling problems arise not on day 1, but on day 2 onwards.
+Eventually a badly designed and not maintaned platform will behave oddly crippling the system in the most unexpected ways.
 
 == Monitoring
 
