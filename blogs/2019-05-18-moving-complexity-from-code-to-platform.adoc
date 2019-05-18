@@ -11,19 +11,19 @@ I think there is a common misconception about microservices out there.
 
 The popular opinion is that microservices supposed to be the cure for all of our problems.  
 But I say that by themselves they can cure only half of our problems.  
-You are suppose to combine them with the latest DevBizSecQaOps practices to transform your company into the ultimate buzzword producing killing machinegun and achievie Continous Deployment nirvana.
+You are suppose to combine them with the latest DevBizSecQaOps practices in order to transform your company into the ultimate buzzword producing killing machinegun and achievie Continous Deployment nirvana.
 
 But seriously.
 
 Countless of blogs promised us that microservices will be the the ultimate cure.
-They were supposed to enable companies to perform gazzilions deployments per day, scale the system up to infinity while reducing the codebase complexity at the same time.
+They were supposed to enable companies to perform gazzilions deployments per day, scale the system up to infinity while saving money and reducing the codebase complexity at the same time.  
 But few asked what is the price for all of this?
 
 Many forgets that microservices architecture shifts the complexity from code to the platform.
 
 We can describe any software system on how complicated and complex it is.  
 System can be made less complicated and complex by removing pieces of it.  
-But when splitting a system into pieces we increase its complexity exponentially.
+But when splitting a system into pieces we the complexity can only increase.
 
 == What is a platform
 
@@ -32,6 +32,31 @@ But when splitting a system into pieces we increase its complexity exponentially
 == Alarms
 
 == Scalling
+
+== Platform
+
+First I would like to point out that if you haven't noticed yet this post is my own private opinion on the subject.
+
+There are two cases when starting with microservices architecture:
+
+1. Starting fresh - what we call a greenfield project.
+2. Migrating from a monolith by extracting bits from it.
+
+Unfortunally both cases usually suffer from the same symptoms:
+
+> Platform is an afterthought.
+
+== No rewards for paying attention to details
+
+When starting fresh everybody on the project is hyped about microservices.
+
+== Devil is in the details
+
+When starting fresh the core funcionality does not exist yet (obviously) and it will get distributed across many services - that's why we call it a distributed system.
+
+The most common mistakes when starting a distributed system from scratch that I recognize are:
+
+1. 
 
 == Monitoring, observability and debugability
 
@@ -59,39 +84,21 @@ Humans should only be in the loop when something goes critically wrong.
 Humans main job should not only be fixing the problems but primarly making sure those problems never occur again or will be fixed automatically next time.
 This is why there is a need for "platform engineers" (or SRE, however we want to call them). 
 Those are either system administrators who can code or coders who knows system administration.  
-There is this one twisted interpretation of DevOps where the premise is you could get "rid" of system administrators and your developers would manage their services in production.
-That's never gonna happen. Most developers don't care and does not want to learn about system adminisration, but there are a few are. 
-Just search for "devops engineer" on any job searching portal.
 
-If a system would always behave 
+There is this one twisted interpretation of DevOps where the premise is you could get "rid" of system administrators and be left with only developers who would manage services in production.
+That's never gonna happen.  
+Most developers don't care and does not want to learn about system administration. 
+Just search for "devops engineer" on any job searching portal to see for yourself how many companies struggle to find them.
 
-The opposite of an observable system is a "black box", where the only thing we can see are the inputs and outputs (or a lack of outpus).
+The opposite of an observable system is a "black box", where the only thing we can see are the inputs and outputs (or a lack therof).
 In this very entertaining https://www.youtube.com/watch?v=30jNsCVLpAE[talk] Bryan Cantrill talks about the art of debugability:
 
 > The art of debugging isn't to guess the answer - it is to be able to ask the right questions to know how to answer them. 
 > Answered questions are facts, not hyphotesis.
 
-== Platform
+Making platform observable is a hard and underappriciated work.
+When a deployment is a non-event nobody congratulates the people behind it.
 
-First I would like to point out that if you haven't noticed yet this post is my own private opinion on the subject.
+In my opinion pulling out microservices architecture requires putting more effort on the platform itself then on the services running on it.
+Companies needs to realize they are creating a platform first and the services running on it are the afterthought.
 
-There are two cases when starting with microservices architecture:
-
-1. Starting fresh - what we call a greenfield project.
-2. Migrating from a monolith by extracting bits from it.
-
-Unfortunally both cases usually suffer from the same symptoms:
-
-> Platform is an afterthought.
-
-== No rewards for paying attention to details
-
-When starting fresh everybody on the project is hyped about microservices.
-
-== Devil is in the details
-
-When starting fresh the core funcionality does not exist yet (obviously) and it will get distributed across many services - that's why we call it a distributed system.
-
-The most common mistakes when starting a distributed system from scratch that I recognize are:
-
-1. 
