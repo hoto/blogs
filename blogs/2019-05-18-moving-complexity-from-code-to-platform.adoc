@@ -104,6 +104,10 @@ Unfortunately both cases usually suffer from the same symptoms:
 
 > Platform design is often an afterthought.
 
+Platform is usually though of as the "supporting" role, rarely as the main actor.
+Companies who change their viewpoint and reverse this situation shall be the one to reap the full benefits of microservice architecture.
+Even all of the DevOps catch phrases from the company "we are hiring" page will come alive like in a fairly tail and mingle among the dancing developers. I promise.
+
 == Common oversights
 
 > "Some people change their ways when they see the light; others when they feel the heat."
@@ -128,6 +132,17 @@ But if there is a penalty to break the SLA then somebody's job, or even the whol
 > "People are not afraid of failure, they are afraid of blame."
 
 === 2. Wrong tools for alerts (or no alerting).
+
+Getting spammed by dozens occurrences of the same alert will make the receivers desensitized.
+Same types of alerts must be grouped together automatically.
+Receiving a notification for the same alert multiple times is much different then getting spammed with copies of it.
+
+Every alert needs to have an assignee and a status.
+You don't want people working on the same issue in parallel without knowing the problem was fixed two days ago by someone else.
+
+Every alert needs at lest the source of origin and the action to follow.
+Alerts will be fixed quicker when there is a clear procedure to fix the problem.
+
 === 3. Making artifacts mutable.
 === 4. Not following the https://12factor.net/["twelve factors"] rules.
 === 5. Designing pipelines with no automated rollback strategy.
