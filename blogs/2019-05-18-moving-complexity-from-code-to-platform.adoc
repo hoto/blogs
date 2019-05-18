@@ -126,14 +126,15 @@ There is this one twisted interpretation of DevOps where the premise is you coul
 That's never gonna happen.  
 Most developers don't care and does not want to learn about system administration. 
 Just search for "devops engineer" on any job searching portal to see for yourself how many companies struggle to find them.
+Also from the job descriptions you can easily tell if a company treats it's platform seriously.
 
-The opposite of an observable system is a "black box", where the only thing we can see are the inputs and outputs (or a lack therof).
-In this very entertaining https://www.youtube.com/watch?v=30jNsCVLpAE[talk] Bryan Cantrill talks about the art of debugability:
+The opposite of an observable system is a "black box", where the only thing we can see are the inputs and outputs (or a lack thereof).
+In this very entertaining https://www.youtube.com/watch?v=30jNsCVLpAE[talk] Bryan Cantrill talks about the art of debuggability:
 
 > The art of debugging isn't to guess the answer - it is to be able to ask the right questions to know how to answer them. 
-> Answered questions are facts, not hyphotesis.
+> Answered questions are facts, not hypothesis.
 
-Making platform observable is a hard and underappriciated work.
+Making platform observable is a hard and under appreciated work.
 When a deployment is a non-event nobody congratulates the people behind it.
 
 In my opinion successfully pulling out microservices architecture requires putting more effort on the platform itself then on the services running on it.
