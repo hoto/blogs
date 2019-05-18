@@ -9,7 +9,7 @@ I think there is a common misconception about microservices out there.
 
 The popular opinion is that microservices supposed to be the cure for all of our problems.
 But I say that by themselves they can cure only half of our problems.
-You are suppose to combine them with the latest DevBizSecDbaQaOps practices in order to transform your company into the ultimate buzzword producing killing machinegun and achieve Continuous Deployment nirvana.
+You are suppose to combine them with the latest DevBizSecDbaQaOps practices in order to transform your company into the ultimate buzzword producing killing machine gun and achieve Continuous Deployment nirvana.
 
 But seriously.
 
@@ -34,11 +34,13 @@ Microservices may reduce complexity from the code but just the opposite happens 
 
 == Platform definition
 
+First I would like to point out that if you haven't noticed yet this post is my own opinion on the subject.
+
 Software which is not a shelfware will eventually end up running on a platform.
-It's all the things which enables the software to perform.
+Platform is all the things which enables the software to run and perform it's duty.
 When platform fails your software fails.  
 
-My definition of any software platform includes:
+My definition of a software platform includes:
 
 * *Platform topology* - existing infrastructure
 * *Services* - executable units of software
@@ -68,12 +70,11 @@ Every platform has a lifecycle:
   Software gets redeployed.
 
 Project crippling problems arise not on day 1, but on day 2 onwards.
-Platform is like a gifted puppy. Upfront cost may be zero but when puppy grows and multiplies someone will have to maintain that.
+Platform is like a free puppy. Upfront cost may be zero but when puppy grows and multiplies the maintenance costs grows exponentially.
 Eventually a badly designed and poorly maintained platform will behave oddly in the most unexpected ways up to a point where instead of fixing the current one it's cheaper to just create a new one.
 
 == Platform as an afterthought
 
-First I would like to point out that if you haven't noticed yet this post is my own private opinion on the subject.
 
 There are two cases when starting with microservices architecture:
 
