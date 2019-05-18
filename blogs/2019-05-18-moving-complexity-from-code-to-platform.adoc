@@ -44,7 +44,7 @@ My definition of any software platform includes:
 * *Services* - executable units of software
 ** *Core services* - executables required to fulfil business needs
 ** *Support services* - executables monitoring core services and the platform itself
-** *Service Orchestration* - executables assigning which service goes where, also responsible for scalling and destroying services
+** *Service Orchestration* - executables assigning which service goes where, also responsible for scaling and destroying services
 * *Service Configuration* - configuration which changes depending on the environment
 * *Service Secrets* - configuration which should not be source controlled
 * *Service Discovery* - detection of services
@@ -68,9 +68,10 @@ Every platform has a lifecycle:
   Software gets redeployed.
 
 Project crippling problems arise not on day 1, but on day 2 onwards.
-Eventually a badly designed and poorly maintaned platform will behave oddly in the most unexpected ways up to a point where instead of fixing the problems it's cheaper to create a new platform.
+Platform is like a gifted puppy. Upfront cost may be zero but when puppy grows and multiplies someone will have to maintain that.
+Eventually a badly designed and poorly maintained platform will behave oddly in the most unexpected ways up to a point where instead of fixing the current one it's cheaper to just create a new one.
 
-== Platform
+== Platform as an afterthought
 
 First I would like to point out that if you haven't noticed yet this post is my own private opinion on the subject.
 
@@ -83,18 +84,16 @@ Unfortunately both cases usually suffer from the same symptoms:
 
 > Platform is an afterthought.
 
-== No rewards for paying attention to details
+== Paying attention to details
 
-When starting fresh everybody on the project is hyped about microservices.
+In my opinion the most common mistakes when "designing" platform for a microservices are:
 
-== Devil is in the details
-
-When starting fresh the core functionality does not exist yet (obviously) and it will get distributed across many services - that's why we call it a distributed system.
-
-The most common mistakes when starting a distributed system from scratch are:
-
-1. Not following the 12
-1. Absence or not enough of monitoring.
+1. Lack of monitoring.
+2. Making artifacts mutable.
+3. Not following the https://12factor.net/["twelve factors"] rules.
+4. Designing pipelines with no automated rollback strategy.
+5. Not changing the tools with scale.
+6.
 
 == Monitoring, observability and debuggability
 
@@ -114,12 +113,12 @@ But it should also self recover. How you ask? Not with a help from humans.
 
 > With any advanced automation the weakest link is always the human.
 
-Creating a self healing system requires it's observable.
+Creating a self healing system requires it to be observable.
 To make the platform observable you need monitoring.
-Monitoring is usually an afterthough on a project when it should be the priority.
+Monitoring then should be a priority not an afterthought.
 
 Humans should only be in the loop when something goes critically wrong.
-Humans main job should not only be fixing the problems but primarly making sure those problems never occur again or will be fixed automatically next time.
+Humans job should not only be fixing the problems but primarily making sure those problems never occur again or would get fixed automatically next time.
 This is why there is a need for "platform engineers" (or SRE, however we want to call them). 
 Those are either system administrators who can code or coders who knows system administration.  
 
