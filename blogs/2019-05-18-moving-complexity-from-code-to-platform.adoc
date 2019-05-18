@@ -21,21 +21,22 @@ Many forgets that microservices architecture shifts the complexity from code to 
 
 == Complexity
 
-> Complex - many parts with intricate arrangements, organized (easy) or disorganized (hard)  
+> Complexity - many parts with intricate arrangements, organized (easy) or disorganized (hard)  
+
 > Complicated - hard to understand regardless of the complexity
 
 We can describe any software system on how complicated and complex it is.  
 System can be made less complicated and complex by removing pieces of it.  
-When splitting a system into pieces it may become less complicated but the complexity will increase.
-Thanfully splitting can be done in such a way that we end up with an organized complexity which is easy to understand.
+When splitting a system into pieces it may become less complicated but the complexity will increase. 
+Thanfully splitting can be done in such a way that we end up with an organized complexity which is easy to understand.  
 
-Microservices may reduce complexity from the code but just the opposite happens to the platform.
+Microservices may reduce complexity from the code but just the opposite happens to the platform.  
 
-== What's a platform
+== Platform definition
 
-If you create software which is not a shelfware it will eventually end up running on a platform.  
-It's all the things which enables the software to run.
-When platform fails your software fails.
+If you create software which is not a shelfware it will eventually end up running on a platform.   
+It's all the things which enables the software to perform.  
+When platform fails your software fails.  
 
 My definition of any software platform includes:
 
@@ -43,11 +44,11 @@ My definition of any software platform includes:
 * *Services* - executable units of software
   - *Core services* - executables required to fulfil business needs
   - *Support services* - executables monitoring core services and the platform itself
-* *Service Configuration* - service configuration which changes depending on the environment
+  - *Service Orchestration* - executables assigning which service goes where, also responsible for scalling and destroying services
+* *Service Configuration* - configuration which changes depending on the environment
 * *Service Secrets* - configuration which should not be source controlled
 * *Service Discovery* - detection of services
 * *Service Mesh* - delivery of requests through a topology
-* *Service orchestration* - executable assigning which service goes where, also responsible for scalling services
 
 Additionally we have things which describes the platform setup and deployment procedures:
 
@@ -141,6 +142,6 @@ In this very entertaining https://www.youtube.com/watch?v=30jNsCVLpAE[talk] Brya
 Making platform observable is a hard and underappriciated work.
 When a deployment is a non-event nobody congratulates the people behind it.
 
-In my opinion pulling out microservices architecture requires putting more effort on the platform itself then on the services running on it.
+In my opinion successfully pulling out microservices architecture requires putting more effort on the platform itself then on the services running on it.
 Companies needs to realize they are creating a platform first and the services running on it are the afterthought.
 
