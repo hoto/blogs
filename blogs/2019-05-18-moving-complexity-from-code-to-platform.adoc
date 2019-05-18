@@ -5,7 +5,6 @@ date: "2019-05-18"
 ---
 
 == Microservices failures: underestimating platform complexity
-:imagesdir: ./images/2019-05-18-microservices-failures
 
 I think there is a common misconception about microservices out there.
 
@@ -21,11 +20,36 @@ But few asked what is the price for all of this?
 
 Many forgets that microservices architecture shifts the complexity from code to the platform.
 
+== Increasing complexity
+
+> Complex - many parts with intricate arrangements, organized (easy) or disorganized (hard)
+> Complicated - hard to understand regardless of the complexity
+
 We can describe any software system on how complicated and complex it is.  
 System can be made less complicated and complex by removing pieces of it.  
-But when splitting a system into pieces we the complexity can only increase.
+But when splitting a system into pieces we may reduce the complicatedness but the complexity will increase.
 
-== What is a platform
+Using microservices we may be reducing complexity from the code but just the opposite happens to the platform.
+
+== What's a platform
+
+If you create software you always have a platform.  
+It's all the things which enables the software to be useful to the business.
+You may not own the platform but you can't never ignore it.
+
+Every platform has a lifecycle:
+
+* Day 1
+
+  There is nothing.
+  Infrastructure gets created and software gets deployment for the first time.
+
+* Day 2+
+
+  Infrastructure gets extended or updated.
+  Software gets redeployed.
+
+Problem are not on day 1, problems are on day 2+ and when the platform is badly designed and never upgraded problems will arise exponentialy until no deployment can be done without completely crashing the parts of the system.
 
 == Monitoring
 
