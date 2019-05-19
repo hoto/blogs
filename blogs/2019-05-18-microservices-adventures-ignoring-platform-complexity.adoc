@@ -4,6 +4,9 @@ date: "2019-05-18"
 ---
 
 == Microservices adventures: Ignoring platform complexity
+:imagesdir: ./images/2019-05-18-microservices-adventures/
+
+_[Published https://codurance.com/2019/05/18/microservices-adventures/[codurance.com] https://medium.com/@AndrzejRehmann/microservices-adventures-ignoring-platform-complexity-b1820d8fb53d[Medium]]_
 
 I think there is a common misconception about microservices out there.
 
