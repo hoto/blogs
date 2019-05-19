@@ -1,9 +1,9 @@
 ---
-title: Microservices failures: Ignoring platform complexity
+title: Microservices adventures: Ignoring platform complexity
 date: "2019-05-18"
 ---
 
-== Microservices failures: Ignoring platform complexity
+== Microservices adventures: Ignoring platform complexity
 
 I think there is a common misconception about microservices out there.
 
