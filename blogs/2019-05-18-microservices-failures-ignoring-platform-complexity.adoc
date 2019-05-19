@@ -17,7 +17,7 @@ Microservices were supposed to enable companies to perform gazillion deployments
 
 However, few asked what is the price for all of this?
 
-In my opinion the price is the increase in the platform complexity.
+In my opinion, the price is the increase in platform complexity.
 
 > Microservices shift the complexity from the services to the platform.
 > Ignoring this fact results in the below sub-optimal results.
@@ -39,7 +39,7 @@ However, that, in my opinion, is an art and requires not only expertise but a to
 
 When going from a monolith to microservices, we split services reducing their complexity, but the complexity does not disappear into thin air, it transfers onto the platform.
 
-Because designing a platform for distributed systems on a large scale is a pretty new concept, many companies don't realize they have to change tactics and fail miserably when giving in the microservices hype.
+Because designing a platform for distributed systems on a large scale is not yet a mainstream concept, many companies don't realize they have to change tactics and fall short when giving in the microservices hype.
 
 == Platform definition
 
