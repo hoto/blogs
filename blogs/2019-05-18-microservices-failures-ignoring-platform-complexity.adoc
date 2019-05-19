@@ -8,20 +8,19 @@ date: "2019-05-18"
 I think there is a common misconception about microservices out there.
 
 The popular opinion is that microservices supposed to be the cure for all of our problems.
-However, I say that by themselves, they can only cure half of the problems.
-To cure the other half, you are supposed to combine microservices with the DevBizSecDbaQaOps practices and transform your company into the ultimate buzzword producing killing machine gun and achieve Continuous Deployment nirvana.
+However, I say that by themselves, they can only cure half of them.
+To cure the other half, you are supposed to combine microservices with the latest DevBizSecDbaQaOps practices and transform your company into the ultimate buzzword producing killing machine and achieve Continuous Deployment nirvana.
 
 But seriously.
 
-Countless blogs promised us that microservices would be the ultimate cure.
-They were supposed to enable companies to perform gazillion deployments per day, scale the system up to infinity, reduce the codebase complexity, and save money at the same time.
-However, few asked what the price for all of this is?
+Microservices were supposed to enable companies to perform gazillion deployments per day, scale the system up to infinity, reduce the codebase complexity, and save money at the same time.
 
-Many forget that microservices architecture shifts the complexity from the code to the platform.
+However, few asked what is the price for all of this?
 
-== Disclaimer
+In my opinion the price is the increase in the platform complexity.
 
-I want to point out that, this post is my own opinions on the subject.
+> Microservices shift the complexity from the services to the platform.
+> Ignoring this fact results in the below sub-optimal results.
 
 == Complexity
 
