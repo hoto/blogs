@@ -8,6 +8,9 @@ date: "2019-05-18"
 
 _[Published https://codurance.com/2019/05/18/microservices-adventures/[codurance.com] https://medium.com/@AndrzejRehmann/microservices-adventures-ignoring-platform-complexity-b1820d8fb53d[Medium]]_
 
+.The three wise monkeys — Photo by https://unsplash.com/photos/1NacmxqfPZA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText[Joao Tzanno] on Unsplash
+image::three-monkeys.jpg[]
+
 I think there is a common misconception about microservices out there.
 
 The popular opinion is that microservices supposed to be the cure for all of our problems.
