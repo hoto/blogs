@@ -1,5 +1,5 @@
 ---
-title: Microservices adventures: Ignoring platform complexity
+title: "Microservices adventures: Ignoring platform complexity"
 date: "2019-05-18"
 ---
 
