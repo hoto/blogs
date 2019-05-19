@@ -1,6 +1,6 @@
 # Blog
 
-Backup of my blog posts from [medium](https://medium.com/@andrzejrehmann/).
+Backup of my blog posts from [medium](https://medium.com/@andrzejrehmann/) and [codurance](https://codurance.com/publications/author/andrzej-rehmann/).
 
 Github [pages](https://hoto.github.io/blog/).
 
