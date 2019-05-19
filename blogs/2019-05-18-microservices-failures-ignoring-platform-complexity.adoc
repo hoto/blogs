@@ -167,8 +167,8 @@ In my opinion, the most common oversights when dealing with microservices are:
 
 >  "It’s pretty incredible when we stop assuming we know what’s going on."
 
-Observability has to be built into the platform from the very beginning.
-Don't make a mistake of going into production and then worry about observability, it will be already too late.
+Observability needs to be built into the platform from the very beginning.
+Don't make a mistake of going into production and then worry about observability, at that time it may be too late.
 
 SLIs, SLAs, and SLOs, which boils down to https://cloud.google.com/blog/products/gcp/sre-fundamentals-slis-slas-and-slos[availability],  should be agreed up front and monitored.
 To monitor those values, you need observability.
@@ -185,14 +185,14 @@ However, if there is a penalty for breaking the SLA, then the answer clarifies i
 === 2. Wrong tools for alerts (or no alerting)
 
 Getting spammed by dozens of occurrences of the same alert makes the receivers desensitized.
-Same types of alerts must be grouped automatically.
+Same types of alerts should automatically get grouped.
 Receiving a notification for the same alert multiple times is much different than getting spammed with copies of it.
 
 Every alert needs to have an assignee and a status.
 You don't want people working on the same issue in parallel without knowing the problem was fixed yesterday by someone else.
 
 Every alert needs at least the source of origin and the action to follow.
-Problems are quickly fixed if there is a clear procedure for how to fix them.
+Humans fix problems quickly if there is a clear procedure for how to deal with them.
 
 === 3. Not following the https://12factor.net/[twelve factors] rules
 
@@ -212,7 +212,7 @@ We want to avoid that.
 === 5. Not having a common logging strategy
 
 Nobody looks at logs for fun.
-They are either used when debugging or when creating a baseline for the system pulse (think heart rate monitor but for software).
+We use them when debugging or when creating a baseline for the system pulse (think heart rate monitor but for software).
 Analyzing logs from services using different logging schemes is just too complicated.
 Just come up with a logging strategy which everybody agrees on and make a logging library for everybody to use.
 
