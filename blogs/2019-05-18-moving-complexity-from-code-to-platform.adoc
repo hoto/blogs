@@ -169,18 +169,18 @@ In my opinion the most common oversights when dealing with microservices are:
 
 >  "It’s pretty incredible when we stop assuming we know what’s going on."
 
-Observability has to be built into the services and the platform from the very beginning.
-Don't make a mistake going into production and then worry about observability, it may be too late.
+Observability has to be built into the platform from the very beginning.
+Don't make a mistake of going into production and then worry about observability, it will be already too late.
 
 SLIs, SLAs and SLOs, which boils down to https://cloud.google.com/blog/products/gcp/sre-fundamentals-slis-slas-and-slos[availability],  should be agreed up front and monitored.
 To monitor those values you need observability.
 
 Often there is a question who will be looking at the monitoring and my answer would be to ask this:
+
 Who cares about not breaking the SLA and what happens when it's broken?
 
 If the answer is "nobody" and "nothing" then you don't need monitoring in the first place because nobody cares if the system is working or not.
-
-But if there is a penalty to break the SLA then somebody's job, or even the whole company, is on the line.
+But if there is a penalty to break the SLA then the answer will clarify itself.
 
 > "People are not afraid of failure, they are afraid of blame."
 
@@ -191,10 +191,10 @@ Same types of alerts must be grouped together automatically.
 Receiving a notification for the same alert multiple times is much different then getting spammed with copies of it.
 
 Every alert needs to have an assignee and a status.
-You don't want people working on the same issue in parallel without knowing the problem was fixed two days ago by someone else.
+You don't want people working on the same issue in parallel without knowing the problem was fixed yesterday by someone else.
 
 Every alert needs at lest the source of origin and the action to follow.
-Alerts will be fixed quicker when there is a clear procedure to fix the problem.
+Problems will be fixed quicker if there is a clear procedure to how to fix them.
 
 === 3. Not following the https://12factor.net/[twelve factors] rules
 
@@ -203,26 +203,35 @@ Those are really the basics and the lowest hanging fruits to pick.
 
 === 4. Making artifacts mutable
 
-Having to rebuild the artifact to change it's configuration makes me cry. Every time.
+Having to rebuild the artifact to change its configuration makes me cry. Every time.
 Artifacts should be built once and be deployable to any environment.
 You can pass the config with env variables or read an external config file.
+
+This is useful because every build is slightly different.
+Same artifact built twice may behave differently in the same conditions.
+We want to avoid that.
 
 === 5. Not having a common logging strategy
 
 Nobody looks at logs for fun.
-They are either used when debugging or when creating a baseline for the system behaviour (think heart rate monitor but for software).
-Analyzing logs from different services using different logging schemes is too complicated.
+They are either used when debugging or when creating a baseline for the system pulse (think heart rate monitor but for software).
+Analyzing logs from services using different logging schemes is just too complicated.
 Just come up with a logging strategy which everybody agrees on and make a logging library for everybody to use.
+
+If you cannot enforce a common strategy then automatically normalize the log streams before they end up presented to a human.
 
 This is also crucial for making good dashboards.
 
 === 6. Not https://zipkin.apache.org/[tracing] network calls
 
-When a function call fails we get a stacktrace where we can see where the call originated.
-When a network call to a service fails we don't have a single stacktrace showing us the calls made to all involved services.
-It is incredibly insightful to have the ability to see network calls hopping between services and be able to trace a single call through the system.
+When a function call crash we get a stacktrace with all the calls from start to finish.
+In microservices calls can jump from service to service and when one fails it's crucial to see the whole flow.
 
-If you use a service mesh then tracing becomes much easier to setup.
+It is incredibly useful and insightful to trace network calls and be able to trace a single call throughout the system.
+
+Tracking individual calls may seem daunting at first but implementation is very easy.
+Usually it's a middle man which marks the network calls and logs the event.
+Visualization is created from the logs.
 
 === 7. Designing pipelines without automated rollbacks
 
