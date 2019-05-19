@@ -196,18 +196,18 @@ You don't want people working on the same issue in parallel without knowing the 
 Every alert needs at lest the source of origin and the action to follow.
 Alerts will be fixed quicker when there is a clear procedure to fix the problem.
 
-=== 4. Not following the https://12factor.net/[twelve factors] rules
+=== 3. Not following the https://12factor.net/[twelve factors] rules
 
 It makes me really sad when I see a container in 2019 which instead of logging to stdout logs to a file.
 Those are really the basics and the lowest hanging fruits to pick.
 
-=== 3. Making artifacts mutable
+=== 4. Making artifacts mutable
 
 Having to rebuild the artifact to change it's configuration makes me cry. Every time.
 Artifacts should be built once and be deployable to any environment.
 You can pass the config with env variables or read an external config file.
 
-=== 10. Not having a common logging strategy
+=== 5. Not having a common logging strategy
 
 Nobody looks at logs for fun.
 They are either used when debugging or when creating a baseline for the system behaviour (think heart rate monitor but for software).
@@ -216,7 +216,7 @@ Just come up with a logging strategy which everybody agrees on and make a loggin
 
 This is also crucial for making good dashboards.
 
-=== 8. Not https://zipkin.apache.org/[tracing] network calls
+=== 6. Not https://zipkin.apache.org/[tracing] network calls
 
 When a function call fails we get a stacktrace where we can see where the call originated.
 When a network call to a service fails we don't have a single stacktrace showing us the calls made to all involved services.
@@ -224,21 +224,21 @@ It is incredibly insightful to have the ability to see network calls hopping bet
 
 If you use a service mesh then tracing becomes much easier to setup.
 
-=== 5. Designing pipelines without automated rollbacks
+=== 7. Designing pipelines without automated rollbacks
 
 To have an automated rollback you need auto detection when something goes wrong.
 How the system detects and decides if something went wrong separates Continuous Deployment wannabes from the pros.
 
 Most basic check would be a healthcheck.
 
-=== 9. Not requiring healthchecks
+=== 8. Not requiring healthchecks
 
 Every service needs to answer one basic question: is it healthy or not.
 Of course healthcheck from the application should be just one of many metrics collected by the orchestrator to decide if a service is healthy.
 E.g. there may be some performance issues that the service is not aware of.
 Or maybe service becomes a "healthy" zombie that needs to be killed and replaced.
 
-=== 7. Not using a Service Mesh
+=== 9. Not using a Service Mesh
 
 When replacing function calls (monolith) for network calls (microservices) we need to accommodate for latency, network errors and packet drops.
 Doing retries directly from the service may seem harmless but it may cause system wide cascading failures and put unnecessary strain on the network.
@@ -249,7 +249,7 @@ It is true that we are still making a network call to the service mesh but it is
 Service mesh also gives us crucial features like retries policies, call timeouts and deadlines.
 It also makes it easier to have call tracing.
 
-=== 6. Not adapting the tools with scale
+=== 10. Not adapting the tools with scale
 
 Many years ago I joined a project where at the very beginning the platform was composed of just a handful of services.
 The tool for orchestrating services was very primitive.
