@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://hoto.github.io/blog/posts/2019-05-18-microservices-adventures-ignoring-platform-complexity/</loc>
+    <lastmod>2019-05-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://hoto.github.io/blog/posts/2019-02-25-creating-a-jenkinsfile-pipeline/</loc>
     <lastmod>2019-02-25T00:00:00+00:00</lastmod>
   </url>
@@ -49,7 +54,7 @@
   
   <url>
     <loc>https://hoto.github.io/blog/</loc>
-    <lastmod>2019-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -60,7 +65,7 @@
   
   <url>
     <loc>https://hoto.github.io/blog/posts/</loc>
-    <lastmod>2019-02-25T00:00:00+00:00</lastmod>
+    <lastmod>2019-05-18T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

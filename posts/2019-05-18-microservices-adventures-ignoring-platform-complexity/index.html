@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.37.1" />
+    <meta name="description" content="">
+
+
+    <link rel="icon" href="/blog/images/favicon.png" type="image/png">
+
+    <title>Microservices adventures: Ignoring platform complexity :: Blog</title>
+
+    
+    <link href="/blog/css/nucleus.css?1558299345" rel="stylesheet">
+    <link href="/blog/css/fontawesome-all.min.css?1558299345" rel="stylesheet">
+    <link href="/blog/css/hybrid.css?1558299345" rel="stylesheet">
+    <link href="/blog/css/featherlight.min.css?1558299345" rel="stylesheet">
+    <link href="/blog/css/perfect-scrollbar.min.css?1558299345" rel="stylesheet">
+    <link href="/blog/css/auto-complete.css?1558299345" rel="stylesheet">
+    <link href="/blog/css/atom-one-dark-reasonable.css?1558299345" rel="stylesheet">
+    <link href="/blog/css/theme.css?1558299345" rel="stylesheet">
+    <link href="/blog/css/hugo-theme.css?1558299345" rel="stylesheet">
+    
+
+    <script src="/blog/js/jquery-3.3.1.min.js?1558299345"></script>
+
+    <style type="text/css">
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/blog/posts/2019-05-18-microservices-adventures-ignoring-platform-complexity/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="https://hoto.github.io/blog/">
+  <svg id="grav-logo" style="width:100%; height:100%;" viewBox="0 0 504 140" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:1.41421;">
+    <path d="M235.832,71.564l-7.98,-0.001c-1.213,0.001 -2.197,0.987 -2.197,2.204l0,15.327l-0.158,0.132c-4.696,3.962 -10.634,6.14 -16.719,6.14c-14.356,0 -26.034,-11.68 -26.034,-26.037c0,-14.358 11.678,-26.035 26.034,-26.035c5.582,0 10.919,1.767 15.437,5.113c0.877,0.649 2.093,0.56 2.866,-0.211l5.69,-5.69c0.444,-0.442 0.675,-1.055 0.639,-1.681c-0.034,-0.627 -0.336,-1.206 -0.828,-1.597c-6.76,-5.363 -15.214,-8.314 -23.805,-8.314c-21.18,0 -38.414,17.233 -38.414,38.415c0,21.183 17.234,38.415 38.414,38.415c10.937,0 21.397,-4.705 28.698,-12.914c0.358,-0.403 0.556,-0.921 0.556,-1.46l0,-19.603c0,-1.217 -0.985,-2.203 -2.2,-2.203"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M502.794,34.445c-0.408,-0.616 -1.1,-0.989 -1.838,-0.989l-8.684,0c-0.879,0 -1.673,0.522 -2.022,1.329l-24.483,56.839l-24.92,-56.852c-0.352,-0.799 -1.142,-1.316 -2.012,-1.316l-8.713,0c-0.744,0 -1.44,0.373 -1.843,0.995c-0.408,0.623 -0.476,1.408 -0.174,2.09l30.186,68.858c0.352,0.799 1.143,1.317 2.017,1.317l10.992,0c0.879,0 1.673,-0.527 2.021,-1.329l29.655,-68.861c0.289,-0.68 0.222,-1.461 -0.182,-2.081"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M388.683,34.772c-0.353,-0.798 -1.142,-1.316 -2.017,-1.316l-10.988,0c-0.879,0 -1.673,0.522 -2.021,1.329l-29.655,68.861c-0.294,0.675 -0.226,1.46 0.182,2.077c0.407,0.619 1.096,0.993 1.838,0.993l8.684,0c0.879,0 1.673,-0.526 2.022,-1.329l24.478,-56.842l24.92,56.854c0.353,0.798 1.143,1.317 2.013,1.317l8.717,0c0.744,0 1.44,-0.374 1.843,-0.993c0.408,-0.624 0.471,-1.41 0.174,-2.094l-30.19,-68.857Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M309.196,81.525l0.476,-0.229c8.675,-4.191 14.279,-13.087 14.279,-22.667c0,-13.881 -11.295,-25.174 -25.176,-25.174l-31.863,0c-1.214,0 -2.199,0.988 -2.199,2.202l0,68.855c0,1.219 0.985,2.204 2.199,2.204l7.979,0c1.214,0 2.2,-0.985 2.2,-2.204l0,-58.679l21.684,0c7.059,0 12.799,5.739 12.799,12.796c0,5.885 -3.996,10.989 -9.728,12.408c-1.032,0.261 -2.064,0.393 -3.071,0.393l-7.977,0c-0.829,0 -1.585,0.467 -1.959,1.205c-0.378,0.74 -0.305,1.625 0.187,2.296l22.62,30.884c0.412,0.566 1.07,0.901 1.771,0.901l9.915,0c0.827,0 1.587,-0.467 1.96,-1.207c0.378,-0.742 0.302,-1.629 -0.186,-2.296l-15.91,-21.688Z"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M107.191,80.969c-7.255,-4.794 -11.4,-8.845 -15.011,-16.109c-2.47,4.977 -8.236,12.376 -17.962,18.198c-4.856,15.106 -27.954,44.015 -35.43,39.916c-2.213,-1.212 -2.633,-2.808 -2.133,-4.456c0.536,-4.129 9.078,-13.62 9.078,-13.62c0,0 0.18,1.992 2.913,6.187c-3.609,-11.205 5.965,-25.031 8.5,-29.738c3.985,-1.269 4.274,-6.387 4.274,-6.387c0.255,-7.909 -3.278,-13.635 -6.701,-17.059c2.459,3.002 3.255,7.539 3.372,11.694l0,0.023c0.012,0.469 0.012,0.93 0.011,1.39c-0.117,3.439 -1.157,8.19 -3.383,8.19l0.006,0.03c-2.289,-0.098 -5.115,0.391 -7.639,1.18l-5.582,1.334c0,0 2.977,-0.136 4.584,1.252c-1.79,2.915 -5.769,6.533 -10.206,8.588c-6.457,2.995 -8.312,-2.964 -5.034,-6.838c0.805,-0.946 1.618,-1.745 2.387,-2.399c-0.495,-0.513 -0.807,-1.198 -0.889,-2.068c-0.001,-0.005 -0.004,-0.009 -0.005,-0.013c-0.45,-1.977 -0.202,-4.543 2.596,-8.623c0.551,-0.863 1.214,-1.748 2.007,-2.647c0.025,-0.031 0.046,-0.059 0.072,-0.089c0.034,-0.042 0.072,-0.08 0.108,-0.121c0.02,-0.023 0.039,-0.045 0.059,-0.068c0.2,-0.228 0.413,-0.45 0.639,-0.663c3.334,-3.414 8.599,-6.966 16.897,-10.152c9.675,-14.223 13.219,-16.89 13.219,-16.89c1.071,-1.096 2.943,-2.458 3.632,-2.805c-5.053,-8.781 -6.074,-21.158 -4.75,-24.493c-0.107,0.18 -0.206,0.365 -0.287,0.556c0.49,-1.143 0.819,-1.509 1.328,-2.111c1.381,-1.632 6.058,-2.488 7.737,0.971c0.895,1.844 1.063,4.232 1.034,6.023c-3.704,-0.193 -7.063,4.036 -7.063,4.036c0,0 3.067,-1.448 6.879,-1.473c0,0 1.015,0.883 2.283,2.542c-1.712,3.213 -4.524,10.021 -2.488,17.168c0.338,1.408 0.849,2.619 1.483,3.648c0.024,0.045 0.044,0.089 0.069,0.135c0.051,0.066 0.096,0.122 0.144,0.183c3.368,5.072 9.542,5.665 9.542,5.665c-2.906,-1.45 -5.274,-3.76 -6.816,-6.56c-0.8,-1.498 -1.291,-2.762 -1.592,-3.761c-1.636,-6.313 0.771,-9.999 2.149,-12.471c3.17,-4.917 8.944,-7.893 15.151,-7.185c8.712,0.995 14.968,8.862 13.973,17.571c-0.608,5.321 -3.781,9.723 -8.142,12.117c1.049,2.839 -0.073,6.28 -0.073,6.28c2.642,3.323 2.758,5.238 2.667,7.017c-3.357,-0.565 -6.618,1.701 -6.618,1.701c0,0 6.476,-1.546 10.238,1.81c2.446,2.631 4.078,5.009 5.051,6.766c1.393,2.505 7.859,2.683 7.123,7.188c-0.737,4.499 -5.669,4.542 -13.401,-0.56M69.571,0c-38.424,0 -69.571,31.148 -69.571,69.567c0,38.422 31.147,69.573 69.571,69.573c38.42,0 69.568,-31.151 69.568,-69.573c0,-38.42 -31.148,-69.567 -69.568,-69.567"
+      style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M73.796,51.693c0.813,-0.814 0.813,-2.134 0,-2.947c-0.815,-0.814 -2.133,-0.814 -2.947,0c-0.815,0.813 -0.815,2.133 0,2.947c0.814,0.813 2.132,0.813 2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M66.445,53.149c-0.814,0.813 -0.814,2.133 0,2.947c0.813,0.814 2.133,0.814 2.947,0c0.813,-0.814 0.813,-2.134 0,-2.947c-0.814,-0.813 -2.134,-0.813 -2.947,0" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M79.231,54.233c-1.274,-1.274 -3.339,-1.272 -4.611,0l-2.713,2.712c-1.274,1.275 -1.274,3.339 0,4.612l2.978,2.978c1.274,1.275 3.338,1.274 4.611,0l2.712,-2.712c1.274,-1.274 1.274,-3.339 0,-4.612l-2.977,-2.978Z" style="fill:#000;fill-rule:nonzero;"></path>
+    <path d="M95.759,41.445c-2.151,-2.578 1.869,-7.257 4.391,-4.463c4.645,5.148 -2.237,7.041 -4.391,4.463M105.004,44.132c3.442,-6.553 -1.427,-10.381 -4.773,-13.523c-5.36,-5.039 -10.706,-7.217 -16.811,-0.241c-6.102,6.977 -2.226,15.068 3.356,19.061c5.584,3.994 14.782,1.255 18.228,-5.297"
+      style="fill:#000;fill-rule:nonzero;"></path>
+  </svg>
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/blog/js/lunr.min.js?1558299345"></script>
+<script type="text/javascript" src="/blog/js/auto-complete.js?1558299345"></script>
+<script type="text/javascript">
+    
+        var baseurl = "https:\/\/hoto.github.io\/blog\/";
+    
+</script>
+<script type="text/javascript" src="/blog/js/search.js?1558299345"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+ 
+  
+    
+    <li data-nav-id="/blog/posts/" title="Posts" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/blog/posts/">
+          Posts
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+          
+        
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2019-05-18-microservices-adventures-ignoring-platform-complexity/" title="Microservices adventures: Ignoring platform complexity" class="dd-item active">
+        <a href="/blog/posts/2019-05-18-microservices-adventures-ignoring-platform-complexity/">
+        Microservices adventures: Ignoring platform complexity
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2019-02-25-creating-a-jenkinsfile-pipeline/" title="Creating a Jenkinsfile pipeline" class="dd-item ">
+        <a href="/blog/posts/2019-02-25-creating-a-jenkinsfile-pipeline/">
+        Creating a Jenkinsfile pipeline
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2019-02-11-private-jenkins-shared-libraries/" title="Private Jenkins Shared Libraries" class="dd-item ">
+        <a href="/blog/posts/2019-02-11-private-jenkins-shared-libraries/">
+        Private Jenkins Shared Libraries
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2017-08-15-encrypt-pendrive-with-luks/" title="Encrypt pendrive with LUKS" class="dd-item ">
+        <a href="/blog/posts/2017-08-15-encrypt-pendrive-with-luks/">
+        Encrypt pendrive with LUKS
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-1-introduction/" title="Fedora with ZFS and encryption (1)" class="dd-item ">
+        <a href="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-1-introduction/">
+        Fedora with ZFS and encryption (1)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-2-partitions/" title="Fedora with ZFS and encryption (2)" class="dd-item ">
+        <a href="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-2-partitions/">
+        Fedora with ZFS and encryption (2)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-3-encryption/" title="Fedora with ZFS and encryption (3)" class="dd-item ">
+        <a href="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-3-encryption/">
+        Fedora with ZFS and encryption (3)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-4-fedora/" title="Fedora with ZFS and encryption (4)" class="dd-item ">
+        <a href="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-4-fedora/">
+        Fedora with ZFS and encryption (4)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-5-encryption2/" title="Fedora with ZFS and encryption (5)" class="dd-item ">
+        <a href="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-5-encryption2/">
+        Fedora with ZFS and encryption (5)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+ 
+  
+    
+      <li data-nav-id="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-6-zfs/" title="Fedora with ZFS and encryption (6)" class="dd-item ">
+        <a href="/blog/posts/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption-part-6-zfs/">
+        Fedora with ZFS and encryption (6)
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      <p>Built with <a href="https://github.com/matcornic/hugo-theme-learn"><i class="fas fa-heart"></i></a> from <a href="http://getgrav.org">Grav</a> and <a href="http://gohugo.io/">Hugo</a></p>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/blog/'>Blog</a> > <a href='/blog/posts/'>Posts</a> > Microservices adventures: Ignoring platform complexity
+          
+         
+          
+         
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Microservices adventures: Ignoring platform complexity
+            </h1>
+          
+
+        
+
+
+
+<div class="sect1">
+<h2 id="_microservices_adventures_ignoring_platform_complexity">Microservices adventures: Ignoring platform complexity</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>[Published <a href="https://codurance.com/2019/05/18/microservices-adventures/">codurance.com</a> <a href="https://medium.com/@AndrzejRehmann/microservices-adventures-ignoring-platform-complexity-b1820d8fb53d">Medium</a>]</em></p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="/blog/images/2019-05-18-microservices-adventures/three-monkeys.jpg" alt="three monkeys">
+</div>
+<div class="title">Figure 1. The three wise monkeys — Photo by <a href="https://unsplash.com/photos/1NacmxqfPZA?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText">Joao Tzanno</a> on Unsplash</div>
+</div>
+<div class="paragraph">
+<p>I think there is a common misconception about microservices out there.</p>
+</div>
+<div class="paragraph">
+<p>The popular opinion is that microservices supposed to be the cure for all of our problems.
+However, I say that by themselves, they can only cure half of them.
+To cure the other half, you are supposed to combine microservices with the latest DevBizSecDbaQaOps practices and transform your company into the ultimate buzzword producing killing machine and achieve Continuous Deployment nirvana.</p>
+</div>
+<div class="paragraph">
+<p>But seriously.</p>
+</div>
+<div class="paragraph">
+<p>Microservices were supposed to enable companies to perform gazillion deployments per day, scale the system up to infinity, reduce the codebase complexity, and save money at the same time.</p>
+</div>
+<div class="paragraph">
+<p>However, few asked what is the price for all of this?</p>
+</div>
+<div class="paragraph">
+<p>In my opinion, the price is the increase in platform complexity.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Microservices shift the complexity from the services to the platform.
+Ignoring this fact results in the suboptimal results.</p>
+</div>
+</blockquote>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_complexity">Complexity</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Complex - many parts with intricate arrangements, organized (easy) or disorganized (hard)</p>
+</div>
+</blockquote>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Complicated - hard to understand regardless of the complexity</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Sometimes things may seem complicated at first but become complex with enough familiarity (think driving a car).</p>
+</div>
+<div class="paragraph">
+<p>We can describe any software system on how complicated and complex it is.
+The system can be made less complicated and complex by removing pieces of it.
+When splitting a system into pieces, it may become less complicated, but the complexity usually increases.</p>
+</div>
+<div class="paragraph">
+<p>Thankfully splitting can be done in such a way that we end up with an "organized" complexity, which is easy to understand.
+However, that, in my opinion, is an art and requires not only expertise but a ton of experience.</p>
+</div>
+<div class="paragraph">
+<p>When going from a monolith to microservices, we split services reducing their complexity, but the complexity does not disappear into thin air, it transfers onto the platform.</p>
+</div>
+<div class="paragraph">
+<p>Because designing a platform for distributed systems on a large scale is not yet a mainstream concept, many companies don&#8217;t realize they have to change tactics and fall short when giving in the microservices hype.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_platform_definition">Platform definition</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The software which is not a shelfware eventually ends up running on a platform.
+The platform is all the things which enable the software to run and perform its duty.
+When the platform fails, your software fails.</p>
+</div>
+<div class="paragraph">
+<p>My definition of a software platform includes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Platform topology</strong> - existing infrastructure</p>
+</li>
+<li>
+<p><strong>Services</strong> - executable units of software</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Core services</strong> - executables required to fulfill business needs</p>
+</li>
+<li>
+<p><strong>Support services</strong> - executables monitoring core services and the platform itself</p>
+</li>
+<li>
+<p><strong>Service Orchestration</strong> - executables assigning which service goes where also responsible for scaling and destroying services</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p><strong>Service Configuration</strong> - configuration which changes depending on the environment</p>
+</li>
+<li>
+<p><strong>Service Secrets</strong> - configuration which should not be source controlled</p>
+</li>
+<li>
+<p><strong>Service Discovery</strong> - detection of services</p>
+</li>
+<li>
+<p><strong>Service Mesh</strong> - delivery of requests through a topology</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Additionally, we have things which describe the platform setup and deployment procedures:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Platform definition</strong> - procedures (hopefully in code) describing in details the infrastructure</p>
+</li>
+<li>
+<p><strong>Deployment pipelines</strong> - procedures (hopefully in code) describing the deployment process</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Every platform is alive, evolving, and has a lifecycle:</p>
+</div>
+<div class="paragraph">
+<p><strong>Day 1</strong></p>
+</div>
+<div class="paragraph">
+<p>There is nothing.
+Infrastructure gets created, and software gets deployment for the first time.</p>
+</div>
+<div class="paragraph">
+<p><strong>Day 2+</strong></p>
+</div>
+<div class="paragraph">
+<p>Infrastructure gets removed, updated, or extended.
+Configuration changes.
+Software crashes.
+Software gets redeployed.
+Deployment fails and needs a rollback.</p>
+</div>
+<div class="paragraph">
+<p>Challenging problems arise not on day 1, but on day 2 onwards.
+If you don&#8217;t plan and think ahead on the first day, you may be in a need one day to scrap your whole platform and go back to the drawing board.</p>
+</div>
+<div class="paragraph">
+<p>There are many things which can go wrong here.
+What&#8217;s inside the boxes (services) is irrelevant, the thing which handles the boxes and connection between them should be the main focus of attention.
+If the company thinks that the services are more crucial then the platform, then I would recommend staying with monoliths.</p>
+</div>
+<div class="paragraph">
+<p>The platform is like a free puppy.
+The upfront cost may be zero, but when the puppy grows and multiplies the maintenance costs grows exponentially.
+Eventually, a badly designed and poorly maintained platform behaves in the most unexpected ways up to a point where instead of fixing the current one, it&#8217;s cheaper to create a new one.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_platform_as_an_afterthought">Platform as an afterthought</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>There are two cases when starting with microservices architecture:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Starting fresh - what we call a greenfield project.</p>
+</li>
+<li>
+<p>Migrating from a monolith by extracting bits from it.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Unfortunately, both cases usually suffer from the same symptoms:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Platform design is often an afterthought.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>The platform usually comes up in the conversations as the "supporting" role, rarely as the main actor.
+Companies who change their viewpoint and reverse this situation shall be the one to reap the full benefits of microservice architecture.
+Who knows, maybe even all of the devops catchphrases from the company "we are hiring" page will then come alive like in a fairy tale and mingle among the dancing developers.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_monitoring_observability_and_debuggability">Monitoring, observability and debuggability</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Monitoring is gathering and displaying data so it can be analyzed.
+To monitor a system, it must be observable.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>If you are observable I can understand you.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>The tools and techniques needed to analyze a system composed of couple services vs. hundredths of services are vastly different.
+Where one can manage to manually gather and sift through metrics for a few services, doing so for dozens is not sustainable.
+Any large scale microservice system needs tools to automatically gather all the essential metrics and display them in a format consumable to humans.</p>
+</div>
+<div class="sect2">
+<h3 id="_black_box">Black box</h3>
+<div class="paragraph">
+<p>The opposite of an observable system is a "black box," where the only things we can measure are the inputs and outputs (or a lack thereof).
+In this hugely entertaining <a href="https://www.youtube.com/watch?v=30jNsCVLpAE">talk</a> Bryan Cantrill talks about the art of debuggability:</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>The art of debugging isn&#8217;t to guess the answer - it is to be able to ask the right questions to know how to answer them.
+Answered questions are facts, not a hypothesis.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Making platform observable is hard and under-appreciated work.
+When a deployment is a non-event, nobody congratulates the people behind it.</p>
+</div>
+<div class="paragraph">
+<p>In my opinion, successfully pulling out microservices architecture requires putting more effort into the platform itself than on the services running on it.
+Companies need to realize they are creating a platform first, and the services running on it are the afterthought.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_platform_engineers">Platform engineers</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Systems are as good as the people who designed it.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Systems fail, and that is something to be expected and embraced.
+However, they should also self recover.
+How do you ask?
+Preferably without the input of humans.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>With any advanced automation the weakest link is always the human.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Creating a self-healing system requires to monitor itself.
+To monitor a platform, you need observability.
+Observability and monitoring should then be a priority, not an afterthought.
+To design, setup, and maintain platform monitoring, we need platform engineers.</p>
+</div>
+<div class="paragraph">
+<p>Humans should be in the loop only when the system cannot repair itself.
+Our job should not only be fixing the problems but primarily making sure that those problems never occur again or gets fixed automatically next time.</p>
+</div>
+<div class="paragraph">
+<p>When dealing with complex platforms, we need full time "platform engineers."
+Those are either system administrators who can code or coders who know system administration.
+They write code to make the platform more observable, stable, and developer friendly.</p>
+</div>
+<div class="paragraph">
+<p>There is this one twisted interpretation of DevOps where the premise is that you could get "rid" of system administrators and end up with only developers who would manage services in production.
+That&#8217;s never going to happen.
+Most developers don&#8217;t care and do not want to learn about system administration.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_common_oversights">Common oversights</h2>
+<div class="sectionbody">
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>"Some people change their ways when they see the light; others when they feel the heat."</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>In my opinion, the most common oversights when dealing with microservices are:</p>
+</div>
+<div class="sect2">
+<h3 id="_1_lack_of_monitoring">1. Lack of monitoring</h3>
+<div class="quoteblock">
+<blockquote>
+<div class="literalblock">
+<div class="content">
+<pre>"It’s pretty incredible when we stop assuming we know what’s going on."</pre>
+</div>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Observability needs to be built into the platform from the very beginning.
+Don&#8217;t make a mistake of going into production and then worry about observability, at that time it may be too late.</p>
+</div>
+<div class="paragraph">
+<p>SLIs, SLAs, and SLOs, which boils down to <a href="https://cloud.google.com/blog/products/gcp/sre-fundamentals-slis-slas-and-slos">availability</a>, should be agreed up front and be monitored.
+To monitor those values, you need observability.</p>
+</div>
+<div class="paragraph">
+<p>Often there is a question who should be looking at the monitoring, and my answer would be to ask this:</p>
+</div>
+<div class="paragraph">
+<p>Who cares about not breaking the SLA and what happens when it&#8217;s broken?</p>
+</div>
+<div class="paragraph">
+<p>If the answer is "nobody" and "nothing," then you don&#8217;t need monitoring in the first place because nobody cares if the system is working or not.
+However, if there is a penalty for breaking the SLA, then the answer clarifies itself.</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>"People are not afraid of failure, they are afraid of blame."</p>
+</div>
+</blockquote>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_2_wrong_tools_for_alerts_or_no_alerting">2. Wrong tools for alerts (or no alerting)</h3>
+<div class="paragraph">
+<p>Getting spammed by dozens of occurrences of the same alert makes the receivers desensitized.
+Same types of alerts should automatically get grouped.
+Receiving a notification for the same alert multiple times is much different than getting spammed with copies of it.</p>
+</div>
+<div class="paragraph">
+<p>Every alert needs to have an assignee and a status.
+You don&#8217;t want people working on the same issue in parallel without knowing the problem was fixed yesterday by someone else.</p>
+</div>
+<div class="paragraph">
+<p>Every alert needs at least the source of origin and the action to follow.
+Humans fix problems quickly if there is a clear procedure for how to deal with them.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_3_not_following_the_a_href_https_12factor_net_twelve_factors_a_rules">3. Not following the <a href="https://12factor.net/">twelve factors</a> rules</h3>
+<div class="paragraph">
+<p>It makes me sad when I see an application in 2019 which instead of logging to stdout logs to a file.
+Twelve factors rules are the basics and the lowest hanging fruits to pick.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_4_making_artifacts_mutable">4. Making artifacts mutable</h3>
+<div class="paragraph">
+<p>Having to rebuild the artifact to change its configuration makes me cry — every time.
+Artifacts should be built once and be deployable to any environment.
+You can pass the config with env variables or read an external config file.</p>
+</div>
+<div class="paragraph">
+<p>Immutable artifacts are useful because every build is slightly different.
+The same artifact built twice may behave differently in the same conditions.
+We want to avoid that.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_5_not_having_a_common_logging_strategy">5. Not having a common logging strategy</h3>
+<div class="paragraph">
+<p>Nobody looks at logs for fun.
+We use them when debugging or when creating a baseline for the system pulse (think heart rate monitor but for software).
+Analyzing logs from services using different logging schemes is just too complicated.
+Just come up with a logging strategy which everybody agrees on and make a logging library for everybody to use.</p>
+</div>
+<div class="paragraph">
+<p>If you cannot enforce a common strategy, then automatically normalize the log streams before they end up presented to a human.</p>
+</div>
+<div class="paragraph">
+<p>Standardized logging scheme is also crucial for making useful dashboards.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_6_not_a_href_https_zipkin_apache_org_tracing_a_network_calls">6. Not <a href="https://zipkin.apache.org/">tracing</a> network calls</h3>
+<div class="paragraph">
+<p>When a function call crash we get a stack trace with all the calls from start to finish.
+In microservices, calls can jump from service to service, and when one fails, it&#8217;s crucial to see the whole flow.</p>
+</div>
+<div class="paragraph">
+<p>It is incredibly useful and insightful to be able to trace a single call throughout the system.</p>
+</div>
+<div class="paragraph">
+<p>Tracking individual calls may seem daunting at first, but implementation is straightforward.
+Usually, it&#8217;s a middle man which marks the network calls and logs the event.
+Logs are then used to produce visualizations.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_7_designing_pipelines_without_automated_rollbacks">7. Designing pipelines without automated rollbacks</h3>
+<div class="paragraph">
+<p>To have an automated rollback, you need auto detection when something goes wrong.
+How the system detects and decides if something went wrong separates Continuous Deployment wannabes from the pros.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_8_not_requiring_health_checks">8. Not requiring health checks</h3>
+<div class="paragraph">
+<p>Every service needs to answer one fundamental question: is it healthy or not.
+Of course, health check status from the application should be just one of many metrics collected by the orchestrator to decide if a service is healthy.
+There may be many issues that the service is not aware of.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_9_not_using_a_service_mesh">9. Not using a Service Mesh</h3>
+<div class="paragraph">
+<p>When replacing function calls (monolith) for network calls (microservices), we need to accommodate for latency, network errors, and packet drops.
+Doing retries directly from the service may seem harmless, but it may cause system-wide cascading failures and put unnecessary strain on the network.</p>
+</div>
+<div class="paragraph">
+<p>Instead of forcing each service to deal with network failures, we can use a middle man called Service Mesh, which is designed to handle those cases.
+It is true that we are still making a network call to a service mesh, but it is safer because the call is not leaving the host.</p>
+</div>
+<div class="paragraph">
+<p>Service mesh also gives us essential features like retries policies, call timeouts, and deadlines.
+It also makes it easier to have a system-wide call tracing.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_10_not_adapting_the_tools_with_scale">10. Not adapting the tools with scale</h3>
+<div class="paragraph">
+<p>Many years ago, I joined a project where, at the very beginning, the platform was running just a handful of services.
+The tool for orchestrating services was very primitive.
+The biggest flaw of that orchestrator was that it didn&#8217;t respect the capacity of the hosts.
+Service assignment to a host was manual.
+The manual assignment works just fine with a tiny platform, but it just did not scale.
+We had to estimate how much memory and CPU each service needs and assign them accordingly.
+Sometimes the estimates were wrong, and one service would crash or starve other services.</p>
+</div>
+<div class="paragraph">
+<p>When we scaled from a couple of services to dozens, we should have changed the tool, but we didn&#8217;t.
+At that time, I didn&#8217;t even understand the problem as I was new to the subject, so did the vast majority of the people on the project.
+Those who knew what was wrong didn&#8217;t care or were too afraid to escalate the problem to the decision makers.
+The platform became incredibly unstable and required daily manual restarts, and soon it was late to replace the orchestrator, it got too deeply embedded into the platform.
+It took more than a year to acknowledge the problem and design a new platform from scratch.</p>
+</div>
+<div class="paragraph">
+<p>Conclusion: the platform needs to be checked periodically to asses if it still suits the needs of a system.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_ending_words">Ending words</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Its been about 10 years since the microservices became mainstream.
+The industry is still coming up with new tools, solutions, and patterns to make our life easier.
+Keeping up with "devops" technology can be fatiguing and overwhelming, so instead, I think it is better to learn the underlying concepts which are universal and evolve slowly.
+That, I hope, is what I&#8217;m trying to do here; figure out what those microservices are all about.
+In our minds, we create models to approximate the concepts we learn.
+I know that my models have big holes in them and needs a major overhaul, so if you see any obvious and stupid mistakes, please share with me!</p>
+</div>
+<div class="paragraph">
+<p>Andy</p>
+</div>
+</div>
+</div>
+
+
+<footer class=" footline" >
+	
+</footer>
+
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/blog/posts/" title="Posts"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/blog/posts/2019-02-25-creating-a-jenkinsfile-pipeline/" title="Creating a Jenkinsfile pipeline" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/blog/js/clipboard.min.js?1558299345"></script>
+    <script src="/blog/js/perfect-scrollbar.min.js?1558299345"></script>
+    <script src="/blog/js/perfect-scrollbar.jquery.min.js?1558299345"></script>
+    <script src="/blog/js/jquery.sticky.js?1558299345"></script>
+    <script src="/blog/js/featherlight.min.js?1558299345"></script>
+    <script src="/blog/js/html5shiv-printshiv.min.js?1558299345"></script>
+    <script src="/blog/js/highlight.pack.js?1558299345"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/blog/js/modernizr.custom-3.6.0.js?1558299345"></script>
+    <script src="/blog/js/learn.js?1558299345"></script>
+    <script src="/blog/js/hugo-learn.js?1558299345"></script>
+
+    <link href="/blog/mermaid/mermaid.css?1558299345" type="text/css" rel="stylesheet" />
+    <script src="/blog/mermaid/mermaid.js?1558299345"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    
+
+  </body>
+</html>
+

@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 25 Feb 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 18 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://hoto.github.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Microservices adventures: Ignoring platform complexity</title>
+      <link>https://hoto.github.io/blog/posts/2019-05-18-microservices-adventures-ignoring-platform-complexity/</link>
+      <pubDate>Sat, 18 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://hoto.github.io/blog/posts/2019-05-18-microservices-adventures-ignoring-platform-complexity/</guid>
+      <description>Microservices adventures: Ignoring platform complexity [Published codurance.com Medium]
+  Figure 1. The three wise monkeys — Photo by Joao Tzanno on Unsplash  I think there is a common misconception about microservices out there.
+ The popular opinion is that microservices supposed to be the cure for all of our problems. However, I say that by themselves, they can only cure half of them. To cure the other half, you are supposed to combine microservices with the latest DevBizSecDbaQaOps practices and transform your company into the ultimate buzzword producing killing machine and achieve Continuous Deployment nirvana.</description>
+    </item>
     
     <item>
       <title>Creating a Jenkinsfile pipeline</title>
