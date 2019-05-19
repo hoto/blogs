@@ -250,3 +250,11 @@ Of course healthcheck from the application should be just one of many metrics co
 E.g. there may be some performance issues that the service is not aware of.
 Or maybe service becomes a "healthy" zombie that needs to be killed and replaced.
 
+=== 10. Not having a common logging strategy
+
+Nobody looks at logs for fun.
+They are either used when debugging or when creating a baseline for the system behaviour (think heart rate monitor but for software).
+Analyzing logs from different services using different logging schemes is too complicated.
+Just come up with a logging strategy which everybody agrees on and make a logging library for everybody to use.
+
+This is also crucial for making good dashboards.
