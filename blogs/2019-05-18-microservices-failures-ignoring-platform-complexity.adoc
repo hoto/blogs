@@ -104,7 +104,7 @@ Unfortunately, both cases usually suffer from the same symptoms:
 
 The platform usually comes up as the "supporting" role, rarely as the main actor.
 Companies who change their viewpoint and reverse this situation shall be the one to reap the full benefits of microservice architecture.
-Even the DevOps catchphrases from the company "we are hiring" page will come alive like in a fairy tale and mingle among the dancing developers. I promise.
+Even the DevOps catchphrases from the company "we are hiring" page might come alive like in a fairy tale and mingle among the dancing developers. I promise.
 
 == Monitoring, observability and debuggability
 
@@ -218,7 +218,7 @@ Just come up with a logging strategy which everybody agrees on and make a loggin
 
 If you cannot enforce a common strategy, then automatically normalize the log streams before they end up presented to a human.
 
-This is also crucial for making useful dashboards.
+Standardized logging scheme is also crucial for making useful dashboards.
 
 === 6. Not https://zipkin.apache.org/[tracing] network calls
 
@@ -229,7 +229,7 @@ It is incredibly useful and insightful to trace network calls and be able to tra
 
 Tracking individual calls may seem daunting at first, but implementation is straightforward.
 Usually, it's a middle man which marks the network calls and logs the event.
-Visualization is created from the logs.
+Logs are then used to produce visualizations.
 
 === 7. Designing pipelines without automated rollbacks
 
@@ -241,16 +241,15 @@ The most basic check would be a health check.
 === 8. Not requiring health checks
 
 Every service needs to answer one fundamental question: is it healthy or not.
-Of course, health check from the application should be just one of many metrics collected by the orchestrator to decide if a service is healthy.
-E.g., there may be some performance issues that the service is not aware of.
-Or maybe service becomes a "healthy" zombie that needs to be killed and replaced.
+Of course, health check status from the application should be just one of many metrics collected by the orchestrator to decide if a service is healthy.
+There may be many issues that the service is not aware of.
 
 === 9. Not using a Service Mesh
 
 When replacing function calls (monolith) for network calls (microservices), we need to accommodate for latency, network errors, and packet drops.
 Doing retries directly from the service may seem harmless, but it may cause system-wide cascading failures and put unnecessary strain on the network.
 
-Why forcing each service to deal with network failures when we can use a middle man called service mesh, which is designed to handle this.
+Instead of forcing each service to deal with network failures, we can use a middle man called service mesh, which is designed to handle this.
 It is true that we are still making a network call to the service mesh, but it is safer because the call is not leaving the host.
 
 Service mesh also gives us essential features like retries policies, call timeouts, and deadlines.
@@ -258,18 +257,18 @@ It also makes it easier to have call tracing.
 
 === 10. Not adapting the tools with scale
 
-Many years ago, I joined a project where, at the very beginning, the platform was composed of just a handful of services.
+Many years ago, I joined a project where, at the very beginning, the platform was running just a handful of services.
 The tool for orchestrating services was very primitive.
 The biggest flaw of that orchestrator was that it didn't respect the capacity of the hosts.
-Service assignment to a host was done manually.
-The manual assignment will work just fine with a tiny platform, but it just did not scale.
+Service assignment to a host was manual.
+The manual assignment works just fine with a tiny platform, but it just did not scale.
 We had to estimate how much memory and CPU services needs and assign them accordingly.
 Sometimes the estimates were wrong, and one service would crash or starve other services.
 
 When we scaled from a couple of services to dozens, we should have changed the tool, but we didn't.
 At that time, I didn't even understand the problem as I was new to the subject, so did the vast majority of the people on the project.
 Those who knew what was wrong didn't care or were too afraid to escalate the problem to the decision makers.
-The platform became incredibly unstable and required daily manual restarts but soon it was late to replace the orchestrator, it was too deeply embedded into the platform.
+The platform became incredibly unstable and required daily manual restarts, and soon it was late to replace the orchestrator, it got too deeply embedded into the platform.
 It took more than a year to acknowledge the problem finally and design a new platform from scratch.
 
 The platform needs to be checked periodically to asses if it still suits the needs of a system.
