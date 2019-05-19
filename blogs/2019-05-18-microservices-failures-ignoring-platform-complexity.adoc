@@ -21,9 +21,7 @@ Many forget that microservices architecture shifts the complexity from the code 
 
 == Disclaimer
 
-I would like to point here out that, if you haven't noticed already, this post is my own opinions on the subject.
-I have created my own models in order to understand microservices architecture, especially in the context of Continuous Deployment.
-Those models are full of holes and may be completely different than what's accepted as the industry standard.
+I would like to point out that, this post are my own opinions on the subject.
 
 == Complexity
 
@@ -274,4 +272,4 @@ Those who knew what was wrong just didn't care or were too afraid to escalate th
 The platform became incredibly unstable and required daily manual restarts but soon it was late to simply replace the orchestrator, it was too deeply embedded into the platform.
 It took more than a year to finally acknowledge the problem and design a new platform from scratch.
 
-https://app.grammarly.com/The platform needs to be checked periodically to asses if it still suits the needs of a system.
+The platform needs to be checked periodically to asses if it still suits the needs of a system.
