@@ -82,8 +82,8 @@ Deployment fails and needs a rollback.
 Challenging problems arise not on day 1, but on day 2 onwards.
 If you don't plan and think ahead on the first day, you may be in a need one day to scrap your whole platform and go back to the drawing board.
 
-You can see that there are many things to go wrong here.
-What's inside the boxes (services) is irrelevant, the thing which handles the boxes should be the main focus of attention.
+There are many things which can go wrong here.
+What's inside the boxes (services) is irrelevant, the thing which handles the boxes and connection between them should be the main focus of attention.
 If the company thinks that the services are more crucial then the platform, then I would recommend staying with monoliths.
 
 The platform is like a free puppy.
@@ -101,9 +101,9 @@ Unfortunately, both cases usually suffer from the same symptoms:
 
 > Platform design is often an afterthought.
 
-The platform usually comes up as the "supporting" role, rarely as the main actor.
+The platform usually comes up in the conversations as the "supporting" role, rarely as the main actor.
 Companies who change their viewpoint and reverse this situation shall be the one to reap the full benefits of microservice architecture.
-Even the DevOps catchphrases from the company "we are hiring" page might come alive like in a fairy tale and mingle among the dancing developers. I promise.
+Who knows, maybe even all of the devops catchphrases from the company "we are hiring" page will then come alive like in a fairy tale and mingle among the dancing developers.
 
 == Monitoring, observability and debuggability
 
@@ -116,31 +116,32 @@ The tools and techniques needed to analyze a system composed of couple services 
 Where one can manage to manually gather and sift through metrics for a few services, doing so for dozens is not sustainable.
 Any large scale microservice system needs tools to automatically gather all the essential metrics and display them in a format consumable to humans.
 
+=== Platform engineers
+
 > Systems are as good as the people who designed it.
 
 Systems fail, and that is something to be expected and embraced.
-However, it should also self recover. How do you ask? Preferably without the input of humans.
-
-=== Platform engineers
+However, they should also self recover.
+How do you ask?
+Preferably without the input of humans.
 
 > With any advanced automation the weakest link is always the human.
 
-Creating a self-healing system requires it to be observable.
-To make the platform observable, you need monitoring.
-Monitoring then should be a priority, not an afterthought.
+Creating a self-healing system requires to monitor itself.
+To monitor a platform, you need observability.
+Observability and monitoring should then be a priority, not an afterthought.
+To design, setup and maintain platform monitoring we need platform engineers.
 
-Humans should only be in the loop when something goes critically wrong.
-Humans job should not only be fixing the problem but primarily making sure that the problem never occurs again or gets fixed automatically next time.
+Humans should be in the loop only when system cannot repair itself.
+Our job should not only be fixing the problems but primarily making sure that those problems never occurs again or gets fixed automatically next time.
 
-When dealing with complex platforms, there is this need for "platform engineers."
+When dealing with complex platforms we need full time "platform engineers."
 Those are either system administrators who can code or coders who know system administration.
-They write code to make the platform more developer friendly, stable, and observable.
+They write code to make the platform more observable, stable and developer friendly.
 
 There is this one twisted interpretation of DevOps where the premise is that you could get "rid" of system administrators and end up with only developers who would manage services in production.
 That's never going to happen.
 Most developers don't care and do not want to learn about system administration.
-Just search for "DevOps engineer" on any job searching portal to see for yourself how many companies struggle to find them.
-Also, from the job descriptions, you can quickly tell if a company treats its platform seriously.
 
 === Black box
 
