@@ -116,6 +116,20 @@ The tools and techniques needed to analyze a system composed of couple services 
 Where one can manage to manually gather and sift through metrics for a few services, doing so for dozens is not sustainable.
 Any large scale microservice system needs tools to automatically gather all the essential metrics and display them in a format consumable to humans.
 
+=== Black box
+
+The opposite of an observable system is a "black box," where the only things we can measure are the inputs and outputs (or a lack thereof).
+In this hugely entertaining https://www.youtube.com/watch?v=30jNsCVLpAE[talk] Bryan Cantrill talks about the art of debuggability:
+
+> The art of debugging isn't to guess the answer - it is to be able to ask the right questions to know how to answer them.
+> Answered questions are facts, not a hypothesis.
+
+Making platform observable is hard and under-appreciated work.
+When a deployment is a non-event, nobody congratulates the people behind it.
+
+In my opinion, successfully pulling out microservices architecture requires putting more effort into the platform itself than on the services running on it.
+Companies need to realize they are creating a platform first, and the services running on it are the afterthought.
+
 === Platform engineers
 
 > Systems are as good as the people who designed it.
@@ -142,20 +156,6 @@ They write code to make the platform more observable, stable and developer frien
 There is this one twisted interpretation of DevOps where the premise is that you could get "rid" of system administrators and end up with only developers who would manage services in production.
 That's never going to happen.
 Most developers don't care and do not want to learn about system administration.
-
-=== Black box
-
-The opposite of an observable system is a "black box," where the only things we can see are the inputs and outputs (or a lack thereof).
-In this hugely entertaining https://www.youtube.com/watch?v=30jNsCVLpAE[talk] Bryan Cantrill talks about the art of debuggability:
-
-> The art of debugging isn't to guess the answer - it is to be able to ask the right questions to know how to answer them.
-> Answered questions are facts, not a hypothesis.
-
-Making platform observable is hard and under-appreciated work.
-When a deployment is a non-event, nobody congratulates the people behind it.
-
-In my opinion, successfully pulling out microservices architecture requires putting more effort into the platform itself than on the services running on it.
-Companies need to realize they are creating a platform first, and the services running on it are the afterthought.
 
 == Common oversights
 
