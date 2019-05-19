@@ -119,7 +119,7 @@ Any large scale microservice system needs tools to automatically gather all the 
 
 > Systems are as good as the people who designed it.
 
-Systems fail, and that should be expected.
+Systems fail, and that is something to be expected and embraced.
 However, it should also self recover. How do you ask? Preferably without the input of humans.
 
 === Platform engineers
