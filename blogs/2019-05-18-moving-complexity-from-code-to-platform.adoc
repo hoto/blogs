@@ -196,33 +196,47 @@ You don't want people working on the same issue in parallel without knowing the 
 Every alert needs at lest the source of origin and the action to follow.
 Alerts will be fixed quicker when there is a clear procedure to fix the problem.
 
+=== 4. Not following the https://12factor.net/[twelve factors] rules
+
+It makes me really sad when I see a container in 2019 which instead of logging to stdout logs to a file.
+Those are really the basics and the lowest hanging fruits to pick.
+
 === 3. Making artifacts mutable
 
 Having to rebuild the artifact to change it's configuration makes me cry. Every time.
 Artifacts should be built once and be deployable to any environment.
 You can pass the config with env variables or read an external config file.
 
-=== 4. Not following the https://12factor.net/[twelve factors] rules
+=== 10. Not having a common logging strategy
 
-It makes me really sad when I see a container in 2019 which instead of logging to stdout logs to a file.
-Those are really the basics and the lowest hanging fruits to pick.
+Nobody looks at logs for fun.
+They are either used when debugging or when creating a baseline for the system behaviour (think heart rate monitor but for software).
+Analyzing logs from different services using different logging schemes is too complicated.
+Just come up with a logging strategy which everybody agrees on and make a logging library for everybody to use.
+
+This is also crucial for making good dashboards.
+
+=== 8. Not https://zipkin.apache.org/[tracing] network calls
+
+When a function call fails we get a stacktrace where we can see where the call originated.
+When a network call to a service fails we don't have a single stacktrace showing us the calls made to all involved services.
+It is incredibly insightful to have the ability to see network calls hopping between services and be able to trace a single call through the system.
+
+If you use a service mesh then tracing becomes much easier to setup.
 
 === 5. Designing pipelines without automated rollbacks
 
 To have an automated rollback you need auto detection when something goes wrong.
-How the system decides if something went wrong separates Continuous Deployment wannabes from the pros.
+How the system detects and decides if something went wrong separates Continuous Deployment wannabes from the pros.
 
 Most basic check would be a healthcheck.
 
-=== 6. Not adapting the tools with scale
+=== 9. Not requiring healthchecks
 
-I was on a project once where it started with a handful of services so the tool for orchestrating services was very primitive.
-That tool biggest flaw was that it didn't know about the capacity of the platform. Service assignment to a host was done manually.
-We had to calculate how much memory and cpu service needs and allocate them accordingly.
-When we scaled from couple of services to dozens we should have changed the tool but we didn't.
-At that time I didn't even understand the problem.
-Platform became incredibly unstable and required daily manual restarts but it was too late to simply replace the orchestrator, it was too deeply embedded into the system.
-It took more then a year to create a new platform from scratch.
+Every service needs to answer one basic question: is it healthy or not.
+Of course healthcheck from the application should be just one of many metrics collected by the orchestrator to decide if a service is healthy.
+E.g. there may be some performance issues that the service is not aware of.
+Or maybe service becomes a "healthy" zombie that needs to be killed and replaced.
 
 === 7. Not using a Service Mesh
 
@@ -235,26 +249,20 @@ It is true that we are still making a network call to the service mesh but it is
 Service mesh also gives us crucial features like retries policies, call timeouts and deadlines.
 It also makes it easier to have call tracing.
 
-=== 8. Not https://zipkin.apache.org/[tracing] network calls
+=== 6. Not adapting the tools with scale
 
-When a function call fails we get a stacktrace where we can see where the call originated.
-When a network call to a service fails we don't have a single stacktrace showing us the calls made to all involved services.
-It is incredibly insightful to have the ability to see network calls hopping between services and be able to trace a single call through the system.
+Many years ago I joined a project where at the very beginning the platform was composed of just a handful of services.
+The tool for orchestrating services was very primitive.
+The biggest flaw of that orchestrator was that it didn't respect the capacity of the hosts.
+Service assignment to a host was done manually.
+Manual assignment will work just fine with a tiny platform but it just did not scale.
+We had to estimate how much memory and cpu services needs and assign them accordingly.
+Sometimes the estimates were wrong and one service would crash or starve other services.
 
-If you use a service mesh then tracing becomes much easier to setup.
+When we scaled from couple of services to dozens we should have changed the tool but we didn't.
+At that time I didn't even understand the problem as I was new to the subject, so did vast majority of the people on the project.
+Those who new what was wrong just didn't care or were too afraid to escalate the problem to the decision makers.
+Platform became incredibly unstable and required daily manual restarts but soon it was late to simply replace the orchestrator, it was too deeply embedded into the platform.
+It took more then a year to finally acknowledge the problem and design a new platform from scratch.
 
-=== 9. Not requiring healthchecks
-
-Every service needs to answer one basic question: is it healthy or not.
-Of course healthcheck from the application should be just one of many metrics collected by the orchestrator to decide if a service is healthy.
-E.g. there may be some performance issues that the service is not aware of.
-Or maybe service becomes a "healthy" zombie that needs to be killed and replaced.
-
-=== 10. Not having a common logging strategy
-
-Nobody looks at logs for fun.
-They are either used when debugging or when creating a baseline for the system behaviour (think heart rate monitor but for software).
-Analyzing logs from different services using different logging schemes is too complicated.
-Just come up with a logging strategy which everybody agrees on and make a logging library for everybody to use.
-
-This is also crucial for making good dashboards.
+Platform needs to be checked periodically to asses if it still suits the needs of a system.
