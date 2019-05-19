@@ -130,7 +130,7 @@ When a deployment is a non-event, nobody congratulates the people behind it.
 In my opinion, successfully pulling out microservices architecture requires putting more effort into the platform itself than on the services running on it.
 Companies need to realize they are creating a platform first, and the services running on it are the afterthought.
 
-=== Platform engineers
+== Platform engineers
 
 > Systems are as good as the people who designed it.
 
@@ -170,7 +170,7 @@ In my opinion, the most common oversights when dealing with microservices are:
 Observability needs to be built into the platform from the very beginning.
 Don't make a mistake of going into production and then worry about observability, at that time it may be too late.
 
-SLIs, SLAs, and SLOs, which boils down to https://cloud.google.com/blog/products/gcp/sre-fundamentals-slis-slas-and-slos[availability],  should be agreed up front and monitored.
+SLIs, SLAs, and SLOs, which boils down to https://cloud.google.com/blog/products/gcp/sre-fundamentals-slis-slas-and-slos[availability], should be agreed up front and be monitored.
 To monitor those values, you need observability.
 
 Often there is a question who should be looking at the monitoring, and my answer would be to ask this:
@@ -196,8 +196,8 @@ Humans fix problems quickly if there is a clear procedure for how to deal with t
 
 === 3. Not following the https://12factor.net/[twelve factors] rules
 
-It makes me sad when I see a container in 2019 which instead of logging to stdout logs to a file.
-Those are the basics and the lowest hanging fruits to pick.
+It makes me sad when I see an application in 2019 which instead of logging to stdout logs to a file.
+Twelve factors rules are are the basics and the lowest hanging fruits to pick.
 
 === 4. Making artifacts mutable
 
@@ -225,7 +225,7 @@ Standardized logging scheme is also crucial for making useful dashboards.
 When a function call crash we get a stack trace with all the calls from start to finish.
 In microservices, calls can jump from service to service, and when one fails, it's crucial to see the whole flow.
 
-It is incredibly useful and insightful to trace network calls and be able to trace a single call throughout the system.
+It is incredibly useful and insightful to be able to trace a single call throughout the system.
 
 Tracking individual calls may seem daunting at first, but implementation is straightforward.
 Usually, it's a middle man which marks the network calls and logs the event.
@@ -235,8 +235,6 @@ Logs are then used to produce visualizations.
 
 To have an automated rollback, you need auto detection when something goes wrong.
 How the system detects and decides if something went wrong separates Continuous Deployment wannabes from the pros.
-
-The most basic check would be a health check.
 
 === 8. Not requiring health checks
 
@@ -249,11 +247,11 @@ There may be many issues that the service is not aware of.
 When replacing function calls (monolith) for network calls (microservices), we need to accommodate for latency, network errors, and packet drops.
 Doing retries directly from the service may seem harmless, but it may cause system-wide cascading failures and put unnecessary strain on the network.
 
-Instead of forcing each service to deal with network failures, we can use a middle man called service mesh, which is designed to handle this.
-It is true that we are still making a network call to the service mesh, but it is safer because the call is not leaving the host.
+Instead of forcing each service to deal with network failures, we can use a middle man called Service Mesh, which is designed to handle those cases.
+It is true that we are still making a network call to a service mesh, but it is safer because the call is not leaving the host.
 
 Service mesh also gives us essential features like retries policies, call timeouts, and deadlines.
-It also makes it easier to have call tracing.
+It also makes it easier to have system wide call tracing.
 
 === 10. Not adapting the tools with scale
 
@@ -262,13 +260,26 @@ The tool for orchestrating services was very primitive.
 The biggest flaw of that orchestrator was that it didn't respect the capacity of the hosts.
 Service assignment to a host was manual.
 The manual assignment works just fine with a tiny platform, but it just did not scale.
-We had to estimate how much memory and CPU services needs and assign them accordingly.
+We had to estimate how much memory and CPU each service needs and assign them accordingly.
 Sometimes the estimates were wrong, and one service would crash or starve other services.
 
 When we scaled from a couple of services to dozens, we should have changed the tool, but we didn't.
 At that time, I didn't even understand the problem as I was new to the subject, so did the vast majority of the people on the project.
 Those who knew what was wrong didn't care or were too afraid to escalate the problem to the decision makers.
 The platform became incredibly unstable and required daily manual restarts, and soon it was late to replace the orchestrator, it got too deeply embedded into the platform.
-It took more than a year to acknowledge the problem finally and design a new platform from scratch.
+It took more than a year to acknowledge the problem and design a new platform from scratch.
 
-The platform needs to be checked periodically to asses if it still suits the needs of a system.
+Conclusion: the platform needs to be checked periodically to asses if it still suits the needs of a system.
+
+
+== Ending words
+
+Its been about 10 years since the microservices became mainstream.
+Industry is still coming up with new tools, solutions and patterns to make our life easier.
+Keeping up with "devops" technology can be fatiguing and overwhelming so instead I think it is better to lear the underlying concepts which are universal and evolve slowly.
+That, I hope, is what I'm trying to do here; figure out what those microservices are all about.
+In our minds we create models to approximate the concepts we learn.
+I know that my models have big holes in them and needs a major overhaul, so if you see any blatant and stupid mistakes please share with me!
+
+Andy
+
