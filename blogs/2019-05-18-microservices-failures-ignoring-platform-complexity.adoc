@@ -144,14 +144,14 @@ Preferably without the input of humans.
 Creating a self-healing system requires to monitor itself.
 To monitor a platform, you need observability.
 Observability and monitoring should then be a priority, not an afterthought.
-To design, setup and maintain platform monitoring we need platform engineers.
+To design, setup, and maintain platform monitoring, we need platform engineers.
 
-Humans should be in the loop only when system cannot repair itself.
-Our job should not only be fixing the problems but primarily making sure that those problems never occurs again or gets fixed automatically next time.
+Humans should be in the loop only when the system cannot repair itself.
+Our job should not only be fixing the problems but primarily making sure that those problems never occur again or gets fixed automatically next time.
 
-When dealing with complex platforms we need full time "platform engineers."
+When dealing with complex platforms, we need full time "platform engineers."
 Those are either system administrators who can code or coders who know system administration.
-They write code to make the platform more observable, stable and developer friendly.
+They write code to make the platform more observable, stable, and developer friendly.
 
 There is this one twisted interpretation of DevOps where the premise is that you could get "rid" of system administrators and end up with only developers who would manage services in production.
 That's never going to happen.
@@ -197,7 +197,7 @@ Humans fix problems quickly if there is a clear procedure for how to deal with t
 === 3. Not following the https://12factor.net/[twelve factors] rules
 
 It makes me sad when I see an application in 2019 which instead of logging to stdout logs to a file.
-Twelve factors rules are are the basics and the lowest hanging fruits to pick.
+Twelve factors rules are the basics and the lowest hanging fruits to pick.
 
 === 4. Making artifacts mutable
 
@@ -251,7 +251,7 @@ Instead of forcing each service to deal with network failures, we can use a midd
 It is true that we are still making a network call to a service mesh, but it is safer because the call is not leaving the host.
 
 Service mesh also gives us essential features like retries policies, call timeouts, and deadlines.
-It also makes it easier to have system wide call tracing.
+It also makes it easier to have a system-wide call tracing.
 
 === 10. Not adapting the tools with scale
 
@@ -275,11 +275,11 @@ Conclusion: the platform needs to be checked periodically to asses if it still s
 == Ending words
 
 Its been about 10 years since the microservices became mainstream.
-Industry is still coming up with new tools, solutions and patterns to make our life easier.
-Keeping up with "devops" technology can be fatiguing and overwhelming so instead I think it is better to lear the underlying concepts which are universal and evolve slowly.
+The industry is still coming up with new tools, solutions, and patterns to make our life easier.
+Keeping up with "devops" technology can be fatiguing and overwhelming, so instead, I think it is better to learn the underlying concepts which are universal and evolve slowly.
 That, I hope, is what I'm trying to do here; figure out what those microservices are all about.
-In our minds we create models to approximate the concepts we learn.
-I know that my models have big holes in them and needs a major overhaul, so if you see any blatant and stupid mistakes please share with me!
+In our minds, we create models to approximate the concepts we learn.
+I know that my models have big holes in them and needs a major overhaul, so if you see any obvious and stupid mistakes, please share with me!
 
 Andy
 
