@@ -20,7 +20,7 @@ However, few asked what is the price for all of this?
 In my opinion, the price is the increase in platform complexity.
 
 > Microservices shift the complexity from the services to the platform.
-> Ignoring this fact results in the below sub-optimal results.
+> Ignoring this fact results in the suboptimal results.
 
 == Complexity
 
