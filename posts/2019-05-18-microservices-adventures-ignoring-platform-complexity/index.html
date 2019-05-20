@@ -12,18 +12,18 @@
     <title>Microservices adventures: Ignoring platform complexity :: Blog</title>
 
     
-    <link href="/blog/css/nucleus.css?1558299345" rel="stylesheet">
-    <link href="/blog/css/fontawesome-all.min.css?1558299345" rel="stylesheet">
-    <link href="/blog/css/hybrid.css?1558299345" rel="stylesheet">
-    <link href="/blog/css/featherlight.min.css?1558299345" rel="stylesheet">
-    <link href="/blog/css/perfect-scrollbar.min.css?1558299345" rel="stylesheet">
-    <link href="/blog/css/auto-complete.css?1558299345" rel="stylesheet">
-    <link href="/blog/css/atom-one-dark-reasonable.css?1558299345" rel="stylesheet">
-    <link href="/blog/css/theme.css?1558299345" rel="stylesheet">
-    <link href="/blog/css/hugo-theme.css?1558299345" rel="stylesheet">
+    <link href="/blog/css/nucleus.css?1558381207" rel="stylesheet">
+    <link href="/blog/css/fontawesome-all.min.css?1558381207" rel="stylesheet">
+    <link href="/blog/css/hybrid.css?1558381207" rel="stylesheet">
+    <link href="/blog/css/featherlight.min.css?1558381207" rel="stylesheet">
+    <link href="/blog/css/perfect-scrollbar.min.css?1558381207" rel="stylesheet">
+    <link href="/blog/css/auto-complete.css?1558381207" rel="stylesheet">
+    <link href="/blog/css/atom-one-dark-reasonable.css?1558381207" rel="stylesheet">
+    <link href="/blog/css/theme.css?1558381207" rel="stylesheet">
+    <link href="/blog/css/hugo-theme.css?1558381207" rel="stylesheet">
     
 
-    <script src="/blog/js/jquery-3.3.1.min.js?1558299345"></script>
+    <script src="/blog/js/jquery-3.3.1.min.js?1558381207"></script>
 
     <style type="text/css">
       :root #header + #content > #left > #rlblock_left{
@@ -68,14 +68,14 @@
     <span data-search-clear=""><i class="fas fa-times"></i></span>
 </div>
 
-<script type="text/javascript" src="/blog/js/lunr.min.js?1558299345"></script>
-<script type="text/javascript" src="/blog/js/auto-complete.js?1558299345"></script>
+<script type="text/javascript" src="/blog/js/lunr.min.js?1558381207"></script>
+<script type="text/javascript" src="/blog/js/auto-complete.js?1558381207"></script>
 <script type="text/javascript">
     
         var baseurl = "https:\/\/hoto.github.io\/blog\/";
     
 </script>
-<script type="text/javascript" src="/blog/js/search.js?1558299345"></script>
+<script type="text/javascript" src="/blog/js/search.js?1558381207"></script>
 
     
   </div>
@@ -420,7 +420,7 @@ To cure the other half, you are supposed to combine microservices with the lates
 <p>Microservices were supposed to enable companies to perform gazillion deployments per day, scale the system up to infinity, reduce the codebase complexity, and save money at the same time.</p>
 </div>
 <div class="paragraph">
-<p>However, few asked what is the price for all of this?</p>
+<p>Few, however, ask what is the price for this?</p>
 </div>
 <div class="paragraph">
 <p>In my opinion, the price is the increase in platform complexity.</p>
@@ -657,19 +657,19 @@ Companies need to realize they are creating a platform first, and the services r
 <div class="paragraph">
 <p>Systems fail, and that is something to be expected and embraced.
 However, they should also self recover.
-How do you ask?
+How, you ask?
 Preferably without the input of humans.</p>
 </div>
 <div class="quoteblock">
 <blockquote>
 <div class="paragraph">
-<p>With any advanced automation the weakest link is always the human.</p>
+<p>With any advanced automation, the weakest link is always the human.</p>
 </div>
 </blockquote>
 </div>
 <div class="paragraph">
-<p>Creating a self-healing system requires to monitor itself.
-To monitor a platform, you need observability.
+<p>A self-healing system requires self-monitoring capabilities.
+To monitor anything, you need observability.
 Observability and monitoring should then be a priority, not an afterthought.
 To design, setup, and maintain platform monitoring, we need platform engineers.</p>
 </div>
@@ -678,14 +678,13 @@ To design, setup, and maintain platform monitoring, we need platform engineers.<
 Our job should not only be fixing the problems but primarily making sure that those problems never occur again or gets fixed automatically next time.</p>
 </div>
 <div class="paragraph">
-<p>When dealing with complex platforms, we need full time "platform engineers."
+<p>When dealing with complex platforms, we need "platform engineers."
 Those are either system administrators who can code or coders who know system administration.
 They write code to make the platform more observable, stable, and developer friendly.</p>
 </div>
 <div class="paragraph">
-<p>There is this one twisted interpretation of DevOps where the premise is that you could get "rid" of system administrators and end up with only developers who would manage services in production.
-That&#8217;s never going to happen.
-Most developers don&#8217;t care and do not want to learn about system administration.</p>
+<p>Best results are achieved when the platform engineers are not an isolated team but part of the development teams.
+An ideal situation is when all your developers can be considered platform engineers.</p>
 </div>
 </div>
 </div>
@@ -765,9 +764,9 @@ Twelve factors rules are the basics and the lowest hanging fruits to pick.</p>
 <div class="sect2">
 <h3 id="_4_making_artifacts_mutable">4. Making artifacts mutable</h3>
 <div class="paragraph">
-<p>Having to rebuild the artifact to change its configuration makes me cry — every time.
+<p>It is unacceptable to have to rebuild the artifact to change its runtime configuration.
 Artifacts should be built once and be deployable to any environment.
-You can pass the config with env variables or read an external config file.</p>
+You can pass or select the config with environment variables or read an external config file.</p>
 </div>
 <div class="paragraph">
 <p>Immutable artifacts are useful because every build is slightly different.
@@ -831,7 +830,7 @@ Doing retries directly from the service may seem harmless, but it may cause syst
 It is true that we are still making a network call to a service mesh, but it is safer because the call is not leaving the host.</p>
 </div>
 <div class="paragraph">
-<p>Service mesh also gives us essential features like retries policies, call timeouts, and deadlines.
+<p>Service mesh also gives us essential features like retries policies, call timeouts, deadlines and <a href="https://martinfowler.com/bliki/CircuitBreaker.html">circuit breaking</a>.
 It also makes it easier to have a system-wide call tracing.</p>
 </div>
 </div>
@@ -865,13 +864,7 @@ It took more than a year to acknowledge the problem and design a new platform fr
 <div class="paragraph">
 <p>Its been about 10 years since the microservices became mainstream.
 The industry is still coming up with new tools, solutions, and patterns to make our life easier.
-Keeping up with "devops" technology can be fatiguing and overwhelming, so instead, I think it is better to learn the underlying concepts which are universal and evolve slowly.
-That, I hope, is what I&#8217;m trying to do here; figure out what those microservices are all about.
-In our minds, we create models to approximate the concepts we learn.
-I know that my models have big holes in them and needs a major overhaul, so if you see any obvious and stupid mistakes, please share with me!</p>
-</div>
-<div class="paragraph">
-<p>Andy</p>
+Keeping up with "devops" technology can be fatiguing and overwhelming, so instead, I think it is better to learn the underlying concepts which are universal and evolve slowly.</p>
 </div>
 </div>
 </div>
@@ -1111,20 +1104,20 @@ I know that my models have big holes in them and needs a major overhaul, so if y
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/blog/js/clipboard.min.js?1558299345"></script>
-    <script src="/blog/js/perfect-scrollbar.min.js?1558299345"></script>
-    <script src="/blog/js/perfect-scrollbar.jquery.min.js?1558299345"></script>
-    <script src="/blog/js/jquery.sticky.js?1558299345"></script>
-    <script src="/blog/js/featherlight.min.js?1558299345"></script>
-    <script src="/blog/js/html5shiv-printshiv.min.js?1558299345"></script>
-    <script src="/blog/js/highlight.pack.js?1558299345"></script>
+    <script src="/blog/js/clipboard.min.js?1558381207"></script>
+    <script src="/blog/js/perfect-scrollbar.min.js?1558381207"></script>
+    <script src="/blog/js/perfect-scrollbar.jquery.min.js?1558381207"></script>
+    <script src="/blog/js/jquery.sticky.js?1558381207"></script>
+    <script src="/blog/js/featherlight.min.js?1558381207"></script>
+    <script src="/blog/js/html5shiv-printshiv.min.js?1558381207"></script>
+    <script src="/blog/js/highlight.pack.js?1558381207"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/blog/js/modernizr.custom-3.6.0.js?1558299345"></script>
-    <script src="/blog/js/learn.js?1558299345"></script>
-    <script src="/blog/js/hugo-learn.js?1558299345"></script>
+    <script src="/blog/js/modernizr.custom-3.6.0.js?1558381207"></script>
+    <script src="/blog/js/learn.js?1558381207"></script>
+    <script src="/blog/js/hugo-learn.js?1558381207"></script>
 
-    <link href="/blog/mermaid/mermaid.css?1558299345" type="text/css" rel="stylesheet" />
-    <script src="/blog/mermaid/mermaid.js?1558299345"></script>
+    <link href="/blog/mermaid/mermaid.css?1558381207" type="text/css" rel="stylesheet" />
+    <script src="/blog/mermaid/mermaid.js?1558381207"></script>
     <script>
         mermaid.initialize({ startOnLoad: true });
     </script>
