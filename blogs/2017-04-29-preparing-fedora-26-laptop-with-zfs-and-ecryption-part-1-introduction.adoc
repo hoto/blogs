@@ -6,7 +6,7 @@ date: "2017-04-29"
 == Preparing Fedora 26 laptop with ZFS and encryption — introduction (part 1)
 :imagesdir: ./images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part1/
 
-_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab[Medium]]_
+_[Published on https://medium.com/@AndrzejRehmann/preparing-fedora-laptop-with-zfs-and-encryption-part-1-f5788dda79ab[medium]]_
 
 .Bootable Fedora 26 pendrive ready to install.
 image::001.jpeg[]

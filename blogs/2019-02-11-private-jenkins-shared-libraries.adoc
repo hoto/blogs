@@ -7,7 +7,7 @@ date: "2019-02-11"
 == Private Jenkins Shared Libraries
 :imagesdir: ./images/2019-02-11-private-jenkins-shared-libraries/
 
-_[Published https://medium.com/@AndrzejRehmann/private-jenkins-shared-libraries-540abe7a0ab7[Medium]]_
+_[Published on https://medium.com/@AndrzejRehmann/private-jenkins-shared-libraries-540abe7a0ab7[medium]]_
 
 The official documentation for Jenkins Shared Libraries is pretty good, but not perfect.
 

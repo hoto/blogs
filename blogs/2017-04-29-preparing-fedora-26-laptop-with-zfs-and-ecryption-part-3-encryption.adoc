@@ -6,7 +6,7 @@ date: "2017-04-29"
 == Preparing Fedora 26 laptop with ZFS and encryption — encryption (part 3)
 :imagesdir: ./images/2017-04-29-preparing-fedora-26-laptop-with-zfs-and-ecryption/part3/
 
-_[Published https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013[Medium]]_
+_[Published on https://medium.com/@AndrzejRehmann/preparing-fedora-26-laptop-with-zfs-and-encryption-encryption-part-3-1c32f4c9c013[medium]]_
 
 .tput setaf 2; xxd -c 48 ~/Pictures/cat.png
 image::001.png[]

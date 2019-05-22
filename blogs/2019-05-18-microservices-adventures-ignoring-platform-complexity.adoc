@@ -6,7 +6,7 @@ date: "2019-05-18"
 == Microservices adventures: Ignoring platform complexity
 :imagesdir: ./images/2019-05-18-microservices-adventures/
 
-_[Published https://codurance.com/2019/05/18/microservices-adventures/[codurance.com] https://medium.com/@AndrzejRehmann/microservices-adventures-ignoring-platform-complexity-b1820d8fb53d[Medium]]_
+_[Published on https://codurance.com/2019/05/18/microservices-adventures/[codurance] https://medium.com/@AndrzejRehmann/microservices-adventures-ignoring-platform-complexity-b1820d8fb53d[medium]]_
 
 .The three wise monkeys — Photo by https://unsplash.com/photos/1NacmxqfPZA?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText[Joao Tzanno] on Unsplash
 image::three-monkeys.jpg[]

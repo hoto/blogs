@@ -6,7 +6,7 @@ date: "2019-02-25"
 == Creating a Jenkinsfile pipeline
 :imagesdir: ./images/2019-02-25-creating-a-jenkinsfile-pipeline/
 
-_[Published https://medium.com/@AndrzejRehmann/creating-a-jenkinsfile-pipeline-7aefc89b8c67[Medium]]_
+_[Published on https://medium.com/@AndrzejRehmann/creating-a-jenkinsfile-pipeline-7aefc89b8c67[medium], https://codurance.com/2019/05/21/creating-a-jenkinsfile-pipeline/[codurance]]_
 
 Basics of setting up a Jenkins multibranch pipeline job and defining a Jenkinsfile.
 
