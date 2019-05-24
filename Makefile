@@ -3,7 +3,7 @@ all: serve
 update-hugo-themes:
 	git submodule update --init
 
-dependencies:
+dependencies: update-hugo-themes
 	sudo dnf install hugo
 	sudo dnf install asciidoctor
 
