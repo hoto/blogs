@@ -1,3 +1,0 @@
-[submodule "themes/ananke"]
-	path = gh-pages-generator/themes/ananke
-	url = https://github.com/budparr/gohugo-theme-ananke.git

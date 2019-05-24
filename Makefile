@@ -14,7 +14,7 @@ serve:
 gh-pages-fix-urls:
 	find ./public/posts -type f -name "*.html" -print0 | xargs -0 sed -i 's src="./images/ src="/blog/images/ g '
 
-gh-pages-generate:
+gh-pages-generate: update-hugo-themes
 	rm -rf public/*
 	cd gh-pages-generator && hugo
 
