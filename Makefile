@@ -1,5 +1,8 @@
 all: serve
 
+clean:
+	rm -rf public/
+
 update-hugo-themes:
 	git submodule update --init
 
@@ -14,14 +17,14 @@ serve:
 gh-pages-fix-urls:
 	find ./public/posts -type f -name "*.html" -print0 | xargs -0 sed -i 's src="./images/ src="/blog/images/ g '
 
-gh-pages-generate: update-hugo-themes
+gh-pages-generate: clean update-hugo-themes
 	rm -rf public/*
 	cd gh-pages-generator && hugo
 
 gh-pages-dry-run: gh-pages-generate gh-pages-fix-urls
 
 # Docs: https://gohugo.io/hosting-and-deployment/hosting-on-github/
-gh-pages-publish:
+gh-pages-publish: clean
 	./publish_to_ghpages.sh
 
 
