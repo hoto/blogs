@@ -228,9 +228,9 @@ Jenkins has two types of credentials: `Global` and `System`.
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/008.png)
 
-## How does Jenkins stores credentials
+## How Jenkins stores credentials
 
-## Dumping all credentials
+## Decrypting and dumping credentials
 
 ## Prevention and best practices
 
