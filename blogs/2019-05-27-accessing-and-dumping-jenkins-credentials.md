@@ -60,7 +60,7 @@ If you want you can add more secrets, but I will be using the already pre-made s
 
 Now that we've covered creating credentials let's move on to accessing them from a `Jenkinsfile`.
 
-## Jenkinsfile access
+## Secrets access from a Jenkinsfile
 
 We will be focusing on job `130-accessing-credentials`. 
 
@@ -160,20 +160,59 @@ pipeline {
       }
     }
 
+    stage('list credentials ids') {
+      steps {
+        script {
+          sh 'cat $JENKINS_HOME/credentials.xml | grep "<id>"'
+        }
+      }
+    }
+
   }
 }
-
 ```
 
 All examples for different types of secrets can be found in the official Jenkins [documentation][2]
 
-Running the job and checking the logs uncovers that Jenkins tries to redact the secrets from the build log by matching for secrets values and replacing them with stars `****`.
-
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/006.png)
+
+Running the job and checking the logs uncovers that Jenkins tries to hide the secrets from the build log by matching for secrets values and redacting them with stars `****`.  
+We can see the actual secret values if we print them in such a way that a simple match and replace won't work.  
+In this case each character is printed separately and Jenkins does not redact the values.
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/007.png)
 
+> Anyone with write access to a repository built on Jenkins can uncover all `Global` credentials by modifying a `Jenkinsfile`.
 
+> Anyone with "create job" privileges can also uncover all `Global` secrets by creating a pipeline job.
+
+### Listing ids of secrets
+
+If you don't have admin priviledges on a Jenkins you can list all credentials ids by listing the `$JENKINS_HOME/credentials.xml` file.
+
+Last stage of `130-accessing-credentials` job:
+
+```groovy
+stage('list credentials ids') {
+  steps {
+    script {
+      sh 'cat $JENKINS_HOME/credentials.xml | grep "<id>"'
+    }
+  }
+}
+```
+
+Job output listing all credentials ids:
+
+``` 
+[130-accessing-credentials] Running shell script
++ cat /var/jenkins_home/credentials.xml
++ grep <id>
+          <id>gitlab</id>
+          <id>production-bastion</id>
+          <id>joke-of-the-day</id>
+          <id>production-docker-ee-certificate</id>
+```
 
 [0]: https://github.com/hoto/jenkinsfile-examples
 [1]: https://github.com/hoto/jenkinsfile-examples/blob/master/jenkinsfiles/130-credentials-masking.groovy 
