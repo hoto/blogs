@@ -176,22 +176,31 @@ All examples for different types of secrets can be found in the official Jenkins
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/006.png)
 
-Running the job and checking the logs uncovers that Jenkins tries to hide the secrets from the build log by matching for secrets values and redacting them with stars `****`.  
+Running the job and checking the logs uncovers that Jenkins tries to redact the secrets from the build log by matching for secrets values and replacing them with stars `****`.  
 We can see the actual secret values if we print them in such a way that a simple match and replace won't work.  
+
+Code:
+```groovy
+print 'username.collect { it }=' + username.collect { it }
+```
+Log output:
+```
+username.collect { it }=[g, i, t, l, a, b, a, d, m, i, n]
+```
+
 In this case each character is printed separately and Jenkins does not redact the values.
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/007.png)
 
 > Anyone with write access to a repository built on Jenkins can uncover all `Global` credentials by modifying a `Jenkinsfile`.
 
-> Anyone with "create job" privileges can also uncover all `Global` secrets by creating a pipeline job.
+> Anyone with "create job" privileges can uncover all `Global` secrets by creating a pipeline job.
 
 ### Listing ids of secrets
 
-If you don't have admin priviledges on a Jenkins you can list all credentials ids by listing the `$JENKINS_HOME/credentials.xml` file.
+You can list all credentials ids by listing the `$JENKINS_HOME/credentials.xml` file.
 
-Last stage of `130-accessing-credentials` job:
-
+Code:
 ```groovy
 stage('list credentials ids') {
   steps {
@@ -201,11 +210,8 @@ stage('list credentials ids') {
   }
 }
 ```
-
-Job output listing all credentials ids:
-
+Log output:
 ``` 
-[130-accessing-credentials] Running shell script
 + cat /var/jenkins_home/credentials.xml
 + grep <id>
           <id>gitlab</id>
@@ -213,6 +219,15 @@ Job output listing all credentials ids:
           <id>joke-of-the-day</id>
           <id>production-docker-ee-certificate</id>
 ```
+
+## Accessing `System` credentials values 
+
+Jenkins has two types of credentials: `Global` and `System`.
+
+`Global` are accessible 
+
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/008.png)
+
 
 [0]: https://github.com/hoto/jenkinsfile-examples
 [1]: https://github.com/hoto/jenkinsfile-examples/blob/master/jenkinsfiles/130-credentials-masking.groovy 
