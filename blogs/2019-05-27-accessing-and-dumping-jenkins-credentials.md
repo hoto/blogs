@@ -32,22 +32,39 @@ Later in this post I will talk about what can be done to minimize the secrets le
 
 ## Creating credentials
 
-If you want to run the examples yourself, you can spin up a pre-made Jenkins instance from my [jenkinsfile-examples][0] repository in less then 1min (depending on your bandwidth):
+If you want to follow this post and run the examples yourself, you can spin up a pre-made Jenkins instance from my [jenkinsfile-examples][0] repository in less then 1min (depending on your bandwidth):
 
 ```bash
 git clone https://github.com/hoto/jenkinsfile-examples.git
 docker-compose pull
 docker-compose up
-
 ```
 
-Open `localhost:8080` where you should see a Jenkins with couple of jobs.
+Open `localhost:8080` where you should see a Jenkins with a couple of jobs.
+
+To browse and add secrets click on `Credentials`.  
+My Jenkins instance already have some pre-made credentials.
+
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/001.png)
+
+To add secrets hover over `(global)` to show a ▼ sign and click on it.  
+Select `Add credentials` where you can finally add secrets.
+
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/002.png)
+
+If you want you can add more secrets, but I will be using the already pre-made secrets.
+
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/003.png)
+
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/004.png)
+
+Now that we've covered creating credentials let's move on to accessing them from a `Jenkinsfile`.
 
 ## Jenkinsfile access
 
 We will be focusing on job `130-accessing-credentials`. 
 
-![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/001.png)
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/005.png)
 
 Job `130-accessing-credentials` has a following [Jenkinsfile][1]:
 
@@ -152,9 +169,9 @@ All examples for different types of secrets can be found in the official Jenkins
 
 Running the job and checking the logs uncovers that Jenkins tries to redact the secrets from the build log by matching for secrets values and replacing them with stars `****`.
 
-![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/002.png)
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/006.png)
 
-![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/003.png)
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/007.png)
 
 
 
