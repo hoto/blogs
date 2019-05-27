@@ -220,7 +220,7 @@ Log output:
           <id>production-docker-ee-certificate</id>
 ```
 
-## Accessing `System` credentials values 
+## Accessing `System` and other credential values 
 
 Jenkins has two types of credentials: `Global` and `System`.
 
@@ -228,6 +228,11 @@ Jenkins has two types of credentials: `Global` and `System`.
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/008.png)
 
+## How does Jenkins stores credentials
+
+## Dumping all credentials
+
+## Prevention and best practices
 
 [0]: https://github.com/hoto/jenkinsfile-examples
 [1]: https://github.com/hoto/jenkinsfile-examples/blob/master/jenkinsfiles/130-credentials-masking.groovy 
