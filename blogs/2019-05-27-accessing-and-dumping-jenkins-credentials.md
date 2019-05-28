@@ -14,6 +14,21 @@ Most pipelines requires secrets to authenticate with some external resources.
 All secrets should live outside of our code repository and should be fed directly into the pipeline.   
 Jenkins offers a credentials store where we can keep our secrets and access them from jobs.
 
+## Why
+
+As consultants we need all of the information the client can give us to provide the best service.
+Sometimes the things we would like to uncover are out of our reach.  
+We of course request permission to gain access but it can take quite awhile, and time may be of the essence.
+
+We could be asked uneasy questions like "why do you need that permission?" or "I will have to talk with my supervisor to approve". There is no need for that, we already have the approval, why waste everybody time when there is an easy way to get what we need?
+
+Sometimes there are entities in the company which are reluctant to share.
+Could be job safety or maybe it's an attempt to hide those customers password hashed with sha512.  
+We don't judge, stuff happens, we understand.  
+We just need to know.
+
+Other times the person maintaining a Jenkins has long left and nobody knows the access to that secret windows machine running windows 98 in production.
+
 ## Credentials storage
 
 I did not use the word "secure" anywhere in the introduction because the way any CI server stores credentials is by nature insecure.
@@ -222,11 +237,39 @@ Log output:
 
 ## Accessing `System` and other credential values 
 
-Jenkins has two types of credentials: `Global` and `System`.
+Jenkins has two types of credentials: `System` and `Global`.
 
-`Global` are accessible 
+`System` are accessible only from Jenkins configuration (e.g. plugins).
+
+`Global` same as System but also accessible from jobs.  
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/008.png)
+
+Although most credentials are stored in `http://localhost:8080/credentials/` view, you can find additional secrets at:
+1. `http://localhost:8080/configure` - some plugins create password type fields there.
+2. `http://localhost:8080/configureSecurity/` - look for AD credentials.
+
+By definition `System` credentials are not accessible from jobs but we can decrypt them from the Jenkins GUI, given we have admin permissions.
+Jenkins sends the encrypted value of each secret to the UI.  
+This is a big security flow and I do not know why 
+
+To decrypt any credentials we can use Jenkins console which requires admin privilidges to access.  
+If you don't have admin privilidges, try to elevate your permissions by looking for an admin user in `Global` credentials and log as admin first.
+
+Navigate to `http://localhost:8080/script` which opens the `Script Console`.  
+
+Tell jenkins to decrypt and print out the secret:
+
+```groovy
+println hudson.util.Secret.decrypt("<encoded_secret>")
+```
+
+Side note: if you try to run this code from a job (Jenkinsfile) you will get an error message:
+
+```
+Scripts not permitted to use staticMethod hudson.util.Secret decrypt java.lang.String. Administrators can decide whether to approve or reject this signature.
+```
+
 
 ## How Jenkins stores credentials
 
