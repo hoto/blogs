@@ -244,15 +244,13 @@ stage('list credentials ids') {
 ```
 Log output:
 ``` 
-+ cat /var/jenkins_home/credentials.xml
-+ grep <id>
-          <id>gitlab</id>
-          <id>production-bastion</id>
-          <id>joke-of-the-day</id>
-          <id>production-docker-ee-certificate</id>
+<id>gitlab</id>
+<id>production-bastion</id>
+<id>joke-of-the-day</id>
+<id>production-docker-ee-certificate</id>
 ```
 
-## Accessing `System` and other credential values 
+## Accessing `System` and other credential values from the UI 
 
 Jenkins has two types of credentials: `System` and `Global`.
 
@@ -266,9 +264,23 @@ Although most credentials are stored in `http://localhost:8080/credentials/` vie
 1. `http://localhost:8080/configure` - some plugins create password type fields there.
 2. `http://localhost:8080/configureSecurity/` - look for AD credentials.
 
-By definition `System` credentials are not accessible from jobs but we can decrypt them from the Jenkins GUI, given we have admin permissions.
+By definition `System` credentials are not accessible from jobs but we can decrypt them from the Jenkins GUI, given we have admin privilidges.
 Jenkins sends the encrypted value of each secret to the UI.  
-This is a big security flow and I do not know why 
+This is a very big security flow.
+
+To view encrypted secret:
+ 
+1. Navigate to `http://localhost:8080/credentials/` 
+2. Update any of the credentials.
+3. Open dev console (F12 in Chrome).
+4. Inspect the dotted element.
+5. Copy text value of `value`
+
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/009.png)
+
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/010.png)
+
+In my case the encrypted secret is `{AQAAABAAAAAgPT7JbBVgyWiivobt0CJEduLyP0lB3uyTj+D5WBvVk6jyG6BQFPYGN4Z3VJN2JLDm}`.
 
 To decrypt any credentials we can use Jenkins console which requires admin privilidges to access.  
 If you don't have admin privilidges, try to elevate your permissions by looking for an admin user in `Global` credentials and log as admin first.
@@ -278,15 +290,19 @@ Navigate to `http://localhost:8080/script` which opens the `Script Console`.
 Tell jenkins to decrypt and print out the secret:
 
 ```groovy
-println hudson.util.Secret.decrypt("<encoded_secret>")
+println hudson.util.Secret.decrypt("{AQAAABAAAAAgPT7JbBVgyWiivobt0CJEduLyP0lB3uyTj+D5WBvVk6jyG6BQFPYGN4Z3VJN2JLDm}")
 ```
 
-Side note: if you try to run this code from a job (Jenkinsfile) you will get an error message:
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/011.png)
+
+There you have it, now you can decrypt any Jenkins secrets (if you have admin privileges).
+
+Side note: if you try to run this code from a Jenkinsfile job you will get an error message:
 
 ```
-Scripts not permitted to use staticMethod hudson.util.Secret decrypt java.lang.String. Administrators can decide whether to approve or reject this signature.
+Scripts not permitted to use staticMethod hudson.util.Secret decrypt java.lang.String. 
+Administrators can decide whether to approve or reject this signature.
 ```
-
 
 ## How Jenkins stores credentials
 
