@@ -62,6 +62,10 @@ The only reasonable idea that comes to my mind is that Jenkins creators wanted t
 However, using Jenkins credentials store is infinitely better then keeping plain secrets in the project repository.  
 Later in this post I will talk about what can be done to minimize the secrets leakage from Jenkins.
 
+
+---
+
+
 ## Creating credentials
 
 If you want to follow this post and run the examples yourself, you can spin up a pre-made Jenkins instance from my [jenkinsfile-examples][0] repository in less then 1min (depending on your bandwidth):
@@ -264,6 +268,8 @@ Although most credentials are stored in `http://localhost:8080/credentials/` vie
 1. `http://localhost:8080/configure` - some plugins create password type fields there.
 2. `http://localhost:8080/configureSecurity/` - look for AD credentials.
 
+### Grabbing credentials using browser inspection tool
+
 By definition `System` credentials are not accessible from jobs but we can decrypt them from the Jenkins GUI, given we have admin privilidges.
 Jenkins sends the encrypted value of each secret to the UI.  
 This is a very big security flow.
@@ -304,6 +310,34 @@ Scripts not permitted to use staticMethod hudson.util.Secret decrypt java.lang.S
 Administrators can decide whether to approve or reject this signature.
 ```
 
+### Iterate and decrypt credentials from the console
+
+Another way is to list all credentials then decrypt them from the console:
+
+```groovy
+def creds = com.cloudbees.plugins.credentials.CredentialsProvider.lookupCredentials(
+    com.cloudbees.plugins.credentials.common.StandardUsernameCredentials.class,
+    Jenkins.instance,
+    null,
+    null
+)
+
+for(c in creds) {
+  if(c instanceof com.cloudbees.jenkins.plugins.sshcredentials.impl.BasicSSHUserPrivateKey){
+    println(String.format("id=%s  desc=%s key=%s\n", c.id, c.description, c.privateKeySource.getPrivateKeys()))
+  }
+  if (c instanceof com.cloudbees.plugins.credentials.impl.UsernamePasswordCredentialsImpl){
+    println(String.format("id=%s  desc=%s user=%s pass=%s\n", c.id, c.description, c.username, c.password))
+  }
+}
+```
+
+This script is not finished though, you can look up all the class names in the Jenkins source code.
+
+
+---
+
+
 ## How Jenkins stores credentials
 
 Long story short to access and decrypt Jenkins credentials you need three files.
@@ -325,7 +359,7 @@ Secrets are encrypted in `credentials.xml` using `AES-128` with `hudson.util.Sec
 `master.key` is stored in plain text.
 
 > `credentials.xml` stores both `Global` and `System` credentials.
-> To access all three files to decrypt those secrets you do not have to gain admin privilidges.
+> To access all three files to decrypt those secrets you do not need admin privilidges.
 
 ## Decrypting and dumping credentials
 
@@ -379,7 +413,16 @@ This tool can also be run locally (with 3 required files copied over) or on the 
 
 > By decrypting `credentials.xml` this way we can print the values of both `Global` and `System` credentials without the admin privilidges.
 
+---
+
 ## Prevention and best practices
+
+
+
+
+
+
+
 
 [0]: https://github.com/hoto/jenkinsfile-examples
 [1]: https://github.com/hoto/jenkinsfile-examples/blob/master/jenkinsfiles/130-credentials-masking.groovy 
