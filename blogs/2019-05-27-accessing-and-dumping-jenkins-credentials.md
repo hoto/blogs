@@ -324,6 +324,9 @@ Secrets are encrypted in `credentials.xml` using `AES-128` with `hudson.util.Sec
 `hudson.util.Secret` binary file is encrypted itself with `master.key`.  
 `master.key` is stored in plain text.
 
+> `credentials.xml` stores both `Global` and `System` credentials.
+> To access all three files to decrypt those secrets you do not have to gain admin privilidges.
+
 ## Decrypting and dumping credentials
 
 There are existing tools to decrypt Jenkins secrets.
@@ -373,6 +376,8 @@ pipeline {
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/013.png)
 
 This tool can also be run locally (with 3 required files copied over) or on the Jenkins host via ssh.
+
+> By decrypting `credentials.xml` this way we can print the values of both `Global` and `System` credentials without the admin privilidges.
 
 ## Prevention and best practices
 
