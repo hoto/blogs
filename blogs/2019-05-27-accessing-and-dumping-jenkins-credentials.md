@@ -28,6 +28,10 @@ We could be delayed by questions like "why do you need that?" or "I will have to
 There is no need for that, we already have the approval. 
 We are the Consultants.  
 
+But seriously.  
+Giving access to a Jenkins equals giving them permission to view all stored there secrets.
+If you don't want people to poke around don't give them any access to your CI.
+
 > The answers you seek, Jenkins shall leak.
 
 Sometimes we encounter entities which are reluctant to share.
@@ -417,7 +421,28 @@ This tool can also be run locally (with 3 required files copied over) or on the 
 
 ## Prevention and best practices
 
+Personally I don't think there is a way to completely mitigate security vulnarabilities from the CI server.
+We can only make it a bit harded to let the attacker get it.
+Create layers and make it a moving target to access your secrets.
 
+### 1. Hide Jenkins behind a VPN
+
+This is a low hanging fruit and a complete must in my opinion.
+Jenkins is like a swiss cheese, full of holes and vulnarabilities.
+Often Jenkinses are left for months and even years never updated.
+Same for the OS on the Jenkins host.
+
+Prevent most basic attempts by hiding your jenkins from the public internet.
+
+### 2. Requlary update Jenkins and its plugins
+
+### 3. Use read-only credentials
+
+### 4. Avoid using secrets
+
+Use e.g. AWS roles.
+
+### 5. Create a moving target
 
 
 
