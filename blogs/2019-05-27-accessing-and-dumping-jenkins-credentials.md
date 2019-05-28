@@ -16,18 +16,35 @@ Jenkins offers a credentials store where we can keep our secrets and access them
 
 ## Why
 
-As consultants we need all of the information the client can give us to provide the best service.
-Sometimes the things we would like to uncover are out of our reach.  
+> Jenkins is an easy pick when it comes to intelligence gathering.
+
+To provide the best service as consultants we need all the information the client can give us.
+Sometimes the things we need to check are temporarily out of our reach.  
 We of course request permission to gain access but it can take quite awhile, and time may be of the essence.
 
-We could be asked uneasy questions like "why do you need that permission?" or "I will have to talk with my supervisor to approve". There is no need for that, we already have the approval, why waste everybody time when there is an easy way to get what we need?
+> To make a good first impression ask Jenkins for a confession.
 
-Sometimes there are entities in the company which are reluctant to share.
-Could be job safety or maybe it's an attempt to hide those customers password hashed with sha512.  
+We could be delayed by questions like "why do you need that?" or "I will have to talk with my supervisor first".  
+There is no need for that, we already have the approval. 
+We are the Consultants.  
+
+> The answers you seek, Jenkins shall leak.
+
+Sometimes there are entities which are reluctant to share.
+Could be job safety, could be an attempt to hide those customers password stored in production DB using base64.
 We don't judge, stuff happens, we understand.  
 We just need to know.
 
-Other times the person maintaining a Jenkins has long left and nobody knows the access to that secret windows machine running windows 98 in production.
+> We don't know them, they don't know us, Jenkins but doesn't choose sides.
+
+
+If you are not a consultant then how about this scenario:
+What do you do when you join a project and the person with the key knowledge has long left and nobody knows how the access that windows 98 machine in production.  
+Jenkins knows.  
+Now you know.  
+Be the hero.
+
+> Encryption, decryption, Jenkins provides plain text subscription.
 
 ## Credentials storage
 
