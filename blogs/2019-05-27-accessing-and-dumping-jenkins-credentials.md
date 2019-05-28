@@ -30,13 +30,12 @@ We are the Consultants.
 
 > The answers you seek, Jenkins shall leak.
 
-Sometimes there are entities which are reluctant to share.
+Sometimes we encounter entities which are reluctant to share.
 Could be job safety, could be an attempt to hide those customers password stored in production DB using base64.
 We don't judge, stuff happens, we understand.  
 We just need to know.
 
-> We don't know them, they don't know us, Jenkins but doesn't choose sides.
-
+> We don't know them, they don't know us, however Jenkins doesn't choose sides.
 
 If you are not a consultant then how about this scenario:
 What do you do when you join a project and the person with the key knowledge has long left and nobody knows how the access that windows 98 machine in production.  
