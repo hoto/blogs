@@ -52,13 +52,14 @@ I did not use the word "secure" anywhere in the introduction because the way any
 CI servers cannot use one-way hashes (like bcrypt) to encode secrets because when requested by the pipeline those secrets needs to be restored back into their original form.  
 One-way hashes are then out of the picture, what's left is two-way encryption.  
 This means two things:
+
 1. Anyone with "Create jobs" permissions can view secrets in plain form.
 2. Jenkins encrypts secrets at rest but keeps the decryption key somewhere on its host.
 
 You may be wondering why Jenkins even bother encrypting the secrets if they can be retrieved just by asking.
 The only reasonable idea that comes to my mind is that Jenkins creators wanted to make it a little bit harder to gain access to plain format secrets when the attacker gains ssh access to the Jenkins host.
 
-However, using credentials store is infinitely better then keeping secrets in the project repository.  
+However, using Jenkins credentials store is infinitely better then keeping plain secrets in the project repository.  
 Later in this post I will talk about what can be done to minimize the secrets leakage from Jenkins.
 
 ## Creating credentials
@@ -74,7 +75,7 @@ docker-compose up
 Open `localhost:8080` where you should see a Jenkins with a couple of jobs.
 
 To browse and add secrets click on `Credentials`.  
-My Jenkins instance already have some pre-made credentials.
+My Jenkins instance already have some pre-made credentials created by me.
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/001.png)
 
@@ -83,7 +84,7 @@ Select `Add credentials` where you can finally add secrets.
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/002.png)
 
-If you want you can add more secrets, but I will be using the already pre-made secrets.
+If you want you can add more secrets, but I will be using the existing secrets.
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/003.png)
 
