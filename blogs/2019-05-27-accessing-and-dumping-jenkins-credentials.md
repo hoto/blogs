@@ -223,10 +223,13 @@ Running the job and checking the logs uncovers that Jenkins tries to redact the 
 We can see the actual secret values if we print them in such a way that a simple match and replace won't work.  
 
 Code:
+
 ```groovy
 print 'username.collect { it }=' + username.collect { it }
 ```
+
 Log output:
+
 ```
 username.collect { it }=[g, i, t, l, a, b, a, d, m, i, n]
 ```
@@ -244,6 +247,7 @@ In this case, each character is printed separately, and Jenkins does not redact 
 You can list all credentials ids by listing the `$JENKINS_HOME/credentials.xml` file.
 
 Code:
+
 ```groovy
 stage('list credentials ids') {
   steps {
@@ -253,7 +257,9 @@ stage('list credentials ids') {
   }
 }
 ```
+
 Log output:
+
 ``` 
 <id>gitlab</id>
 <id>production-bastion</id>
