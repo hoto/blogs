@@ -209,7 +209,7 @@ pipeline {
 }
 ```
 
-All examples for different types of secrets can be found in the official Jenkins [documentation][2]
+All examples for different types of secrets can be found in the official Jenkins [documentation][2].
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/006.png)
 
@@ -225,13 +225,13 @@ Log output:
 username.collect { it }=[g, i, t, l, a, b, a, d, m, i, n]
 ```
 
-In this case each character is printed separately and Jenkins does not redact the values.
+In this case, each character is printed separately, and Jenkins does not redact the values.
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/007.png)
 
 > Anyone with write access to a repository built on Jenkins can uncover all `Global` credentials by modifying a `Jenkinsfile`.
 
-> Anyone with "create job" privileges can uncover all `Global` secrets by creating a pipeline job.
+> Anyone with "creates job" privileges can uncover all `Global` secrets by creating a pipeline job.
 
 ### Listing ids of secrets
 
@@ -259,7 +259,7 @@ Log output:
 
 Jenkins has two types of credentials: `System` and `Global`.
 
-`System` are accessible only from Jenkins configuration (e.g. plugins).
+`System` is accessible only from Jenkins configuration (e.g.,, plugins).
 
 `Global` same as System but also accessible from jobs.  
 
@@ -269,11 +269,10 @@ Although most credentials are stored in `http://localhost:8080/credentials/` vie
 1. `http://localhost:8080/configure` - some plugins create password type fields there.
 2. `http://localhost:8080/configureSecurity/` - look for AD credentials.
 
-### Grabbing credentials using browser inspection tool
+### Grabbing credentials using a browser inspection tool
 
-By definition `System` credentials are not accessible from jobs but we can decrypt them from the Jenkins GUI, given we have admin privilidges.
-Jenkins sends the encrypted value of each secret to the UI.  
-This is a very big security flow.
+By definition `System` credentials are not accessible from jobs, but we can decrypt them from the Jenkins GUI, given we have admin privileges. Jenkins sends the encrypted value of each secret to the UI.  
+This is a huge security flaw.
 
 To view encrypted secret:
  
@@ -289,10 +288,10 @@ To view encrypted secret:
 
 In my case the encrypted secret is `{AQAAABAAAAAgPT7JbBVgyWiivobt0CJEduLyP0lB3uyTj+D5WBvVk6jyG6BQFPYGN4Z3VJN2JLDm}`.
 
-To decrypt any credentials we can use Jenkins console which requires admin privilidges to access.  
-If you don't have admin privilidges, try to elevate your permissions by looking for an admin user in `Global` credentials and log as admin first.
+To decrypt any credentials we can use Jenkins console which requires admin privileges to access.  
+If you don't have admin privileges, try to elevate your permissions by looking for an admin user in `Global` credentials and log as admin first.
 
-Navigate to `http://localhost:8080/script` which opens the `Script Console`.  
+Navigate to `http://localhost:8080/script`, which opens the `Script Console`.  
 
 Tell jenkins to decrypt and print out the secret:
 
@@ -302,9 +301,9 @@ println hudson.util.Secret.decrypt("{AQAAABAAAAAgPT7JbBVgyWiivobt0CJEduLyP0lB3uy
 
 ![](./images/2019-05-27-accessing-and-dumping-jenkins-credentials/011.png)
 
-There you have it, now you can decrypt any Jenkins secret (if you have admin privileges).
+There you have it; now you can decrypt any Jenkins secret (if you have admin privileges).
 
-Side note: if you try to run this code from a Jenkinsfile job you will get an error message:
+Side note: if you try to run this code from a Jenkinsfile job, you will get an error message:
 
 ```
 Scripts not permitted to use staticMethod hudson.util.Secret decrypt java.lang.String. 
@@ -333,7 +332,7 @@ for(c in creds) {
 }
 ```
 
-This script is not finished though, you can look up all the class names in the Jenkins source code.
+This script is not finished though. You can look up all the class names in the Jenkins source code.
 
 
 ---
@@ -360,17 +359,17 @@ Secrets are encrypted in `credentials.xml` using `AES-128` with `hudson.util.Sec
 `master.key` is stored in plain text.
 
 > `credentials.xml` stores both `Global` and `System` credentials.
-> To access all three files to decrypt those secrets you do not need admin privilidges.
+> To access all three files to decrypt those secrets you do not need admin privileges.
 
 ## Decrypting and dumping credentials
 
 There are existing tools to decrypt Jenkins secrets.
-The one I found are in python, like this [one][4].  
-I would include the source code here but unfortunately that repository does not have a license.
+The ones I found are in python, like this [one][4].  
+I would include the source code here, but unfortunately, that repository does not have a license.
 
-Python cryptography module is not included in the python standard library, it has to be installed as dependency.
-Because I don't want to deal with python runtime and external dependencies I wrote my own decryptor in Go.
-Go binaries are self contained and requires only the kernel to run.
+Python cryptography module is not included in the python standard library, it has to be installed as a dependency.
+Because I don't want to deal with python runtime and external dependencies I wrote my decryptor in Go.
+Go binaries are self-contained and require only the kernel to run.
 
 Side note: Jenkins is using `AES-128-ECB` algorithm which is not included in the Go standard library.
 That algorithm was deliberately excluded from the library in 2009 to discourage people from using it.
@@ -412,62 +411,62 @@ pipeline {
 
 This tool can also be run locally (with 3 required files copied over) or on the Jenkins host via ssh.
 
-> By decrypting `credentials.xml` this way we can print the values of both `Global` and `System` credentials without the admin privilidges.
+> By decrypting `credentials.xml` this way, we can print the values of both `Global` and `System` credentials without the admin privileges.
 
 ---
 
 ## Prevention and best practices
 
-Personally I don't think there is a way to completely mitigate security vulnerabilities when using a CI.
+I don’t think there is a way to mitigate security vulnerabilities when using a CI completely.
 We can only make it a bit more time consuming to let the attacker get our secrets by setting up layers and creating moving targets.
 
 ### 1. Hide Jenkins behind a VPN
 
-This is a an easy pick and my #1 advice to anyone using a Jenkins.
-Prevent most basic attacks by hiding your jenkins from the public internet.
-I know VPNs are annoying to use but nowadays internet connection is so fast you should not even notice it.
+This is an easy pick and my #1 advice to anyone using a Jenkins.
+Prevent most basic attacks by hiding your Jenkins from the public internet.
+I know VPNs are annoying to use, but nowadays the internet connection is so fast you should not even notice it.
 
 ### 2. Regularly update Jenkins
 
 Often Jenkinses are left for months and even years never updated.
 Old versions are full of known holes and vulnerabilities.
 Same for plugins and the OS, don't hesitate to update them as well.
-In my 4 years dealing with Jenkinses I only had a problem once when updating, but a built in "rollback" feature saved me.
-If you are worried about regular updating then set up an automatic backup of the Jenkins disk every 24h.
+In my 4 years dealing with Jenkinses, I only had a problem once when updating, but a built-in "rollback" feature saved me.
+If you are worried about regular updating, then set up an automatic backup of the Jenkins disk every 24h.
 
-### 3. Follow principle of least privilege 
+### 3. Follow the principle of least privilege 
 
-If a read-only access is enough then don't use credentials with read-and-write access.
+If read-only access is enough, then don't use credentials with read-and-write access.
 
 ### 4. Limit the access scope
 
-When pipeline only needs access to a subset of resources then create credentials only for those resources and nothing more.
+When pipeline only needs access to a subset of resources, then create credentials only for those resources and nothing more.
 
 ### 5. Avoid using secrets at all
 
 Secrets won't leak if we never create them in the first place.  
-Some cloud providers make it possible to access a resource by assigning a role to a machine (e.g. AWS IAM role).
+Some cloud providers make it possible to access a resource by assigning a role to a machine (e.g., AWS IAM role).
 
 ### 6. Create a moving target
 
-Instead of storing a secret on Jenkins store it in a vault with automatic password rotation (e.g. Hashicorp Vault, AWS Secrets Manager).
+Instead of storing a secret on Jenkins store it in a vault with automatic password rotation (e.g., Hashicorp Vault, AWS Secrets Manager).
 Make your pipeline call a vault to access a secret every time it needs it. 
-This makes automatic password rotation very esy to setup as the vault will be the only source of truth.
+This makes automatic password rotation very easy to set up as the vault will be the only source of truth.
 
-Although a password rotation does not prevent from the secret to leak it will be valid only for couple of hours or days.
-That's why it's called a "moving target".
+Although a password rotation does not prevent the secret to leak it will be valid only for a couple of hours or days.
+That's why it's called a "moving target."
 
 ### 7. Treat all credentials stored in Jenkins as plain text
 
 Once you give someone access, even read-only, to a Jenkins it's game over.  
-Treat everyone with access to Jenkins as an admin user and you will be fine.
+Treat everyone with access to Jenkins as an admin user, and you will be fine.
 All developers on a project can know all secrets, that should not be a problem.
 
 ### 8. Accept that you will get hacked
 
-If you have something worth stealing it will be stolen.
-You may think that if someone stole your source code and dumped your databases it's game over, but that is not necessarily true.
-Even if your production database credentials are stolen but the customers secrets inside it are properly one-way hashed there is nothing that the attacker can do with that stolen data (with current level of technology).
+If you have something worth stealing, someone will try to steal it.
+You may think that if someone stole your source code and dumped your databases, it's game over, but that is not necessarily true.
+Even if your production database credentials are stolen but the customers' secrets inside it are properly one-way hashed there is nothing that the attacker can do with that stolen data (with the current level of technology).
 The only thing your company loses then is it's credibility.
 
 You have to know your threat model to incorporate accurate security measures.
