@@ -421,31 +421,59 @@ This tool can also be run locally (with 3 required files copied over) or on the 
 
 ## Prevention and best practices
 
-Personally I don't think there is a way to completely mitigate security vulnarabilities from the CI server.
-We can only make it a bit harded to let the attacker get it.
-Create layers and make it a moving target to access your secrets.
+Personally I don't think there is a way to completely mitigate security vulnerabilities when using a CI.
+We can only make it a bit more time consuming to let the attacker get our secrets by setting up layers and creating moving targets.
 
 ### 1. Hide Jenkins behind a VPN
 
-This is a low hanging fruit and a complete must in my opinion.
-Jenkins is like a swiss cheese, full of holes and vulnarabilities.
+This is a an easy pick and my #1 advice to anyone using a Jenkins.
+Prevent most basic attacks by hiding your jenkins from the public internet.
+I know VPNs are annoying to use but nowadays internet connection is so fast you should not even notice it.
+
+### 2. Regularly update Jenkins
+
 Often Jenkinses are left for months and even years never updated.
-Same for the OS on the Jenkins host.
+Old versions are full of known holes and vulnerabilities.
+Same for plugins and the OS, don't hesitate to update them as well.
+In my 4 years dealing with Jenkinses I only had a problem once when updating, but a built in "rollback" feature saved me.
+If you are worried about regular updating then set up an automatic backup of the Jenkins disk every 24h.
 
-Prevent most basic attempts by hiding your jenkins from the public internet.
+### 3. Follow principle of least privilege 
 
-### 2. Requlary update Jenkins and its plugins
+If a read-only access is enough then don't use credentials with read-and-write access.
 
-### 3. Use read-only credentials
+### 4. Limit the access scope
 
-### 4. Avoid using secrets
+When pipeline only needs access to a subset of resources then create credentials only for those resources and nothing more.
 
-Use e.g. AWS roles.
+### 5. Avoid using secrets at all
 
-### 5. Create a moving target
+Secrets won't leak if we never create them in the first place.  
+Some cloud providers make it possible to access a resource by assigning a role to a machine (e.g. AWS IAM role).
 
+### 6. Create a moving target
 
+Instead of storing a secret on Jenkins store it in a vault with automatic password rotation (e.g. Hashicorp Vault, AWS Secrets Manager).
+Make your pipeline call a vault to access a secret every time it needs it. 
+This makes automatic password rotation very esy to setup as the vault will be the only source of truth.
 
+Although a password rotation does not prevent from the secret to leak it will be valid only for couple of hours or days.
+That's why it's called a "moving target".
+
+### 7. Treat all credentials stored in Jenkins as plain text
+
+Once you give someone access, even read-only, to a Jenkins it's game over.  
+Treat everyone with access to Jenkins as an admin user and you will be fine.
+All developers on a project can know all secrets, that should not be a problem.
+
+### 8. Accept that you will get hacked
+
+If you have something worth stealing it will be stolen.
+You may think that if someone stole your source code and dumped your databases it's game over, but that is not necessarily true.
+Even if your production database credentials are stolen but the customers secrets inside it are properly one-way hashed there is nothing that the attacker can do with that stolen data (with current level of technology).
+The only thing your company loses then is it's credibility.
+
+You have to know your threat model to incorporate accurate security measures.
 
 
 
