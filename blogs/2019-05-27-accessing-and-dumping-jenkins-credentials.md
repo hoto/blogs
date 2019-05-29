@@ -28,7 +28,7 @@ There is no need for that; we already have the approval.
 We are the Consultants.  
 
 But seriously.  
-Giving access to a Jenkins equals permitting them to view all stored their secrets. If you don’t want people to poke around, don’t give them any access to your CI.
+Giving access to a Jenkins equals permitting them to view all stored their secrets. If you don't want people to poke around, don't give them any access to your CI.
 
 > The answers you seek, Jenkins shall leak.
 
@@ -37,7 +37,7 @@ It could be an attempt to hide those customers password stored in production DB 
 We don't judge, stuff happens, we understand.  
 We just need to know.
 
-> We don’t know them; they don’t know us; however, Jenkins doesn’t choose sides.
+> We don't know them; they don't know us; however, Jenkins doesn't choose sides.
 
 What do you do when you join a project and the person with the vital knowledge has long left, and nobody knows how to access that windows 98 machine in production.
 Jenkins knows.  
@@ -51,7 +51,7 @@ Be the hero.
 I did not use the word “secure” anywhere in the introduction because the way any CI server stores credentials are by nature, insecure.
 
 CI servers cannot use one-way hashes (like bcrypt) to encode secrets because when requested by the pipeline, those secrets need to be restored into their original form.
-One-way hashes are then out of the picture, what’s left is two-way encryption.
+One-way hashes are then out of the picture, what's left is two-way encryption.
 This means two things:
 
 1. Anyone with "Create jobs" permissions can view secrets in plain form.
