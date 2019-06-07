@@ -26,7 +26,7 @@ Backups of my posts from [medium](https://medium.com/@andrzejrehmann/) and [codu
 |------------|--------------------------------------------------------|-------------------------------|
 | 2014-05-11 | Why TDD? Internal presentation for my team at Motorola. Short history of Agile movement, Extreme Programming and benefits of TDD. | [slides][101] |
 | 2015-11-18 | High performance AngularJS web pages. Internal Motorola Tech Talk. Overview of what makes a web app slow. Also how to use profiling in Chrome dev tools. | [slides][104] |
-| 2016-03-22 | Spinning NodeJS application on AWS in 20 minutes. Public Meetup.  Live presentation how to create and serve simple NodeJS web application using AWS EC2 instance. | [slides][103] |
+| 2016-03-22 | Spinning NodeJS application on AWS in 20 minutes. Public Meetup.  Live presentation how to create and serve simple NodeJS web application using AWS EC2 instance. | [meetup][103] |
 | 2016-10-16 | Dockerized build environment. Internal Motorola Tech Talk. Different approaches of using Docker in build pipelines. | [slides][102] |
 | 2017-01-18 | Docker and Docker Compose - getting containers to work. Public MotoEdu presentation targeting students. Presented on three different local universities: AGH, Politechnika Krakowska and Jagiellonian University.  What is Docker and Docker Compose. How can it help you in local development and running in production. | [slides][100a], [photos][100b] |
 
