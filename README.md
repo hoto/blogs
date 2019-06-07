@@ -1,6 +1,7 @@
-# Blog
+# My publications and presentations
 
-Backups of my posts from [medium](https://medium.com/@andrzejrehmann/) and [codurance](https://codurance.com/publications/author/andrzej-rehmann/).
+Backups of my posts from [medium](https://medium.com/@andrzejrehmann/) and [codurance](https://codurance.com/publications/author/andrzej-rehmann/).  
+Links to my presentation slides.
 
 #### Publications
 
